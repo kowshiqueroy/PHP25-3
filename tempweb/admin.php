@@ -27,6 +27,28 @@ if ($conn->query($sql) === TRUE) {
     echo "Error creating table: " . $conn->error;
 }
 
+$sql = "CREATE TABLE IF NOT EXISTS products (
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    image VARCHAR(255) NOT NULL,
+    category VARCHAR(255) NOT NULL,
+    price DECIMAL(10,2) NOT NULL,
+    saleprice DECIMAL(10,2) NOT NULL,
+    t1 BOOLEAN NOT NULL DEFAULT FALSE,
+    t2 BOOLEAN NOT NULL DEFAULT FALSE,
+    t3 BOOLEAN NOT NULL DEFAULT FALSE,
+    address VARCHAR(255) NOT NULL,
+    pack VARCHAR(255) NOT NULL,
+    type VARCHAR(255) NOT NULL,
+    star INT(1) NOT NULL,
+    status INT(1) NOT NULL,
+    description TEXT
+)";
+if ($conn->query($sql) === TRUE) {
+    // echo "Table products created successfully";
+} else {
+    echo "Error creating table: " . $conn->error;
+}
 
 if ($conn->query("SELECT COUNT(*) FROM users")->fetch_array()[0] == 0) {
     $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");

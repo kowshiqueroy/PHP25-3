@@ -210,13 +210,13 @@
 
 /*** Icon ***/
 .icon {
-    padding: 15px;
+    padding: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     background: #FFFFFF !important;
-    border-radius: 50px;
-    border: 1px dashed var(--primary) !important;
+    /* border-radius: 50px;
+    border: 1px dashed var(--primary) !important; */
 }
 
 

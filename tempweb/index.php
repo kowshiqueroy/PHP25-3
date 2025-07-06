@@ -176,108 +176,156 @@
                     </div>
                 </div>
 
-                 <div class="tab-content">
+                <div class="tab-content">
                     <div id="tab-1" class="tab-pane fade show p-0 active">
-                        <div class="row g-4">
-                           
-                             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href="#"><img class="img-fluid" src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=800&q=80" alt="Rice Pack"></a>
-                                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">Featured</div>
-                                        <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">Grains</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">$12.99</h5>
-                                        <a class="d-block h5 mb-2" href="#">Premium Basmati Rice Pack</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Harvested in Punjab, India</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-weight text-primary me-2"></i>5kg Pack</small>
-                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-leaf text-primary me-2"></i>Non-GMO</small>
-                                        <small class="flex-fill text-center py-2"><i class="fa fa-star text-primary me-2"></i>4.7/5</small>
-                                    </div>
+                        <?php
+                        $sql = "SELECT * FROM products WHERE t1 = 1  ORDER BY id DESC LIMIT 6";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0): 
+                            echo '<div class="row g-4">';
+                            while ($row = $result->fetch_assoc()): ?>
+                                <div class="col-lg-4 col-md-6">
+                                    <div class="property-item rounded overflow-hidden">
+                                        <div class="position-relative">
+                                            <img class="img-fluid" src="<?= $row['image'] ?>" alt="">
+                                            <div class="bg-secondary rounded text-white position-absolute start-0 top-0 mt-3 px-3 py-2">
+                                                <h6 class="mb-0"><?= $row['name'] ?></h6>
+                                            </div>
+                                        </div>
+                                        <div class="p-4 pb-0">
+                                            <h5 class="text-primary mb-3"><?= $row['category'] ?></h5>
+                                            <?php if ($row['price'] > $row['saleprice']): ?>
+                                            <p class="mb-1"><strike><?= $row['price'] ?> USD</strike>  <strong><?= $row['saleprice'] ?> USD</strong></p>
+                                            <?php else: ?>
+                                            <p class="mb-1"><strong><?= $row['price'] ?> USD</strong></p>
+                                            <?php endif; ?>
 
-                                    <div class="d-flex border-top justify-content-center">
-                                      <button class="w-100 btn btn-success">Coming Soon</button>
+                                            <p class="mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i><strong><?= $row['address'] ?></strong></p>
+                                            <div class="d-flex border-top">
+                                                 <small class="text-primary ms-auto"><?= $row['pack'] ?> </small>
+                                                <small class="text-primary ms-auto"><?= $row['type'] ?> </small>
+                                                <small class="text-muted ms-auto">
+                                                    <?php for ($i=1; $i <= 5; $i++): ?>
+                                                        <i class="fa fa-star<?= $i <= $row['star'] ? '' : '-o' ?>" style="color: <?= $i <= $row['star'] ? '#ffc107' : '#ccc' ?>"></i>
+                                                    <?php endfor; ?>
+                                                </small>
+                                            </div>
+
+                                            <?php if ($row['status'] == 0): ?>
+                                            <div class="text-center w-100 mt-3">
+                                                <button class="btn btn-primary w-100" disabled>Coming Soon</button>
+                                            </div>
+                                            <?php else: ?>
+                                            <div class="text-center w-100 mt-3">
+                                                <a href="cart.php?action=add&id=<?= $row['id'] ?>" class="btn btn-primary w-100">Add to Cart</a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-
-
-
                                 </div>
-                            </div>
-                            <div class="col-12 text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <a class="btn btn-primary py-3 px-5" href="">Browse More</a>
-                            </div>
-                        </div>
+                            <?php endwhile;
+                            echo '</div>';
+                        endif; ?>
                     </div>
                     <div id="tab-2" class="tab-pane  show p-0">
-                        <div class="row g-4">
-                             <div class="col-lg-4 col-md-6  " >
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href="#"><img class="img-fluid" src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=800&q=80" alt="Rice Pack"></a>
-                                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">Top Rated</div>
-                                        <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">Grains</div>
-                                    </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">$12.99</h5>
-                                        <a class="d-block h5 mb-2" href="#">Premium Basmati Rice Pack</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Harvested in Punjab, India</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-weight text-primary me-2"></i>5kg Pack</small>
-                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-leaf text-primary me-2"></i>Non-GMO</small>
-                                        <small class="flex-fill text-center py-2"><i class="fa fa-star text-primary me-2"></i>4.7/5</small>
-                                    </div>
+                        <?php
+                        $sql = "SELECT * FROM products WHERE t2 = 1  ORDER BY id DESC LIMIT 6";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0): 
+                            echo '<div class="row g-4">';
+                            while ($row = $result->fetch_assoc()): ?>
+                                   <div class="col-lg-4 col-md-6">
+                                    <div class="property-item rounded overflow-hidden">
+                                        <div class="position-relative">
+                                            <img class="img-fluid" src="<?= $row['image'] ?>" alt="">
+                                            <div class="bg-secondary rounded text-white position-absolute start-0 top-0 mt-3 px-3 py-2">
+                                                <h6 class="mb-0"><?= $row['name'] ?></h6>
+                                            </div>
+                                        </div>
+                                        <div class="p-4 pb-0">
+                                            <h5 class="text-primary mb-3"><?= $row['category'] ?></h5>
+                                            <?php if ($row['price'] > $row['saleprice']): ?>
+                                            <p class="mb-1"><strike><?= $row['price'] ?> USD</strike>  <strong><?= $row['saleprice'] ?> USD</strong></p>
+                                            <?php else: ?>
+                                            <p class="mb-1"><strong><?= $row['price'] ?> USD</strong></p>
+                                            <?php endif; ?>
 
-                                      <div class="d-flex border-top justify-content-center">
-                                      <button class="w-100 btn btn-success">Coming Soon</button>
+                                            <p class="mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i><strong><?= $row['address'] ?></strong></p>
+                                            <div class="d-flex border-top">
+                                                 <small class="text-primary ms-auto"><?= $row['pack'] ?> </small>
+                                                <small class="text-primary ms-auto"><?= $row['type'] ?> </small>
+                                                <small class="text-muted ms-auto">
+                                                    <?php for ($i=1; $i <= 5; $i++): ?>
+                                                        <i class="fa fa-star<?= $i <= $row['star'] ? '' : '-o' ?>" style="color: <?= $i <= $row['star'] ? '#ffc107' : '#ccc' ?>"></i>
+                                                    <?php endfor; ?>
+                                                </small>
+                                            </div>
+
+                                            <?php if ($row['status'] == 0): ?>
+                                            <div class="text-center w-100 mt-3">
+                                                <button class="btn btn-primary w-100" disabled>Coming Soon</button>
+                                            </div>
+                                            <?php else: ?>
+                                            <div class="text-center w-100 mt-3">
+                                                <a href="cart.php?action=add&id=<?= $row['id'] ?>" class="btn btn-primary w-100">Add to Cart</a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-12 text-center">
-                                <a class="btn btn-primary py-3 px-5" href="">Browse More</a>
-                            </div>
-                        </div>
+                            <?php endwhile;
+                            echo '</div>';
+                        endif; ?>
                     </div>
                     <div id="tab-3" class="tab-pane  show p-0">
-                        <div class="row g-4">
-                           
-                           <div class="col-lg-4 col-md-6  " >
-                                <div class="property-item rounded overflow-hidden">
-                                    <div class="position-relative overflow-hidden">
-                                        <a href="#"><img class="img-fluid" src="https://images.pexels.com/photos/461428/pexels-photo-461428.jpeg?auto=compress&w=800&q=80" alt="Rice Pack"></a>
-                                        <div class="bg-primary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">Offers</div>
-                                        <div class="bg-white rounded-top text-primary position-absolute start-0 bottom-0 mx-4 pt-1 px-3">Grains</div>
-                                        
-                                     
+                        <?php
+                        $sql = "SELECT * FROM products WHERE t3 = 1  ORDER BY id DESC LIMIT 6";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0): 
+                            echo '<div class="row g-4">';
+                            while ($row = $result->fetch_assoc()): ?>
+                                   <div class="col-lg-4 col-md-6">
+                                    <div class="property-item rounded overflow-hidden">
+                                        <div class="position-relative">
+                                            <img class="img-fluid" src="<?= $row['image'] ?>" alt="">
+                                            <div class="bg-secondary rounded text-white position-absolute start-0 top-0 mt-3 px-3 py-2">
+                                                <h6 class="mb-0"><?= $row['name'] ?></h6>
+                                            </div>
+                                        </div>
+                                        <div class="p-4 pb-0">
+                                            <h5 class="text-primary mb-3"><?= $row['category'] ?></h5>
+                                            <?php if ($row['price'] > $row['saleprice']): ?>
+                                            <p class="mb-1"><strike><?= $row['price'] ?> USD</strike>  <strong><?= $row['saleprice'] ?> USD</strong></p>
+                                            <?php else: ?>
+                                            <p class="mb-1"><strong><?= $row['price'] ?> USD</strong></p>
+                                            <?php endif; ?>
+
+                                            <p class="mb-0"><i class="fa fa-map-marker-alt text-primary me-2"></i><strong><?= $row['address'] ?></strong></p>
+                                            <div class="d-flex border-top">
+                                                 <small class="text-primary ms-auto"><?= $row['pack'] ?> </small>
+                                                <small class="text-primary ms-auto"><?= $row['type'] ?> </small>
+                                                <small class="text-muted ms-auto">
+                                                    <?php for ($i=1; $i <= 5; $i++): ?>
+                                                        <i class="fa fa-star<?= $i <= $row['star'] ? '' : '-o' ?>" style="color: <?= $i <= $row['star'] ? '#ffc107' : '#ccc' ?>"></i>
+                                                    <?php endfor; ?>
+                                                </small>
+                                            </div>
+
+                                            <?php if ($row['status'] == 0): ?>
+                                            <div class="text-center w-100 mt-3">
+                                                <button class="btn btn-primary w-100" disabled>Coming Soon</button>
+                                            </div>
+                                            <?php else: ?>
+                                            <div class="text-center w-100 mt-3">
+                                                <a href="cart.php?action=add&id=<?= $row['id'] ?>" class="btn btn-primary w-100">Add to Cart</a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
                                     </div>
-                                    <div class="p-4 pb-0">
-                                        <h5 class="text-primary mb-3">$12.99 </h5>
-                                        <a class="d-block h5 mb-2" href="#">Premium Basmati Rice Pack</a>
-                                        <p><i class="fa fa-map-marker-alt text-primary me-2"></i>Harvested in Punjab, India</p>
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-weight text-primary me-2"></i>5kg Pack</small>
-                                        <small class="flex-fill text-center border-end py-2"><i class="fa fa-leaf text-primary me-2"></i>Non-GMO</small>
-                                        <small class="flex-fill text-center py-2"><i class="fa fa-star text-primary me-2"></i>4.7/5</small>
-                                    </div>
-                                      <div class="d-flex border-top justify-content-center">
-                                      <button class="w-100 btn btn-success">Coming Soon</button>
-                                    </div>
-
-
-
-
-
-                                  
                                 </div>
-                            </div>
-                            <div class="col-12 text-center">
-                                <a class="btn btn-primary py-3 px-5" href="">Browse More</a>
-                            </div>
-                        </div>
+                            <?php endwhile;
+                            echo '</div>';
+                        endif; ?>
                     </div>
                 </div>
                 

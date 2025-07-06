@@ -66,9 +66,17 @@ require_once "connection.php";
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Products</a>
                             <div class="dropdown-menu rounded-0 m-0">
-                                <a href="products.php?category=snacks" class="dropdown-item">Snacks</a>
-                                <a href="products.php?category=dairy" class="dropdown-item">Dairy</a>
-                                <a href="products.php?category=fruits" class="dropdown-item">Fruits</a>
+                                <a href="products.php" class="dropdown-item">All</a>
+                                <?php
+                                $query = "SELECT DISTINCT category FROM products";
+                                $result = $conn->query($query);
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                        echo '<a href="products.php?category=' . urlencode($row['category']) . '" class="dropdown-item">' . htmlspecialchars($row['category']) . '</a>';
+                                    }
+                                }
+                                ?>
+
 
 
                             </div>

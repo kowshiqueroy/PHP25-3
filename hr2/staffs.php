@@ -43,9 +43,23 @@ if (isset($_SESSION['username'])) {
     // Handle Add/Edit
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-        $logo_link = $conn->real_escape_string($_POST['logo_link']);
-        $company_name = $conn->real_escape_string($_POST['company_name']);
-        $photo_link = $conn->real_escape_string($_POST['photo_link']);
+$logo_link = '';
+    $photo_link = '';     
+
+$logo_link = $conn->real_escape_string($_POST['logo_link']);
+$photo_link = $conn->real_escape_string($_POST['photo_link']);
+$google_drive_url_pattern = '/https:\/\/drive\.google\.com\/file\/d\/([^\/]+)\/view\?usp=sharing/';
+
+if (preg_match($google_drive_url_pattern, $photo_link, $matches)) {
+    $photo_link = "https://lh3.googleusercontent.com/d/" . $matches[1];
+}
+
+if (preg_match($google_drive_url_pattern, $logo_link, $matches)) {
+    $logo_link = "https://lh3.googleusercontent.com/d/" . $matches[1];
+}
+
+
+         $company_name = $conn->real_escape_string($_POST['company_name']);
         $name = $conn->real_escape_string($_POST['name']);
         $position = $conn->real_escape_string($_POST['position']);
         $department = $conn->real_escape_string($_POST['department']);
