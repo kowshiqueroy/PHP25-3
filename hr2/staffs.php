@@ -128,10 +128,16 @@ if (isset($_SESSION['username'])) {
     <div class="container">
         <div class="admin-header">
             <h2 class="mb-0">Staffs Admin Panel</h2>
-            <form action="logout.php" method="post" style="margin:0;">
-                <button type="submit" class="logout-btn">Logout</button>
-            </form>
+            <button type="button" class="logout-btn" onclick="window.location.href='?logout=1'">Logout</button>
         </div>
+
+        <?php // Handle logout
+if (isset($_GET['logout'])) {
+    session_destroy();
+    header("Location: index.php");
+    exit;
+}
+?>
         <div class="card mb-4">
             <div class="card-header"><?= $editStaff ? 'Edit Staff' : 'Add Staff' ?></div>
             <div class="card-body">
