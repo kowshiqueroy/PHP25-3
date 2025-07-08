@@ -125,7 +125,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
             <div class="col-md-4">
                 <div class="card text-white bg-success mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Clients</h5>
+                        <h5 class="card-title">Comments</h5>
                         <form action="" method="post">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Client Name</label>
@@ -137,7 +137,7 @@ if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== tru
                             </div>
                             <div class="mb-3">
                                 <label for="star" class="form-label">Star (1-5)</label>
-                                <select name="star" id="star" class="form-select">
+                                <select name="star" id="star" class="form-select" required>
                                     <option value="5">5</option>
                                     <option value="4">4</option>
                                     <option value="3">3</option>

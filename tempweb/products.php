@@ -50,11 +50,11 @@
                                         <div class="position-relative">
                                             <img class="img-fluid" src="<?= $row['image'] ?>" alt="">
                                             <div class="bg-secondary rounded text-white position-absolute start-0 top-0 mt-3 px-3 py-2">
-                                                <h6 class="mb-0"><?= $row['name'] ?></h6>
+                                                <h6 class="mb-0"><?= $row['category'] ?></h6>
                                             </div>
                                         </div>
                                         <div class="p-4 pb-0">
-                                            <h5 class="text-primary mb-3"><?= $row['category'] ?></h5>
+                                            <h5 class="text-primary mb-3"><?= $row['name'] ?></h5>
                                             <?php if ($row['price'] > $row['saleprice']): ?>
                                             <p class="mb-1"><strike><?= $row['price'] ?> USD</strike>  <strong><?= $row['saleprice'] ?> USD</strong></p>
                                             <?php else: ?>
