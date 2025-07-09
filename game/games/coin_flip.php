@@ -125,7 +125,7 @@ $coins = $coins_row['coins'];
 </head>
 <body>
 <div class="container py-5 text-center">
-  <h2 class="mb-1">🪙 Coin Flip</h2>
+  <h2 class="mb-1" onclick="window.location.href='../dashboard.php'">🪙 Coin Flip</h2>
   <!-- <p class="mb-4 text-secondary">Test your luck. Pick heads or tails to double your bet!</p> -->
 
   <div class=" game-info  d-flex justify-content-between align-items-center">

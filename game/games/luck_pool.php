@@ -67,7 +67,7 @@ $coins = $coins_row['coins'];
                 //echo $count;
                 $conn->query("UPDATE players SET coins = coins - 100 WHERE id = $user_id");
 
-                $msg = "1 Slot -100";
+                $msg = "Got Slot -100";
 
                 if ($count == 13) {
 
@@ -193,7 +193,7 @@ $coins = $coins_row['coins'];
 </head>
 <body>
 <div class="container py-5 text-center">
-  <h2 class="mb-2"> <span class="luck-icon">✨</span> Luck Pool</h2>
+  <h2 class="mb-2" onclick="window.location.href='../dashboard.php'"> <span class="luck-icon">✨</span> Luck Pool</h2>
    <div class=" game-info  d-flex justify-content-between align-items-center">
     <div class="">
       💰 <strong></strong> <?= $coins ?> coins

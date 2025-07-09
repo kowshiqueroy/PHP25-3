@@ -52,7 +52,7 @@ $coins = $row['coins'];
   <style>
     body.dashboard-bg {
   background-color: #121212;
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   color: #f8f9fa;
 }
 
@@ -124,8 +124,8 @@ $coins = $row['coins'];
 
 
 <div class="d-flex justify-content-center align-items-center">
-      <div class="coin-display me-4">  <?= htmlspecialchars($username) ?> 🪙 Coins: <strong><?= $coins ?></strong></div>
-      <a href="logout.php" class="btn btn-outline-warning">Logout</a>
+      <div class="coin-display me-4">  👤 <?= htmlspecialchars($username) ?> 🪙 <strong><?= $coins ?></strong></div>
+      <a href="logout.php" class="btn btn-outline-warning">🔓 Logout</a>
     </div>
   <main class="container py-5">
     <?php if ($username === 'admin'): ?>
@@ -234,7 +234,7 @@ $coins = $row['coins'];
 <?php
 // Fetch transaction data
 $user_id = $_SESSION['user_id'];
-$query = "SELECT txn_id, amount, approved, created_at FROM transactions WHERE player_id = ? ORDER BY created_at DESC";
+$query = "SELECT txn_id, amount, approved, created_at FROM transactions WHERE player_id = ? ORDER BY created_at DESC LIMIT 5";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -250,9 +250,9 @@ if ($result->num_rows > 0): ?>
         <thead class="text-center">
           <tr>
             <th>TX ID</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Date</th>
+            <th>💰</th>
+            <th></th>
+            <th>📅</th>
           </tr>
         </thead>
         <tbody>
@@ -260,7 +260,7 @@ if ($result->num_rows > 0): ?>
             <tr>
               <td style="text-align: center;"><?= htmlspecialchars($row['txn_id']) ?></td>
               <td style="text-align: center;"><?= htmlspecialchars($row['amount']) ?></td>
-              <td style="text-align: center;"><?= htmlspecialchars($row['approved'] == 1 ? 'Approved' : 'Waiting') ?></td>
+              <td style="text-align: center;"><?= htmlspecialchars($row['approved'] == 1 ? '✅' : '⏰') ?></td>
               <td style="text-align: center;"><?= htmlspecialchars($row['created_at']) ?></td>
             </tr>
           <?php endwhile; ?>
@@ -272,26 +272,28 @@ if ($result->num_rows > 0): ?>
   <div class="alert alert-warning">No transactions found.</div>
 <?php endif; ?>
 
-  <section class="card bg-dark border border-secondary mb-4">
-    <div class="card-header bg-secondary text-white fw-bold">🔒 Change Password or Block</div>
-    <div class="card-body">
-      <form method="post" action="">
-        <div class="mb-3">
-          <label for="old_password" class="form-label text-white">Old Password</label>
-          <input type="password" name="old_password" id="old_password" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="new_password" class="form-label text-white">New Password</label>
-          <input type="password" name="new_password" id="new_password" class="form-control" required>
-        </div>
-        <div class="mb-3">
-          <label for="confirm_password" class="form-label text-white">Confirm Password</label>
-          <input type="password" name="confirm_password" id="confirm_password" class="form-control" required>
-        </div>
-        <button type="submit" name="change_password" class="btn btn-primary">Change Password</button>
-      </form>
-    </div>
-  </section>
+   <section class="card bg-dark border border-danger mb-4 ">
+      <div class="card-header bg-warning text-dark fw-bold">🔒 Change Password</div>
+      <div class="card-body">
+        <form method="post" action="" class="row g-2">
+            <div class="col-md-3">
+            
+            <input type="password" name="old_password" id="old_password" placeholder="Old Password" class="form-control" required>
+          </div>
+          <div class="col-md-3">
+      
+            <input type="password" name="new_password" id="new_password" placeholder="New Password" class="form-control" required>
+          </div>
+          <div class="col-md-3">
+          
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" class="form-control" required>
+          </div>
+          <div class="col-md-3">
+          <button type="submit" name="change_password" class="btn btn-danger w-100">Change Password</button>
+          </div>
+        </form>
+      </div>
+    </section>
 
 <?php
 

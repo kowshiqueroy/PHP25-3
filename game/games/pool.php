@@ -8,21 +8,9 @@ if ($luck_row) {
 
 
       <p class="text-secondary" style="font-size: 0.7rem; line-height: 1.5;">
-        Pool: <span class="luck-icon">✨</span><?php echo $id;
-
-    
+       <span class="text-white"><span class="luck-icon"></span> Pool: <span class="luck-icon">✨</span><?php echo $id;?></span>
       
-
-      
-
-        
-        
-        
-        
-        
-        ?><br>
-      
-        <?= implode('<br>', array_map(function($key) use ($luck_row, $conn) { 
+        <?php $players = array_map(function($key) use ($luck_row, $conn) { 
             $val = $luck_row[$key] ?? '';
             if ($val) {
                 $stmt = $conn->prepare("SELECT username FROM players WHERE id = ?");
@@ -35,7 +23,16 @@ if ($luck_row) {
                 }
             }
             return $key . ': ' . $val;
-        }, array_slice(array_keys($luck_row), 1, 12))) ?>
+        }, array_slice(array_keys($luck_row), 1, 12)); ?>
+        <div style="font-size: 0.6rem; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(4, auto); gap: 5px; margin: 0 auto; text-align: left;">
+        <?php foreach (array_chunk($players, 3) as $chunk): ?>
+            <?php foreach ($chunk as $player): ?>
+
+                
+                <div class="card bg-warning" style="border-radius: 10px; padding: 10px; word-break: break-all;"><?= $player ?></div>
+            <?php endforeach; ?>
+        <?php endforeach; ?>
+        </div>
 
 
 
