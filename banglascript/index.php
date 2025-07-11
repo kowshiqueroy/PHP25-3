@@ -1,5 +1,6 @@
 <?php
 
+include_once("header.php");
 
 // 1. Default program with more examples
 $defaultCode = <<<'CODE'
@@ -815,8 +816,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <a href="contact/" class="btn btn-secondary">Contact</a>
     </div>
 
-    <p class="text-center">সহজ কোডে প্রোগ্রামিং শিখুন।</p>
-        <p class="text-center">বাংলা সিনট্যাক্স শীঘ্রই আসছে। </p>
+    <div class="d-flex justify-content-around shadow p-3 mb-5 bg-body-tertiary rounded">
+        <p style="color: red;">সহজ কোডে প্রোগ্রামিং শিখুন।</p>
+        <p style="color: red;">বাংলা সিনট্যাক্স শীঘ্রই আসছে।</p>
+    </div>
+        <p class="text-center">
+            Total Visitors: <?php echo $total_ip; ?>, Total Hits: <?php echo $total_hits; ?> in this page
+ 
+            <a href="https://wa.me/+8801632950179?text=About%20BanglaScript: " target="_blank">Feedback on WhatsApp</a>
+        </p>
     <div class="row">
       <div class="col-sm-6">
         <form method="POST" class="mb-4">

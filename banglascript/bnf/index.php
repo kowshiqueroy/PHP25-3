@@ -1,3 +1,6 @@
+<?php
+include('../header.php');
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -184,5 +187,11 @@ if (condition) { …   } else { …   }
 - Provide any needed input tokens in Scan Input.
 - Click Run. The interpreter will parse, evaluate, and display each output(...) result line by line.</pre>
   </div>
+
+
+
+
+
+  
 </body>
 </html>
