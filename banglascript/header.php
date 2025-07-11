@@ -26,5 +26,10 @@ $stmt->close();
 
 $total_ip = $conn->query("SELECT COUNT(*) FROM hits")->fetch_assoc()['COUNT(*)'];
 $total_hits = $conn->query("SELECT SUM(hits) FROM hits")->fetch_assoc()['SUM(hits)'];
+
+
+
+
+
 ?>
 

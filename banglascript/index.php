@@ -2,82 +2,58 @@
 
 include_once("header.php");
 
+
+
+// sql to create table
+$sql = "CREATE TABLE IF NOT EXISTS debug (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    ip VARCHAR(45) NOT NULL,
+    code TEXT NOT NULL,
+    scan TEXT NOT NULL,
+    result TEXT NOT NULL,
+    error TEXT NOT NULL,
+    execution_time DECIMAL(10,6) NOT NULL,
+    timedate TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)";
+
+if ($conn->query($sql) === TRUE) {
+    // echo "Table created successfully";
+} else {
+    echo "Error creating table: " . $conn->error;
+}
+
+
+
+
+
+
+
+
+
 // 1. Default program with more examples
 $defaultCode = <<<'CODE'
-// Variable declarations and arithmetic
-box a = 10;
-box b = 3;
-box name = "BanglaScript";
-
-// Basic arithmetic operations
-box sum = a + b;
-box diff = a - b;
-box prod = a * b;
-box quot = a / b;
-box mod = a % b;
-
-output("=== Arithmetic Results ===");
-output("Sum: " + sum);
-output("Difference: " + diff);
-output("Product: " + prod);
-output("Quotient: " + quot);
-output("Modulo: " + mod);
-
-// Comparison operations
-box isEqual = (a == b);
-box isNotEqual = (a != b);
-box isGreater = (a > b);
-box isLess = (a < b);
-
-output("=== Comparison Results ===");
-output("a == b: " + isEqual);
-output("a != b: " + isNotEqual);
-output("a > b: " + isGreater);
-output("a < b: " + isLess);
-
-// Conditional statement
-if (a > b) {
-    output("\n" + a + " is greater than " + b);
-} else {
-    output("\n" + a + " is not greater than " + b);
+// This is a comment
+box a = 1;
+box b = 2;
+box c = a + b;
+output("Result is: "+a);
+input(d);
+if (c > d) {
+    output("c is greater than d");
+}
+else {
+    output("c is not greater than d");
+}
+box e=d;
+loop(e > 0) {
+    box serial=d-e+1;
+    output("Looping "+serial);
+    e=e-1;
 }
 
-// Fixed count loop
-output("=== Fixed Count Loop ===");
-box counter = 0;
-loop(3) {
-    output("Iteration: " + counter);
-    counter = counter + 1;
-}
-
-// While-style loop
-output("=== While Loop ===");
-box x = 0;
-loop(x < 3) {
-    output("x = " + x);
-    x = x + 1;
-}
-
-// Multiple conditions loop
-output("=== Multiple Conditions Loop ===");
-box y = 0;
-loop(y < 2, sum > 5) {
-    output("y = " + y + ", sum = " + sum);
-    y = y + 1;
-}
-
-// Input demonstration
-output("=== Input Demo ===");
-output("Enter your name:");
-input(userName);
-output("Hello, " + userName + "!");
-
-// String operations
-box greeting = "Welcome to " + name;
-output("" + greeting);
 CODE;
 
-$defaultScan = "Kowshique";
+$defaultScan = "3";
 
 // 2. Enhanced Tokenizer with better error handling
 function tokenize(string $input): array {
@@ -757,6 +733,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $error = $e->getMessage();
         $executionTime = round((microtime(true) - $startTime) * 1000, 2);
     }
+
+ 
+    $codeParam = $code;
+    $scanInputParam = $scanInput;
+    $outputParam = json_encode($output);
+    $errorParam = $error;
+    $executionTimeParam = $executionTime;
+    $ipParam = $_SERVER['REMOTE_ADDR'];
+    
+    $stmt = $conn->prepare("INSERT INTO debug (code, scan, result, error, execution_time, ip) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssds", $codeParam, $scanInputParam, $outputParam, $errorParam, $executionTimeParam, $ipParam);
+    $stmt->execute();
+    $stmt->close();
+    
+
 }
 ?>
 <!DOCTYPE html>
@@ -830,7 +821,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form method="POST" class="mb-4">
           <div class="mb-3">
             <label for="code" class="form-label">Code</label>
-            <textarea id="code" name="code" class="form-control" style="height: 300px;"><?php
+            <textarea id="code" name="code" class="form-control" style="height: 400px;"><?php
               echo htmlspecialchars($_POST['code'] ?? $defaultCode);
             ?></textarea>
           </div>
@@ -851,6 +842,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($error) echo "Error: " . htmlspecialchars($error);
             else echo htmlspecialchars(implode("\n", $output));
           ?></pre>
+          <p>Execution Time: <?php echo htmlspecialchars($executionTime) . ' ms'; ?></p>
+
         </div>
       </div>
     </div>

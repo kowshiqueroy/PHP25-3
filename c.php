@@ -83,7 +83,7 @@
       <div id="canvas" class="dropzone" ondrop="handleDrop(event)" ondragover="allowDrop(event)"></div>
     </div>
     <div class="col-md-4">
-      <h5>Generated C Code</h5>
+      <h5>Generated Code</h5>
       <pre><code id="output"></code></pre>
     </div>
   </div>
