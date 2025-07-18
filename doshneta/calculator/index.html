@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>দশনেতা 💸</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      padding: 25px 10px;
+    }
+    .calculator {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    h1, h2 {
+      color: #ff6f61;
+      text-align: center;
+      font-weight: 700;
+    }
+    label i {
+      margin-right: 6px;
+      color: #ff6f61;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .btn-primary {
+      width: 100%;
+      font-weight: bold;
+      background: #ff6f61;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #d94f50;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(15px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="text-center mb-4">
+    <h1>দশনেতা</h1>
+  </div>
+
+  <div class="nav-buttons">
+    <a href="../dashboard/" class="btn btn-outline-secondary flex-fill">📝 চান্দা হিট লিস্ট</a>
+    <a href="../register/" class="btn btn-outline-secondary flex-fill">🔐 চান্দা সুরক্ষা সার্টিফিকেট</a>
+    <a href="../calculator/" class="btn btn-primary flex-fill" id="highlight">📊 চান্দা ক্যালকুলেটর</a>
+  </div>
+
+  <div class="calculator">
+   
+
+    <div class="form-group">
+      <label for="income"><i class="bi bi-cash-coin"></i>আয়</label>
+      <input type="number" id="income" value="20000" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="hidden-income"><i class="bi bi-bank"></i>গোপন আয়</label>
+      <input type="number" id="hidden-income" value="100000" class="form-control">
+    </div>
+
+    <div class="form-group row">
+      <div class="col">
+        <label for="job"><i class="bi bi-person-workspace"></i>পেশা</label>
+        <select id="job" class="form-control">
+          <option value="1">সরকারি</option>
+          <option value="2">বেসরকারি</option>
+          <option value="3">ব্যবসা</option>
+          <option value="4">কৃষি</option>
+          <option value="5">শিক্ষক</option>
+          <option value="6">ডাক্তার</option>
+          <option value="7">ইঞ্জিনিয়ার</option>
+          <option value="8">আর্মি</option>
+          <option value="9">অন্যান্য</option>
+        </select>
+      </div>
+      <div class="col">
+        <label for="party"><i class="bi bi-megaphone-fill"></i>দল</label>
+        <select id="party" class="form-control">
+             <option value="0">জানি না</option>
+          <option value="1">BAL</option>
+          <option value="2">দেশনেতা</option>
+          <option value="3">কাকা</option>
+          <option value="4">হুজুর</option>
+          <option value="5">গেঞ্জি</option>
+          <option value="6">অন্যান্য</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" onclick="calculateDonation()">💡 হিসাব করুন</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function calculateDonation() {
+      var income = parseFloat(document.getElementById("income").value) || 0;
+      var hiddenIncome = parseFloat(document.getElementById("hidden-income").value) || 0;
+      var job = document.getElementById("job").value;
+      var party = document.getElementById("party").value;
+
+      if (job === "8") {
+        document.getElementById("result").innerHTML =
+          "<p>🛡️ পেশা: আর্মি</p><p>😅 সরি আমার ভুল হয়ে গেছে</p>";
+        return;
+      }
+
+      var jobMultiplier = getJobMultiplier(job);
+      var partyMultiplier = getPartyMultiplier(party);
+      var totalIncome = ((income * 0.1) + (hiddenIncome * 0.9));
+
+      var result = "<div class='card mt-3'><div class='card-header bg-warning text-dark'>📦 চান্দার পরিমান</div><div class='card-body'>";
+      result += "<p>💰 আয়ের ১০% : " + (income / 10).toFixed(2) + " ৳</p>";
+      result += "<p>🕵️‍♂️ গোপন আয়ের ৯০% : " + (hiddenIncome * 0.9).toFixed(2) + " ৳</p>";
+      result += "<hr><p>= " + totalIncome.toFixed(2) + " ৳</p>";
+
+      totalIncome += totalIncome * jobMultiplier;
+      totalIncome += totalIncome * partyMultiplier;
+
+      result += "<hr><p>👤 " + getJobName(job) + "</p>";
+      result += "<p>🏛️ " + getPartyName(party) + "</p>";
+
+      if (totalIncome < 0) {
+        result += "<hr><h5 style='color:red'>❌ আপনি ফেরত পাবেন " + totalIncome.toFixed(2) + " ৳</h5>";
+      } else {
+        result += "<hr><h5>✅ মোট চান্দা: " + totalIncome.toFixed(2) + " ৳</h5>";
+      }
+      result += "</div></div>";
+
+      document.getElementById("result").innerHTML = result;
+    }
+
+    function getJobMultiplier(job) {
+      switch (job) {
+        case "1": return .1;
+        case "2": return 1;
+        case "3": return 10;
+        case "4":
+        case "5":
+        case "6":
+        case "7":
+        case "9": return .1;
+        case "8": return 0;
+        default: return .1;
+      }
+    }
+
+    function getPartyMultiplier(party) {
+      switch (party) {
+        case "1": return 10;
+        case "2": return -10;
+        case "3": return 0.1;
+        case "4": return -0.1;
+        case "5": return -10;
+        case "6": return 0.1;
+        default: return -0.1;
+      }
+    }
+
+    function getJobName(job) {
+      switch (job) {
+        case "1": return "সরকারি চাকুরি আরও ১০% (উঠায় নিয়েন)";
+        case "2": return "বেসরকারি চাকুরি (EMI পেতে দশনেতাকে ভিডিও কল করুন)";
+        case "3": return "ব্যবসা আরও ১০ গুন";
+        case "4": return "কৃষি ১০%";
+        case "5": return "শিক্ষক ১০%";
+        case "6": return "ডাক্তার ১০%";
+        case "7": return "ইঞ্জিনিয়ার ১০%";
+        case "8": return "আর্মি (সরি আমার ভুল হয়ে গেছে)";
+      default: return "আরও ১০%";
+    }
+  }
+
+  function getPartyName(party) {
+    switch (party) {
+      case "1": return "BAL এর লোক আরও ১০ গুন দিবে";
+      case "2": return "দেশনেতার লোক ফেরত পাবে ১০ গুন";
+      case "3": return "কাকার লোক আরও ১০% দিবে";
+      case "4": return "হুজুরের লোক ফেরত পাবেন ১০%";
+      case "5": return "গেঞ্জির লোক ফেরত পাবে ১০ গুন";
+      case "6": return "যার দলের ঠিক নাই সে আরও ১০% দিবে";
+    default: return "আমাদের দলে আসেন ১০% পাবেন ";
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>দশনেতা 💸</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #fdfbfb, #ebedee);
+      padding: 25px 10px;
+    }
+    .calculator {
+      max-width: 600px;
+      margin: auto;
+      background: #fff;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+    h1, h2 {
+      color: #ff6f61;
+      text-align: center;
+      font-weight: 700;
+    }
+    label i {
+      margin-right: 6px;
+      color: #ff6f61;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .btn-primary {
+      width: 100%;
+      font-weight: bold;
+      background: #ff6f61;
+      border: none;
+    }
+    .btn-primary:hover {
+      background: #d94f50;
+    }
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    #result {
+      margin-top: 20px;
+      animation: fadeInUp 0.6s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes fadeInUp {
+      from {opacity: 0; transform: translateY(15px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="text-center mb-4">
+    <h1>দশনেতা</h1>
+  </div>
+
+  <div class="nav-buttons">
+    <a href="../dashboard/" class="btn btn-outline-secondary flex-fill">📝 চান্দা হিট লিস্ট</a>
+    <a href="../calculator/" class="btn btn-outline-secondary flex-fill">📊 চান্দা ক্যালকুলেটর</a>
+        <a href="../register/" class="btn btn-primary flex-fill" id="highlight">🔐 চান্দা সুরক্ষা সার্টিফিকেট</a>
+
+  </div>
+
+  <div class="calculator">
+
+    <div class="form-group">
+      <label for="name"><i class="bi bi-person-circle"></i>নাম</label>
+      <input type="text" id="name" value="বলবো না" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="address"><i class="bi bi-geo-alt-fill"></i>ঠিকানা</label>
+      <input type="text" id="address" value="বলবো না" class="form-control">
+    </div>
+   
+
+    <div class="form-group">
+      <label for="income"><i class="bi bi-cash-coin"></i>আয়</label>
+      <input type="number" id="income" value="20000" class="form-control">
+    </div>
+
+    <div class="form-group">
+      <label for="hidden-income"><i class="bi bi-bank"></i>গোপন আয়</label>
+      <input type="number" id="hidden-income" value="100000" class="form-control">
+    </div>
+
+    <div class="form-group row">
+      <div class="col">
+        <label for="job"><i class="bi bi-person-workspace"></i>পেশা</label>
+        <select id="job" class="form-control">
+           <option value="9">নাম বলবো না</option>
+          <option value="1">সরকারি</option>
+          <option value="2">বেসরকারি</option>
+          <option value="3">ব্যবসা</option>
+          <option value="4">কৃষি</option>
+          <option value="5">শিক্ষক</option>
+          <option value="6">ডাক্তার</option>
+          <option value="7">ইঞ্জিনিয়ার</option>
+        
+         
+        </select>
+      </div>
+      <div class="col">
+        <label for="party"><i class="bi bi-megaphone-fill"></i>দল</label>
+        <select id="party" class="form-control">
+          <option value="0">জানি না</option>
+          <option value="1">BAL</option>
+          <option value="2">দেশনেতা</option>
+          <option value="3">কাকা</option>
+          <option value="4">হুজুর</option>
+          <option value="5">গেঞ্জি</option>
+          <option value="6">অন্যান্য</option>
+        </select>
+      </div>
+    </div>
+
+<div class="form-group row">
+  <div class="col">
+    <label for="chanda-amount"><i class="bi bi-currency-exchange"></i> চান্দার পরিমান</label>
+    <input type="number" id="chanda-amount" class="form-control" placeholder="পরিমান লিখুন" value="1000">
+  </div>
+  <div class="col-auto d-flex align-items-end">
+    <button type="button" class="btn btn-secondary" onclick="window.location.href='../calculator/'">ক্যালকুলেটর</button>
+  </div>
+</div>
+
+<div class="form-group row">
+  <div class="col">
+    <label for="date"><i class="bi bi-calendar-event"></i> তারিখ</label>
+    <input type="date" id="date" class="form-control" value="">
+    <script>
+      document.getElementById('date').valueAsDate = new Date();
+    </script>
+  </div>
+  <div class="col-auto d-flex align-items-end">
+    <button type="button" class="btn btn-secondary">মেয়াদ ১ মাস</button>
+  </div>
+</div>
+
+
+    <button class="btn btn-primary" onclick="certify()">সার্টিফিকেট ডাউনলোড</button>
+    <div id="result"></div>
+    <div id="show" ></div>
+  </div>
+
+  <script>
+
+    function certify() {
+  document.getElementById('result').innerText = '';
+  document.getElementById('show').innerText = '';
+
+  const name = document.getElementById('name').value;
+  const address = document.getElementById('address').value;
+  const income = parseFloat(document.getElementById('income').value);
+  const hiddenIncome = parseFloat(document.getElementById('hidden-income').value);
+  const job = document.getElementById('job').value;
+  const party = document.getElementById('party').value;
+  const chandaAmount = parseFloat(document.getElementById('chanda-amount').value);
+  const date = document.getElementById('date').value;
+
+  if (!name || !address ||   !chandaAmount || !date) {
+    document.getElementById('result').innerText = 'সব তথ্য সঠিকভাবে পূরণ করুন।';
+    return;
+  }
+
+  function getJobName(job) {
+    switch (job) {
+      case "1": return "সরকারি চাকুরি";
+      case "2": return "বেসরকারি চাকুরি";
+      case "3": return "ব্যবসা";
+      case "4": return "কৃষি";
+      case "5": return "শিক্ষক";
+      case "6": return "ডাক্তার";
+      case "7": return "ইঞ্জিনিয়ার";
+      case "8": return "আর্মি";
+      default: return "অন্যান্য";
+    }
+  }
+
+  function getPartyName(party) {
+    switch (party) {
+      case "1": return "BAL";
+      case "2": return "দেশনেতা";
+      case "3": return "কাকা";
+      case "4": return "হুজুর";
+      case "5": return "গেঞ্জি";
+      case "6": return "অন্যান্য";
+      default: return "জানি না";
+    }
+  }
+
+  const totalIncome = income + hiddenIncome;
+
+  // Canvas
+  const canvas = document.createElement('canvas');
+  document.body.appendChild(canvas);
+  canvas.style.display = 'none';
+  const ctx = canvas.getContext('2d');
+  const width = 1000;
+  const height = 700;
+  canvas.width = width;
+  canvas.height = height;
+
+  // Background
+  const bgGradient = ctx.createLinearGradient(0, 0, 0, height);
+  bgGradient.addColorStop(0, '#f2f6f9');
+  bgGradient.addColorStop(1, '#cfd9df');
+  ctx.fillStyle = bgGradient;
+  ctx.fillRect(0, 0, width, height);
+
+  // Border
+  ctx.strokeStyle = '#34495e';
+  ctx.lineWidth = 8;
+  ctx.strokeRect(20, 20, width - 40, height - 40);
+
+  // Header
+
+  // Box on top left
+  ctx.strokeStyle = '#000';
+  ctx.lineWidth = 4;
+  ctx.strokeRect(50, 50, 180, 180);
+  ctx.fillStyle = '#000';
+  ctx.font = '20px "Segoe UI", sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('doshneta.netlify.app', 140, 135);
+
+
+  ctx.font = 'bold 42px "Segoe UI", sans-serif';
+  ctx.fillStyle = 'rgba(44, 62, 80, 1)';
+  ctx.textAlign = 'center';
+  ctx.fillText('চান্দা সুরক্ষা পত্র', width / 2, 100);
+  ctx.font = '20px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#34495e';
+  ctx.fillText('একটি চান্দা দান, বাঁচাতে পারে প্রাণ', width / 2, 140);
+
+  // Data
+  const lines = [
+    `নাম: ${name}`,
+    `ঠিকানা: ${address}`,
+    `মোট আয়: ${totalIncome} ৳`,
+    `পেশা: ${getJobName(job)}`,
+    `দল: ${getPartyName(party)}`,
+    `চান্দার পরিমান: ${chandaAmount} ৳`,
+    `তারিখ: ${date}`,
+    `এর পরবর্তী ১ মাস পর্যন্ত এই সনদ বহনকারীর কাছে চান্দা চাহিয়া লজ্জা দিবেন না`,
+  ];
+  ctx.font = '22px "Segoe UI", sans-serif';
+  ctx.fillStyle = '#000';
+  const startY = 200;
+  const lineHeight = 40;
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], width / 2, startY + i * lineHeight);
+  }
+
+  // Left Seal
+  ctx.beginPath();
+  ctx.arc(120, height - 120, 60, 0, Math.PI * 2);
+  ctx.fillStyle = '#e74c3c';
+  ctx.fill();
+  ctx.font = 'bold 14px "Segoe UI", sans-serif';
+  ctx.fillStyle = 'white';
+  ctx.fillText('দশনেতার ধান্দা', 120, height - 130);
+  ctx.fillText('থাকবে শুধু চান্দা', 120, height - 110);
+
+  // Right Seal
+  ctx.beginPath();
+  ctx.arc(width - 120, height - 120, 60, 0, Math.PI * 2);
+  ctx.fillStyle = '#27ae60';
+  ctx.fill();
+  ctx.font = 'bold 14px "Segoe UI", sans-serif';
+  ctx.fillStyle = 'white';
+  ctx.fillText('ভিডিও কলে', width - 120, height - 130);
+  ctx.fillText('চলবে দেশ', width - 120, height - 110);
+
+  // Signature
+  ctx.fillStyle = '#2c3e50';
+  ctx.font = 'italic bold 20px "Dancing Script", cursive, sans-serif';
+  ctx.fillText('dshntr10%', width / 2, height - 70);
+  ctx.font = 'italic 20px "Segoe UI", sans-serif';
+  ctx.fillText('স্বাক্ষর', width / 2, height - 50);
+
+  // QR Code
+  const tempDiv = document.createElement('div');
+  document.body.appendChild(tempDiv);
+  const qr = new QRCode(tempDiv, {
+    text: 'https://doshneta.netlify.app/register',
+    width: 200,
+    height: 200,
+    colorDark: '#000',
+    colorLight: '#fff',
+    correctLevel: QRCode.CorrectLevel.H,
+  });
+
+  setTimeout(() => {
+    const qrImg = tempDiv.querySelector('img');
+    if (qrImg) {
+      const img = new Image();
+      img.src = qrImg.src;
+      img.onload = () => {
+        ctx.drawImage(img, width - 230, 50, 180, 180);
+        tempDiv.remove();
+        canvas.style.display = 'block';
+
+        // Download Button
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/jpeg');
+        link.download = `doshneta-${name}-${date}.jpg`;
+
+        const button = document.createElement('button');
+        button.innerHTML = '📥 Download Certificate';
+        button.onclick = () => link.click();
+        button.style.display = 'block';
+        button.style.margin = '20px auto';
+        button.style.fontSize = '20px';
+        button.style.fontWeight = 'bold';
+
+        const preview = document.createElement('img');
+        preview.src = canvas.toDataURL('image/jpeg');
+        preview.style.maxWidth = '100%';
+
+        document.getElementById('result').innerHTML = '';
+        document.getElementById('result').appendChild(button);
+        document.getElementById('show').innerHTML = '';
+        document.getElementById('show').appendChild(preview);
+          canvas.style.display = 'none';
+      };
+    }
+  }, 500);
+}
+</script>
+
+</body>
+</html>
