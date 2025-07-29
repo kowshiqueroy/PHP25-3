@@ -394,7 +394,35 @@ if ($result->num_rows > 0): ?>
 <?php else: ?>
     <p>No records found.</p>
 <?php endif; ?>
+<div class="button-group">
+    <button onclick="window.location.href='damages.php'" class="btn btn-outline-primary">
+        <i class="bi bi-list"></i> List View
+    </button>
+    <button onclick="window.location.href='report.php?id=<?= htmlspecialchars($id) ?>'" class="btn btn-outline-info">
+        <i class="bi bi-file-text"></i> View Report
+    </button>
+</div>
 
+<style>
+.button-group {
+    text-align: center;
+    margin-bottom: 20px;
+}
+button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+button:hover {
+    background-color: #45a049;
+}
+</style>
     <script>
         document.getElementById('product_id').addEventListener('change', function() {
             var xhttp = new XMLHttpRequest();

@@ -106,7 +106,7 @@ if (isset($_GET['date_from']) && isset($_GET['date_to'])) {
                         echo "<td>{$row['shop_type']} - {$row['trader_name']}</td>";
                         echo "<td>{$row['shop_total_qty']} ={$row['shop_total_amount']}/-</td>";
                         echo "<td>{$row['received_total_qty']} ={$row['received_total_amount']}/-</td>";
-                        echo "<td>{$row['actual_total_qty']} ={$row['actual_total_amount']}/-</td>";
+                        echo "<td><a style='text-decoration: none' href='report.php?id={$row['id']}'>{$row['actual_total_qty']} ={$row['actual_total_amount']}/- 📊</a></td>";
                         echo "</tr>";
                     }
                     $stmt->close();
