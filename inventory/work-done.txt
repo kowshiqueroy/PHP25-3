@@ -1,0 +1,74 @@
+## Work Done
+
+### Phase 1: Project Setup & Core Infrastructure
+- Created `development work-plan.txt`
+- Created `work-done.txt`
+- Created core directories: `public`, `includes`, `modules`, `uploads`, `config`
+- Created `index.php` (main entry point with login form and Bootstrap 5 integration)
+- Created `config.php` (application-wide configurations, database credentials)
+- Created `setup.php` (database initialization, table creation, default admin, sample data seeding)
+- Created `includes/db_connect.php` (MySQL connection function)
+- Created `includes/functions.php` (placeholder for common utility functions)
+
+### Phase 3: Authentication & Authorization
+- Implemented `login.php` for user authentication.
+- Implemented `includes/auth_check.php` for session management and role-based access control.
+- Modified `index.php` to display login error messages.
+- Created `dashboard.php` with a basic layout, navigation bar, and role-based menu items.
+- Created `logout.php` for session termination.
+- Created `unauthorized.php` for access denied messages.
+
+### Phase 4: Core Modules (CRUD Operations)
+- Implemented `store_management.php` for CRUD operations on stores (Admin/Manager roles).
+- Implemented `user_management.php` for CRUD operations on users (Admin/Manager roles).
+- Implemented `category_management.php` for CRUD operations on categories (Admin/Manager/Data Entry roles).
+- Implemented `product_management.php` for CRUD operations on products, including image uploads (Admin/Manager/Data Entry roles).
+- Implemented `product_batch_management.php` for CRUD operations on product batches (Admin/Manager/Data Entry roles).
+
+### Phase 5: POS-Style Transaction UI
+- Implemented `transactions.php` with tabbed UI for different transaction types.
+- Implemented `api/product_search.php` for AJAX product lookup.
+- Implemented `api/product_batch_search.php` for AJAX product batch lookup.
+- Implemented `process_transaction.php` to handle 'IN' (New Stock Entry) transactions, including database updates for product batches and transactions.
+- Implemented `OUT`, `Return to Store`, `Return to Supplier`, `Mark as Damaged`, and `Expiry Isolation` transaction types in `process_transaction.php`.
+
+### Phase 6: QC Workflow
+- Implemented `qc_workflow.php` for QC role to view and approve/reject pending transactions.
+- Modified `setup.php` to add `qc_status` column to `transactions` table.
+- Modified `process_transaction.php` to set `qc_status` to 'Pending' for new transactions.
+- Updated `qc_workflow.php` to handle stock updates for all transaction types upon QC approval.
+
+### Phase 7: Reporting System
+- Implemented `reports.php` for custom filtered reports (Viewer/Manager/Admin roles).
+
+### Phase 8: Additional Features & Refinements
+- Modified `setup.php` to include a default JSON configuration for the `config_json` column in the `stores` table.
+- Updated `store_management.php` to allow editing of the `config_json` field for each store.
+- Added `get_store_config` and `update_store_config` functions to `includes/functions.php` for handling JSON configuration.
+- Implemented basic smart suggestion engine for requisition substitutes in `transactions.php` (OUT tab) and `api/product_substitute_search.php`.
+- Implemented auto-suggestion for low-expiry items on OUT transactions in `transactions.php` and `api/product_batch_search.php`.
+- Implemented notification summaries on the dashboard (`dashboard.php`) for pending QC actions, low stock alerts, and expired batches.
+- Integrated audit trail logging (`log_audit_trail` function in `includes/functions.php`) for `process_transaction.php` and `qc_workflow.php`.
+
+### Phase 1 (Revisited): Refine Role-Based Access Control
+- Updated `dashboard.php` navigation links to reflect stricter role permissions.
+- Restricted `store_management.php` access to 'Admin' only.
+- Restricted `user_management.php` access to 'Admin' only.
+- Restricted `category_management.php` access to 'Manager' and 'Data Entry' only (removed 'Admin').
+- Restricted `product_management.php` access to 'Manager' and 'Data Entry' only (removed 'Admin').
+- Restricted `product_batch_management.php` access to 'Manager' and 'Data Entry' only (removed 'Admin').
+- Restricted `transactions.php` access to 'Manager', 'Data Entry', and 'QC' only (removed 'Admin').
+- Restricted `qc_workflow.php` access to 'Manager' and 'QC' only (removed 'Admin').
+
+### Phase 2: Enhance Transaction Forms (Single Product First)
+- Modified `transactions` table schema in `setup.php` to include `person_name`, `contact_text`, and `slip_number` columns.
+- Added `person_name`, `contact_text`, and `slip_number` input fields to all transaction forms in `transactions.php`.
+- Updated `process_transaction.php` to capture and store `person_name`, `contact_text`, and `slip_number`.
+- Updated `qc_workflow.php` to display `person_name`, `contact_text`, and `slip_number` in the pending transactions table.
+- Updated `reports.php` to display `person_name`, `contact_text`, and `slip_number` in the generated reports.
+
+### Phase 3: Implement Multi-Product Transactions (Sales Invoice Style)
+- Modified `transactions` table schema in `setup.php`:
+    - Removed `product_id`, `quantity`, `batch_id`.
+    - Added `total_amount`.
+- Created `transaction_items` table in `setup.php`.

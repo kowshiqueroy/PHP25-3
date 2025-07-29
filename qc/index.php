@@ -1,3 +1,37 @@
+<?php
+// This is a simple login page for QC Damage
+include_once('config.php');
+$msg="";
+if (isset($_SESSION['user_id'])) {
+    header('Location: dashboard.php');
+    exit;
+}
+
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $sql = "SELECT * FROM users WHERE username = ? and status='active'";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $username);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        if (password_verify($password, $row['password'])) {
+            $_SESSION['user_id'] = $row['id'];
+            header('Location: dashboard.php');
+            exit;
+        }
+    }
+    $msg= "Invalid username or password.";
+}
+
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -72,6 +106,19 @@
         button:hover {
             background: #1e87f0;
         }
+        h3 {
+            color: red;
+            margin-bottom: 20px;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(-2px, 0); }
+            50% { transform: translate(2px, 0); }
+            75% { transform: translate(-2px, 0); }
+            100% { transform: translate(0, 0); }
+        }
     </style>
 </head>
 
@@ -79,7 +126,8 @@
     <div class="container">
         <div class="login-box">
             <h2>QC Damage Login</h2>
-            <form action="inddex.php" method="post">
+            <h3><?php echo $msg; ?></h3>
+            <form action="index.php" method="post">
                 <div class="user-box">
                     <input type="text" name="username" required>
                     <label>Username</label>

@@ -1,9 +1,10 @@
 <?php
+include_once 'config.php'; // Include your database connection and configuration file
 $theme = 0; // 0 for light, 1 for dark
 $language = 0; // 0 for English, 1 for Bangla
 $username = 'User1234';
 $role = 'Admin';
-$company = 'My Company';
+$company = 'Ovijat QC';
 
 $lang = [
     // English
@@ -12,6 +13,7 @@ $lang = [
         'dashboard' => 'Dashboard',
         'users' => 'Users',
         'products' => 'Products',
+        'damages' => 'Damages',
         'analytics' => 'Analytics',
         'settings' => 'Settings',
         'logout' => 'Logout',
@@ -84,6 +86,7 @@ $lang = [
         'users' => 'ব্যবহারকারী',
         'products' => 'পণ্য',
         'analytics' => 'বিশ্লেষণ',
+        'damages' => 'ক্ষতি',
         'settings' => 'সেটিংস',
         'logout' => 'লগআউট',
         'total_revenue' => 'মোট রাজস্ব',
@@ -209,6 +212,15 @@ $lang = [
                     <span><?php echo $lang[$language]['products']; ?></span>
                 </a>
             </li>
+
+             <li class="nav-item">
+                <a href="damages.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                    <span><?php echo $lang[$language]['damages']; ?></span>
+                </a>
+            </li>
             <li class="nav-item">
                 <a href="analytics.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -253,7 +265,7 @@ $lang = [
                 <?php echo $lang[$language]['admin_panel']; ?>
             </div>
             <div class="header-right">
-                <button class="logout-btn"><?php echo $lang[$language]['logout']; ?></button>
+                <button class="logout-btn" onclick="window.location.href='logout.php'"><?php echo $lang[$language]['logout']; ?></button>
             </div>
         </header>
 

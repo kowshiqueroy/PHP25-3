@@ -1,0 +1,141 @@
+# Development Work Plan for Core PHP/MySQL Inventory & POS System
+
+This plan outlines the steps to develop a self-hosted, lightweight, role-based inventory and store management system using core PHP and MySQL, Bootstrap 5 for UI, and vanilla JavaScript.
+
+## Phase 1: Project Setup & Core Infrastructure
+
+1.  **Initial Directory Structure:**
+    *   Create `public/` (for static assets like CSS/JS).
+    *   Create `includes/` (for common functions, database connection).
+    *   Create `modules/` (for different functional modules like users, products, transactions).
+    *   Create `uploads/` (for product images).
+    *   Create `config/` (for JSON configurations).
+2.  **Basic Files:**
+    *   `index.php` (main entry point, login).
+    *   `setup.php` (database initialization, default admin, sample data).
+    *   `config.php` (application-wide configurations, database credentials).
+    *   `includes/db_connect.php` (MySQL connection).
+    *   `includes/functions.php` (common utility functions).
+3.  **Bootstrap 5 Integration:**
+    *   Link Bootstrap CSS and JS in `public/`.
+    *   Create a basic responsive header/footer template.
+
+## Phase 2: Database & Initial Data Setup (`setup.php`)
+
+1.  **Database Connection & Creation:**
+    *   Implement logic to connect to MySQL and create the database if it doesn't exist.
+2.  **Table Creation:**
+    *   `roles` (id, name)
+    *   `users` (id, username, password_hash, role_id, store_id, created_at)
+    *   `stores` (id, name, location, config_json)
+    *   `categories` (id, name, description)
+    *   `products` (id, name, category_id, sku, image_path, description, created_at)
+    *   `product_batches` (id, product_id, store_id, expiry_date, storage_location, qc_status, damage_status, quantity, created_at, updated_at)
+    *   `transactions` (id, type, user_id, store_id, batch_id, product_id, quantity, transaction_date, comments, created_at)
+    *   `qc_logs` (id, transaction_id, user_id, status, comments, log_date)
+    *   `audit_trail` (id, user_id, action, entity_type, entity_id, old_value, new_value, timestamp)
+3.  **Default Admin Account:**
+    *   Create a default admin user with a predefined username and password.
+4.  **Seed Sample Data:**
+    *   Add sample roles (Admin, Manager, Data Entry, Viewer, Purchaser, QC).
+    *   Add sample stores.
+    *   Add sample categories.
+    *   Add sample products.
+    *   Add sample product batches.
+
+## Phase 3: Authentication & Authorization
+
+1.  **Session Management:**
+    *   Implement PHP session start and management.
+2.  **Login/Logout:**
+    *   Create login form (`index.php`).
+    *   Validate credentials against `users` table.
+    *   Set session variables upon successful login (user_id, role_id, store_id).
+    *   Logout functionality.
+3.  **Role-Based Access Control (RBAC):**
+    *   Implement a function to check user permissions based on `role_id` for accessing modules/pages.
+    *   Redirect unauthorized users.
+
+## Phase 4: Core Modules (CRUD Operations)
+
+1.  **Dashboard:**
+    *   Basic dashboard view based on user role.
+2.  **Store Management (Admin Only):**
+    *   CRUD for `stores`.
+    *   Assign users to stores.
+3.  **User Management (Admin/Manager):**
+    *   CRUD for `users`.
+    *   Assign roles to users.
+4.  **Product Category Management:**
+    *   CRUD for `categories`.
+5.  **Product Management:**
+    *   CRUD for `products`.
+    *   Handle product image uploads to `uploads/`.
+6.  **Product Batch Management:**
+    *   CRUD for `product_batches`.
+    *   Link to products and stores.
+
+## Phase 5: POS-Style Transaction UI
+
+1.  **Transaction Interface:**
+    *   Single page with tabbed/pane-based UI for different transaction types.
+    *   `IN` (New Stock Entry)
+    *   `OUT` (Dispatch to Usage)
+    *   `Return to Store`
+    *   `Return to Supplier`
+    *   `Mark as Damaged`
+    *   `Expiry Isolation`
+2.  **Form Elements & Logic:**
+    *   Product lookup (AJAX-based auto-suggestion).
+    *   Quantity input.
+    *   Expiry date, storage location (for IN).
+    *   Comments field.
+    *   Barcode/QR scanning (placeholder: focus on manual input/lookup first).
+    *   Auto-suggestion for low-expiry items on OUT transactions.
+3.  **AJAX & Modals:**
+    *   Use vanilla JavaScript for AJAX form submissions.
+    *   Modal confirmations for critical actions.
+    *   Color-coded action buttons.
+
+## Phase 6: QC Workflow
+
+1.  **QC Verification Module:**
+    *   Interface for QC role to view pending `IN`, `Return`, and `Damaged` transactions.
+    *   Approve/Reject functionality.
+    *   Mandatory comments for approval/rejection.
+2.  **Stock Update Logic:**
+    *   Stock updates to `product_batches` only occur after QC approval for relevant transaction types.
+3.  **QC Logs:**
+    *   Record all QC actions in `qc_logs` table.
+
+## Phase 7: Reporting System
+
+1.  **Custom Filtered Reports:**
+    *   Interface to filter reports by store, transaction type, product, category, date range.
+    *   Reports for `IN`, `OUT`, and current `Stock` levels.
+2.  **HTML Views & Printing:**
+    *   Generate clean HTML reports optimized for A4 printing (using Bootstrap print utilities).
+3.  **Snapshot Dashboard:**
+    *   Real-time widgets: pending POs (if PO module is added later), QC actions, expiry alerts.
+
+## Phase 8: Additional Features & Refinements
+
+1.  **JSON Configuration:**
+    *   Implement reading/writing `config/store_rules.json` for unit, currency, expiry alerts per store.
+2.  **Product Image Uploads:**
+    *   Ensure robust handling of image uploads to `uploads/` directory.
+3.  **Smart Suggestion Engine (Basic):**
+    *   Implement a basic suggestion for requisition substitutes (e.g., if product A is out of stock, suggest product B from the same category).
+4.  **Notification Summaries:**
+    *   Basic notification system (e.g., dashboard alerts for low stock, pending QC).
+5.  **Audit Trail:**
+    *   Log significant stock changes and user actions in `audit_trail` table.
+6.  **Error Handling & Validation:**
+    *   Implement robust server-side validation and user-friendly error messages.
+7.  **Security Enhancements:**
+    *   Password hashing (Bcrypt).
+    *   Prevent SQL injection (prepared statements).
+    *   CSRF protection (basic token implementation).
+8.  **Code Refactoring & Documentation:**
+    *   Ensure code is clean, modular, and well-commented for educational clarity.
+    *   Add a `README.md` for setup instructions.

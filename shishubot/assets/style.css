@@ -1,0 +1,217 @@
+body {
+    font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; /* Modern monospace font */
+    background-color: #1a1a1a; /* Deep dark background */
+    color: #e0e0e0; /* Soft white text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden;
+}
+
+.login-container, .chat-container {
+    background-color: #0a0a0a; /* Even darker background for containers */
+    padding: 25px;
+    border-radius: 10px; /* Slightly rounded corners */
+    box-shadow: 0 0 20px rgba(0, 255, 100, 0.3); /* Subtle teal/green glow */
+    width: 100%;
+    max-width: 800px; /* Wider for a more spacious terminal feel */
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    border: 1px solid #00ff64; /* Thin accent border */
+}
+
+.login-container h1, .chat-container h1 {
+    margin-bottom: 25px;
+    color: #00ff64; /* Vibrant accent color */
+    text-align: center;
+    text-shadow: 0 0 5px rgba(0, 255, 100, 0.5);
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #00ff64;
+}
+
+.form-group input[type="text"],
+.form-group input[type="password"] {
+    width: calc(100% - 24px); /* Adjust for padding and border */
+    padding: 12px;
+    border: 1px solid #00ff64; /* Accent border */
+    background-color: #1a1a1a; /* Matches body background */
+    color: #e0e0e0;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+button[type="submit"] {
+    background-color: #005522; /* Darker green for buttons */
+    color: #e0e0e0;
+    padding: 12px 20px;
+    border: 1px solid #00ff64;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+button[type="submit"]:hover {
+    background-color: #007733; /* Lighter green on hover */
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.7);
+}
+
+.error {
+    color: #ff4444; /* Softer red for errors */
+    margin-bottom: 15px;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #00ff64;
+}
+
+.chatbot-name {
+    color: #00ff64;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 0 0 5px rgba(0, 255, 100, 0.5);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    color: #e0e0e0;
+    font-size: 0.9em;
+}
+
+.user-info span {
+    margin-right: 10px;
+}
+
+.logout-link {
+    color: #00ff64; /* Vibrant green for links */
+    text-decoration: none; /* No underline by default */
+    transition: text-decoration 0.3s ease;
+}
+
+.logout-link:hover {
+    text-decoration: underline;
+}
+
+.chat-box {
+    flex-grow: 1;
+    border: none;
+    background-color: #0a0a0a;
+    overflow-y: auto;
+    padding: 15px;
+    margin-bottom: 15px;
+    scroll-behavior: smooth;
+    border-top: 1px dashed #00ff64; /* Dashed separator */
+    border-bottom: 1px dashed #00ff64;
+}
+
+.message {
+    margin-bottom: 12px;
+    padding: 0;
+    max-width: 100%; /* Allow messages to take full width */
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    user-select: text; /* Make text selectable/copyable */
+}
+
+.user-message {
+    color: #e0e0e0; /* User text color */
+    text-align: right;
+    align-self: flex-end;
+}
+
+.bot-message {
+    color: #00ff64; /* Bot text color */
+    text-align: left;
+    align-self: flex-start;
+}
+
+.message-timestamp {
+    font-size: 0.75em;
+    color: #888; /* Subtler timestamp color */
+    margin-top: 3px;
+    display: block;
+}
+
+.input-area {
+    display: flex;
+    gap: 10px; /* Space between input and button */
+    margin-top: 15px;
+}
+
+#chat-input {
+    flex-grow: 1; /* Takes most of the space */
+    padding: 12px;
+    border: 1px solid #00ff64;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    border-radius: 5px;
+    font-size: 1em;
+}
+
+#chat-form button {
+    padding: 12px 20px;
+    background-color: #005522;
+    color: #e0e0e0;
+    border: 1px solid #00ff64;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#chat-form button:hover {
+    background-color: #007733;
+    box-shadow: 0 0 10px rgba(0, 255, 100, 0.7);
+}
+
+pre {
+    background-color: #000; /* Pure black for code blocks */
+    color: #00ff64;
+    padding: 15px;
+    border-radius: 5px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+    border: 1px dashed #00ff64;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+code {
+    font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    color: #00ff64;
+}
+
+a {
+    color: #00ff64; /* Vibrant green for links */
+    text-decoration: none;
+    transition: text-decoration 0.3s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+}
