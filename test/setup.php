@@ -50,5 +50,30 @@ $conn->query("CREATE TABLE IF NOT EXISTS damage_details (
 
     status BOOLEAN DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-
+$conn->query("CREATE TABLE IF NOT EXISTS damage_items (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    damage_details_id INT(11) UNSIGNED NOT NULL,
+    product_id INT(11) UNSIGNED NOT NULL,
+    shop_qty INT(11) NOT NULL,
+    shop_amount DECIMAL(10,2) NOT NULL,
+    received_qty INT(11) NOT NULL,
+    received_amount DECIMAL(10,2) NOT NULL,
+    actual_qty INT(11) NOT NULL,
+    actual_amount DECIMAL(10,2) NOT NULL,
+    good INT(11) NOT NULL,
+    label INT(11) NOT NULL,
+    sealing INT(11) NOT NULL,
+    expired INT(11) NOT NULL,
+    date_problem INT(11) NOT NULL,
+    broken INT(11) NOT NULL,
+    VHsealing INT(11) NOT NULL,
+    insect INT(11) NOT NULL,
+    intentional INT(11) NOT NULL,
+    soft INT(11) NOT NULL,
+    bodyleakage INT(11) NOT NULL,
+    others INT(11) NOT NULL,
+    total_negative_qty INT(11) NOT NULL,
+    total_negative_amount DECIMAL(10,2) NOT NULL,
+    remarks TEXT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 ?>
