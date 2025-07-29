@@ -1,149 +1,202 @@
 <?php
-// This is a simple login page for QC Damage
-include_once('config.php');
-$msg="";
-if (isset($_SESSION['user_id'])) {
-    header('Location: dashboard.php');
-    exit;
-}
+include_once 'header.php';
+?>
 
-if (isset($_POST['username']) && isset($_POST['password'])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-
-    $sql = "SELECT * FROM users WHERE username = ? and status='active'";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-        if (password_verify($password, $row['password'])) {
-            $_SESSION['user_id'] = $row['id'];
-            header('Location: dashboard.php');
-            exit;
-        }
-    }
-    $msg= "Invalid username or password.";
-}
-
+<main class="printable">
+<?php
+$sql = "SELECT 
+    SUM(shop_total_qty) as total_shop_qty,
+    SUM(received_total_qty) as total_received_qty,
+    SUM(actual_total_qty) as total_actual_qty,
+    SUM(shop_total_amount) as total_shop_amount,
+    SUM(received_total_amount) as total_received_amount,
+    SUM(actual_total_amount) as total_actual_amount,
+    COUNT(*) as total_records,
+    SUM(CASE WHEN shop_type = 'TP' THEN 1 ELSE 0 END) as total_tp_records,
+    SUM(CASE WHEN shop_type = 'DP' THEN 1 ELSE 0 END) as total_dp_records
+    FROM damage_details where status = 1";
+$result = mysqli_query($conn, $sql);
+$row = mysqli_fetch_assoc($result);
 ?>
 
 
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<!DOCTYPE html>
-<html lang="en">
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f6f8;
+      color: #333;
+      line-height: 1.6;
+      padding: 2rem;
+    }
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .login-box {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
-            width: 360px;
-            text-align: center;
-        }
-        .login-box h2 {
-            margin-bottom: 30px;
-            color: #333;
-        }
-        .user-box {
-            position: relative;
-            margin-bottom: 30px;
-        }
-        .user-box input {
-            width: 100%;
-            padding: 10px;
-            background: transparent;
-            border: none;
-            border-bottom: 2px solid #333;
-            outline: none;
-            color: #333;
-            font-size: 16px;
-        }
-        .user-box label {
-            position: absolute;
-            top: 0;
-            left: 0;
-            padding: -80px 0;
-            font-size: 10px;
-            color: #333;
-            pointer-events: none;
-            transition: 0.5s;
-        }
-        .user-box input:focus ~ label,
-        .user-box input:valid ~ label {
-            top: -20px;
-            left: 0;
-            color: #2196F3;
-            font-size: 12px;
-        }
-        button {
-            background: #2196F3;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        button:hover {
-            background: #1e87f0;
-        }
-        h3 {
-            color: red;
-            margin-bottom: 20px;
-            animation: shake 0.5s ease-in-out;
-        }
-        
-        @keyframes shake {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(-2px, 0); }
-            50% { transform: translate(2px, 0); }
-            75% { transform: translate(-2px, 0); }
-            100% { transform: translate(0, 0); }
-        }
-    </style>
-</head>
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto 2rem;
+    }
 
-<body>
-    <div class="container">
-        <div class="login-box">
-            <h2>QC Damage Login</h2>
-            <h3><?php echo $msg; ?></h3>
-            <form action="index.php" method="post">
-                <div class="user-box">
-                    <input type="text" name="username" required>
-                    <label>Username</label>
-                </div>
-                <div class="user-box">
-                    <input type="password" name="password" required>
-                    <label>Password</label>
-                </div>
-                <button type="submit"><i class="fas fa-sign-in-alt"></i> Login</button>
-            </form>
+    .card h2 {
+      margin-bottom: 2rem;
+      font-size: 1.8rem;
+      color: #007bff;
+      border-bottom: 1px solid #dee2e6;
+      padding-bottom: 0.5rem;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .stats-box {
+      flex: 1 1 30%;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: all 0.3s ease;
+    }
+
+    .stats-box:hover {
+      background-color: #ffffff;
+      transform: translateY(-4px);
+      box-shadow: 0 0.5rem 1.2rem rgba(0,0,0,0.15);
+    }
+
+    .stats-box h5 {
+      color: #6c757d;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #e9ecef;
+      padding-bottom: 0.5rem;
+    }
+
+    .stat-line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+    }
+
+    .stat-line span {
+      color: #555;
+    }
+
+    .stat-line strong {
+      color: #000;
+    }
+
+    @media (max-width: 768px) {
+      .stats-box {
+        flex: 1 1 100%;
+      }
+    }
+  </style>
+
+  <div class="card">
+    <h2>Order Summary</h2>
+    <div class="summary-row">
+      <div class="stats-box">
+        <h5>Records</h5>
+        <div class="stat-line"><span>Total:</span><strong><?php echo $row['total_records']; ?></strong></div>
+        <div class="stat-line"><span>TP Records:</span><strong><?php echo $row['total_tp_records']; ?></strong></div>
+        <div class="stat-line"><span>DP Records:</span><strong><?php echo $row['total_dp_records']; ?></strong></div>
+      </div>
+      <div class="stats-box">
+        <h5>Quantities</h5>
+        <div class="stat-line"><span>Shop:</span><strong><?php echo number_format($row['total_shop_qty']); ?></strong></div>
+        <div class="stat-line"><span>Received:</span><strong><?php echo number_format($row['total_received_qty']); ?></strong></div>
+        <div class="stat-line"><span>Actual:</span><strong><?php echo number_format($row['total_actual_qty']); ?></strong></div>
+      </div>
+      <div class="stats-box">
+        <h5>Amounts</h5>
+        <div class="stat-line"><span>Shop:</span><strong>$<?php echo number_format($row['total_shop_amount'], 2); ?></strong></div>
+        <div class="stat-line"><span>Received:</span><strong>$<?php echo number_format($row['total_received_amount'], 2); ?></strong></div>
+        <div class="stat-line"><span>Actual:</span><strong>$<?php echo number_format($row['total_actual_amount'], 2); ?></strong></div>
+      </div>
+    </div>
+  </div>
+
+<div class="card">
+    <h2>Data Visualization</h2>
+    <div style="display: flex; justify-content: space-between; gap: 20px;">
+        <div style="flex: 1;">
+            <canvas id="recordsChart"></canvas>
+        </div>
+        <div style="flex: 1;">
+            <canvas id="quantityChart"></canvas>
+        </div>
+        <div style="flex: 1;">
+            <canvas id="amountChart"></canvas>
         </div>
     </div>
-    <script>
-        // Add any JavaScript here if needed
-    </script>
-</body>
+</div>
 
-</html>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Records Chart
+new Chart(document.getElementById('recordsChart'), {
+    type: 'pie',
+    data: {
+        labels: ['TP Records', 'DP Records'],
+        datasets: [{
+            data: [<?php echo $row['total_tp_records']; ?>, <?php echo $row['total_dp_records']; ?>],
+            backgroundColor: ['#007bff', '#28a745']
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { title: { display: true, text: 'Record Distribution' } }
+    }
+});
 
+// Quantities Chart
+new Chart(document.getElementById('quantityChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Shop', 'Received', 'Actual'],
+        datasets: [{
+            label: 'Quantities',
+            data: [<?php echo $row['total_shop_qty']; ?>, <?php echo $row['total_received_qty']; ?>, <?php echo $row['total_actual_qty']; ?>],
+            backgroundColor: '#17a2b8'
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { title: { display: true, text: 'Quantity Comparison' } }
+    }
+});
+
+// Amounts Chart
+new Chart(document.getElementById('amountChart'), {
+    type: 'line',
+    data: {
+        labels: ['Shop', 'Received', 'Actual'],
+        datasets: [{
+            label: 'Amounts ($)',
+            data: [<?php echo $row['total_shop_amount']; ?>, <?php echo $row['total_received_amount']; ?>, <?php echo $row['total_actual_amount']; ?>],
+            borderColor: '#dc3545',
+            fill: false
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: { title: { display: true, text: 'Amount Trends' } }
+    }
+});
+</script>
+</main>
+
+<?php
+include_once 'footer.php';
+?>

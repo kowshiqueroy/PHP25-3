@@ -84,21 +84,21 @@ if ($result->num_rows > 0) {
     </div>
     <div id="printable">
         <!-- Your report content goes here -->
-        <h1 style="text-align: center;">Ovijat Food & Beverages Industries Ltd.</h1>
-        <p style="text-align: center;">QC Damage Report <?php echo date('Y-m-d h:i:s A'); ?></p>
-<div style="text-align: center; margin: 20px 0; line-height: 1.6;">
-    <div style="margin-bottom: 15px;">
-      
+        <h1 style="text-align: center; margin: 0; line-height: 1;">Ovijat Food & Beverages Industries Ltd.</h1>
+        <p style="text-align: center; margin: 5px 0; line-height: 1;">QC Damage Report <?php echo date('Y-m-d h:i:s A'); ?></p>
+    <div style="text-align: center; margin: 20px 0; line-height: 1;">
+        <div style="margin-bottom: 5px;">
+          
           <?php echo $shop_type; ?><?php echo $id; ?> </strong> <strong>Received:</strong> <?php echo $received_date; ?> 
-       </strong> <strong>Inspection:</strong> <?php echo $inspection_date; ?> <strong>Trader:</strong> <?php echo $trader_name; ?>
-    </div>
-    <div style="font-size: 1.1em; padding: 10px; background-color: #f8f9fa; border-radius: 4px; display: inline-block;">
+           </strong> <strong>Inspection:</strong> <?php echo $inspection_date; ?> <strong>Trader:</strong> <?php echo $trader_name; ?>
+        </div>
+        <div style="font-size: 1.1em; padding: 5px; background-color: #f8f9fa; border-radius: 4px; display: inline-block;">
         <strong style="color: #2c3e50;">Shop:</strong> <?php echo $shop_total_qty." = ".$shop_total_amount; ?>/-
-        <strong style="color: #2c3e50; margin-left: 15px;">Received:</strong> <?php echo $received_total_qty." = ".$received_total_amount; ?>/-
-        <strong style="color: #2c3e50; margin-left: 15px;">Actual:</strong> <?php echo $actual_total_qty." = ".$actual_total_amount; ?>/-
-        <?php if (!$status): ?><span style="color: #e74c3c; margin-left: 15px;">Draft</span><?php endif; ?>
+        <strong style="color: #2c3e50; margin-left: 5px;">Received:</strong> <?php echo $received_total_qty." = ".$received_total_amount; ?>/-
+        <strong style="color: #2c3e50; margin-left: 5px;">Actual:</strong> <?php echo $actual_total_qty." = ".$actual_total_amount; ?>/-
+        <?php if (!$status): ?><span style="color: #e74c3c; margin-left: 5px;">Draft</span><?php endif; ?>
+        </div>
     </div>
-</div>
  
 
 <?php

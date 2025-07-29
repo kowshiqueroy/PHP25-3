@@ -1,207 +1,103 @@
-<?php include_once 'header.php'; ?>
+<?php
+include_once 'header.php';
+?>
+<?php
+$msg="Create and manage products in the system.";
+    if (isset($_POST['update_user'])) {
+        $old_password = $_POST['old_password'];
+        $new_password = $_POST['new_password'];
 
+        if (empty($old_password) || empty($new_password)) {
+            $msg= "Error: Please fill in all fields.";
+        } else {
 
-
-
-<style>
-    body {
-        font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-        background-color: #f8f9fc;
-        padding: 2rem;
-    }
-
-    .form-wrapper {
-        max-width: 640px;
-        margin: auto;
-        background: #fff;
-        border-radius: 1rem;
-        padding: 2.5rem;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        border: 1px solid #e0e0e0;
-    }
-
-    .form-wrapper h3 {
-        text-align: center;
-        font-size: 1.75rem;
-        font-weight: 700;
-        margin-bottom: 2rem;
-        color: #2c3e50;
-    }
-
-    .form-group {
-        margin-bottom: 1.5rem;
-        position: relative;
-    }
-
-    .form-label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        color: #34495e;
-    }
-
-    .form-control {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 1px solid #ced4da;
-        border-radius: 0.5rem;
-        font-size: 1rem;
-        transition: all 0.25s ease;
-        background-color: #fefefe;
-    }
-
-    .form-group:focus-within .form-control {
-        border-color: #1a73e8;
-        box-shadow: 0 0 0 0.25rem rgba(26, 115, 232, 0.2);
-    }
-
-    .btn-primary {
-        display: block;
-        width: 100%;
-        background-color: #1a73e8;
-        color: white;
-        border: none;
-        padding: 0.75rem 1.25rem;
-        font-size: 1rem;
-        font-weight: 600;
-        border-radius: 0.5rem;
-        transition: background-color 0.3s ease;
-        cursor: pointer;
-    }
-
-    .btn-primary:hover {
-        background-color: #1666cc;
-    }
-</style>
-    <style>
-    .table-container {
-        max-width: 1000px;
-        margin: 3rem auto;
-        padding: 1.5rem;
-        background-color: #fff;
-        border-radius: 1rem;
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-        overflow-x: auto;
-        font-family: 'Segoe UI', 'Roboto', sans-serif;
-    }
-
-    table.table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.95rem;
-        color: #2d2d2d;
-    }
-
-    thead th {
-        padding: 1rem;
-        text-align: left;
-        background-color: #f5f8fc;
-        font-weight: 600;
-        color: #34495e;
-        border-bottom: 2px solid #e3e3e3;
-    }
-
-    tbody td {
-        padding: 1rem;
-        border-bottom: 1px solid #ebebeb;
-    }
-
-    tbody tr:hover {
-        background-color: #f0f7ff;
-    }
-
-    .btn-sm {
-        display: inline-block;
-        background-color: #f39c12;
-        color: white;
-        padding: 0.4rem 0.8rem;
-        font-size: 0.85rem;
-        border-radius: 0.375rem;
-        text-decoration: none;
-        font-weight: 500;
-        transition: background-color 0.2s ease;
-    }
-
-    .btn-sm:hover {
-        background-color: #d68910;
-    }
-
-    @media screen and (max-width: 768px) {
-        thead th,
-        tbody td {
-            padding: 0.75rem;
-            font-size: 0.9rem;
-        }
-
-        .btn-sm {
-            padding: 0.35rem 0.6rem;
-        }
-    }
-</style>
-
-<div class="form-wrapper">
-    <h3>🛒 Add Product</h3>
-    <form action="products.php" method="POST">
-        <input type="hidden" id="id" name="id">
-
-        <div class="form-group">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" required>
-        </div>
-
-        <div class="form-group">
-            <label for="tp_rate" class="form-label">TP Rate</label>
-            <input type="number" step="0.01" class="form-control" id="tp_rate" name="tp_rate" required>
-        </div>
-
-        <div class="form-group">
-            <label for="dp_rate" class="form-label">DP Rate</label>
-            <input type="number" step="0.01" class="form-control" id="dp_rate" name="dp_rate" required>
-        </div>
-
-        <button type="submit" name="add_product" class="btn-primary">Add Product</button>
-    </form>
-</div>
-
-     
-        
-
-<div class="table-container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>TP Rate</th>
-                <th>DP Rate</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-            $stmt = $conn->prepare("SELECT id, name, tp_rate, dp_rate FROM products");
+            $stmt = $conn->prepare("SELECT password FROM users WHERE id = ?");
+            $stmt->bind_param("i", $user_id);
+            $user_id = $_SESSION['user_id'];
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($row = $result->fetch_assoc()) {
-                echo "<tr>";
-                echo "<td>{$row['id']}</td>";
-                echo "<td>{$row['name']}</td>";
-                echo "<td>{$row['tp_rate']}</td>";
-                echo "<td>{$row['dp_rate']}</td>";
-                echo "<td><a href='?edit={$row['id']}' class='btn-sm'>Edit</a></td>";
-                echo "</tr>";
+            $row = $result->fetch_assoc();
+            if (password_verify($old_password, $row['password'])) {
+                $stmt = $conn->prepare("UPDATE users SET password = ? WHERE id = ?");
+                $hashed_new_password = password_hash($new_password, PASSWORD_DEFAULT);
+                $stmt->bind_param("si", $hashed_new_password, $user_id);
+                if ($stmt->execute()) {
+                    $msg= "Password updated successfully.";
+                } else {
+                    $msg= "Error: " . $conn->error;
+                }
+                $stmt->close();
+            } else {
+                $msg= "Current password is incorrect.";
             }
-            $stmt->close();
-            ?>
-        </tbody>
-    </table>
-</div>
-        
+        }
+    }
 
-<?php
+    if (isset($_POST['add_user'])) {
+       $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    if (strlen($username) < 3 || strlen($username) > 10) {
+        $msg = "Username must be 3-10 characters.";
+    } elseif (strlen($password) < 3) {
+        $msg = "Password must be at least 3 characters.";
+    } else {
+
+     
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $conn->prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        $stmt->bind_param("ss", $username, $hashed_password);
+        try {
+            $stmt->execute();
+            $msg = "User added successfully!";
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                $msg = "Duplicate entry for username: $username";
+            } else {
+                $msg = "Error adding user: " . $e->getMessage();
+            }
+        }
+        $stmt->close();
+
+    }
+    
+}
+
+
+if (isset($_GET['toggle'])) {
+    $user_id = $_GET['toggle'];
+
+    // Fetch current status
+    $stmt = $conn->prepare("SELECT status FROM users WHERE id = ?");
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+   
+    
+    // Toggle status
+    $new_status = ($row['status'] === 'active') ? 'inactive' : 'active';
+  
+    
+    // Update status in the database
+    $stmt = $conn->prepare("UPDATE users SET status = ? WHERE id = ?");
+    $stmt->bind_param("si", $new_status, $user_id);
+    if ($stmt->execute()) {
+        $msg = "User status changed to {$new_status}!";
+        
+    } else {
+        $msg = "Error changing user status: " . $conn->error;
+    }
+    $stmt->close();
+}
+
 if (isset($_POST['add_product'])) {
     if (empty($_POST['name']) || empty($_POST['tp_rate']) || empty($_POST['dp_rate'])) {
         echo "<script>alert('All fields are required');</script>";
+        exit;
+    }
+    if (strlen($_POST['name']) < 3 || strlen($_POST['name']) > 50) {
+        echo "<script>alert('Product name must be between 3 and 50 characters');</script>";
         exit;
     }
     if (!is_numeric($_POST['tp_rate']) || !is_numeric($_POST['dp_rate'])) {
@@ -212,56 +108,128 @@ if (isset($_POST['add_product'])) {
         echo "<script>alert('TP Rate and DP Rate must be non-negative');</script>";
         exit;
     }
-    $stmt = $conn->prepare("SELECT id FROM products WHERE id = ?");
-    $stmt->bind_param("i", $_POST['id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
+
+    $stmt = $conn->prepare("INSERT INTO products (name, tp_rate, dp_rate) VALUES (?, ?, ?)");
+    $stmt->bind_param("sdd", $_POST['name'], $_POST['tp_rate'], $_POST['dp_rate']);
+    if ($stmt->execute()) {
+        $msg = "Product added successfully!";
+    } else {
+        $msg = "Error adding product.";
+    }
+    $stmt->close();
+}
+
+if (isset($_POST['update_product'])) {
+    if (empty($_POST['name']) || empty($_POST['tp_rate']) || empty($_POST['dp_rate'])) {
+        $msg = "All fields are required";
+    } elseif (strlen($_POST['name']) < 3 || strlen($_POST['name']) > 50) {
+        $msg = "Product name must be between 3 and 50 characters";
+    } elseif (!is_numeric($_POST['tp_rate']) || !is_numeric($_POST['dp_rate'])) {
+        $msg = "TP Rate and DP Rate must be numeric";
+    } elseif ($_POST['tp_rate'] < 0 || $_POST['dp_rate'] < 0) {
+        $msg = "TP Rate and DP Rate must be non-negative";
+    } else {
         $stmt = $conn->prepare("UPDATE products SET name = ?, tp_rate = ?, dp_rate = ? WHERE id = ?");
         $stmt->bind_param("sddi", $_POST['name'], $_POST['tp_rate'], $_POST['dp_rate'], $_POST['id']);
-        $stmt->execute();
-        if ($stmt->affected_rows > 0) {
-            echo "<script>alert('Product updated');</script>";
-            echo "<script>window.location.href='products.php';</script>";
+        if ($stmt->execute()) {
+            $msg = "Product updated successfully!";
         } else {
-            echo "<script>alert('Error updating product');</script>";
+            $msg = "Error updating product.";
         }
-    } else {
-        $stmt = $conn->prepare("INSERT INTO products (name, tp_rate, dp_rate) VALUES (?, ?, ?)");
-        $stmt->bind_param("sdd", $_POST['name'], $_POST['tp_rate'], $_POST['dp_rate']);
-        $stmt->execute();
-        if ($stmt->affected_rows > 0) {
-            echo "<script>alert('Product added');</script>";
-            echo "<script>window.location.href='products.php';</script>";
-        } else {
-            echo "<script>alert('Error adding product');</script>";
-        }
+        $stmt->close();
     }
-    $stmt->close();
-
-
-
 }
-
-if (isset($_GET['edit'])) {
-
-    $stmt = $conn->prepare("SELECT id, name, tp_rate, dp_rate FROM products WHERE id = ?");
-    $stmt->bind_param("i", $_GET['edit']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($row = $result->fetch_assoc()) {
-        echo "<script>document.getElementById('id').value='{$row['id']}'</script>";
-        echo "<script>document.getElementById('name').value='{$row['name']}'</script>";
-        echo "<script>document.getElementById('tp_rate').value='{$row['tp_rate']}'</script>";
-        echo "<script>document.getElementById('dp_rate').value='{$row['dp_rate']}'</script>";
-    }
-    $stmt->close();
-}
-
-
 ?>
+<main class="printable">
+    <h2>Products</h2>
+    <p><?php echo $msg; ?></p>
 
 
-<?php include_once 'footer.php'; ?>
+    <div class="form-row-center">
+            <?php if (isset($_GET['edit'])): ?>
+            <?php
+            $stmt = $conn->prepare("SELECT name, tp_rate, dp_rate FROM products WHERE id = ?");
+            $stmt->bind_param("i", $_GET['edit']);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            ?>
+            <form class="card" method="POST" action="products.php">
+                <h2>Edit Product</h2>
+                <input type="hidden" id="product_id" name="id" value="<?php echo $_GET['edit']; ?>">
 
-      
+                <div class="form-group">
+                    <label for="name3">Name</label>
+                    <input type="text" id="name3" name="name" value="<?php echo htmlspecialchars($row['name']); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="tp_rate">TP Rate</label>
+                    <input type="number" step="0.01" id="tp_rate" name="tp_rate" value="<?php echo htmlspecialchars($row['tp_rate']); ?>">
+                </div>
+                <div class="form-group">
+                    <label for="dp_rate">DP Rate</label>
+                    <input type="number" step="0.01" id="dp_rate" name="dp_rate" value="<?php echo htmlspecialchars($row['dp_rate']); ?>">
+                </div>
+                <button type="submit" name="update_product">Update</button>
+            </form>
+            <?php else: ?>
+            <form class="card" method="POST" action="products.php">
+                <h2>Add Product</h2>
+
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <div class="form-group">
+                    <label for="tp_rate">TP Rate</label>
+                    <input type="number" step="0.01" id="tp_rate" name="tp_rate">
+                </div>
+                <div class="form-group">
+                    <label for="dp_rate">DP Rate</label>
+                    <input type="number" step="0.01" id="dp_rate" name="dp_rate">
+                </div>
+                <button type="submit" name="add_product">Add</button>
+            </form>
+            <?php endif; ?>
+        </div>
+
+
+        <div class="table-container card">
+            <h2>Users</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>TP/DP Rates</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $stmt = $conn->prepare("SELECT * FROM products ORDER BY id DESC");
+                    $stmt->execute();
+                    $result = $stmt->get_result();
+                    while ($row = $result->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $row['id'] . "</td>";
+                        echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+                        echo "<td>" . htmlspecialchars($row['tp_rate']) . " / " . htmlspecialchars($row['dp_rate']) . "</td>";
+                        echo "<td><a style= 'text-decoration: none' href='products.php?edit=" . $row['id'] . "' class='btn-sm'>✏️</a></td>";
+                        echo "</tr>";
+                    }
+                    $stmt->close();
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
+
+
+
+
+</main>
+
+<?php
+include_once 'footer.php';
+?>

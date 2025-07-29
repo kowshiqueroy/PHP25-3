@@ -168,7 +168,19 @@ foreach ($filesByType as &$group) {
 </head>
 <body>
 <div class="container py-5">
-    <h2 class="text-center mb-4">🧠 File Manager</h2>
+
+<a href="<?php echo $_SERVER['REQUEST_URI']."qc"; ?>" class="btn btn-warning w-100 mb-4 d-flex align-items-center justify-content-center" style="animation: pulse 2s infinite;">
+    <span class="me-2">🌐</span>
+    <span>Visit Test Website <?php echo $_SERVER['REQUEST_URI']."qc"; ?></span>
+</a>
+<style>
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+</style>
+    <h2 class="text-center mb-4">🧠 Kowshique Roy's Development File Manager</h2>
 
     <?php if ($msg): ?>
         <div class="alert alert-info text-center"><?= $msg ?></div>
@@ -193,10 +205,7 @@ foreach ($filesByType as &$group) {
                 <div class="card-body">
                     <h6><a href="<?= htmlspecialchars($folder['item']) ?>" class="text-decoration-none"><?= htmlspecialchars($folder['item']) ?></a></h6>
                     <small>Modified: <?= date("Y-m-d H:i:s", $folder['modified']) ?></small><br>
-                    <form method="POST" class="d-inline-block mt-2 me-1">
-                        <input type="hidden" name="delete" value="<?= htmlspecialchars($folder['item']) ?>" />
-                        <button class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete <?= htmlspecialchars($folder['item']) ?>?')">Delete</button>
-                    </form>
+                   
                     <form method="POST" class="mt-2">
                         <input type="hidden" name="rename_from" value="<?= htmlspecialchars($folder['item']) ?>" />
                         <input type="text" name="rename_to" class="form-control form-control-sm mb-1" placeholder="New name..." required />
@@ -233,10 +242,7 @@ foreach ($filesByType as &$group) {
                     <div class="card-body">
                         <h6><a href="<?= htmlspecialchars($file['item']) ?>" target="_blank" class="text-decoration-none"><?= htmlspecialchars($file['item']) ?></a></h6>
                         <small>Modified: <?= date("Y-m-d H:i:s", $file['modified']) ?></small><br>
-                        <form method="POST" class="d-inline-block ms-2">
-                            <input type="hidden" name="delete" value="<?= htmlspecialchars($file['item']) ?>" />
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                     
                         <form method="POST" class="mt-2">
                             <input type="hidden" name="rename_from" value="<?= htmlspecialchars($file['item']) ?>" />
                             <input type="text" name="rename_to" class="form-control form-control-sm mb-1" placeholder="New name..." required />

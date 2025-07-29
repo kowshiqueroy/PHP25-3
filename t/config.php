@@ -17,5 +17,5 @@ if ($conn->connect_error) {
 $conn->set_charset("utf8");
 // Start session
 session_start();
-$company_name = 'Quality Control'; // Set your company name here
+
 ?>
