@@ -163,8 +163,10 @@ if ($itemid > 0) {
     $total_negative_amount = 0.00;
     $remarks = '';
 }
-
-
+if ($status == 1) {
+    header("Location: report.php?id=$id");
+    exit();
+} 
 ?>
 <main class="printable">
     <h2>Damage Report</h2>
@@ -186,7 +188,7 @@ if ($itemid > 0) {
         <input type="hidden" name="id" value="<?= $id ?>">
         <input type="hidden" name="damage_details_id" value="<?= $id ?>">
         <div class="form-group" style="flex: 1 0 100%; margin: 0.5rem;">
-            <label for="product_id">Product Details</label>
+            <label for="product_id">Product Details   <span type="hidden" id="rate"></span></label>
             <select name="product_id" id="product_id" class="form-control" required>
                 <?php
                 $stmt = $conn->prepare("SELECT id, name FROM products");
@@ -258,7 +260,7 @@ if ($itemid > 0) {
             <input type="number" class="form-control" id="others" name="others" value="<?= $others ?>" required>
         </div>
          <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="insect">insect</label>
+            <label for="insect">Insect</label>
             <input type="number" class="form-control" id="insect" name="insect" value="<?= $insect ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
@@ -285,10 +287,10 @@ if ($itemid > 0) {
             <label for="remarks">Remarks</label>
             <input type="text" class="form-control" id="remarks" name="remarks" value="<?= $remarks ?>">
         </div>
-        <button type="submit" class="btn btn-primary" style="flex: 1 0 20%; margin: 0.5rem;">Update</button>
+        <button type="submit" class="btn btn-primary" style="flex: 1 0 20%; margin: 0.5rem;">Add</button>
     </form>
 
-    <p type="hidden" id="rate"></p>
+  
 
 
 
@@ -392,11 +394,11 @@ if ($result->num_rows > 0): ?>
     </table>
     </div>
 <?php else: ?>
-    <p>No records found.</p>
+    <p>---------</p>
 <?php endif; ?>
 <div class="button-group">
     <button onclick="window.location.href='damages.php'" class="btn btn-outline-primary">
-        <i class="bi bi-list"></i> List View
+        <i class="bi bi-list"></i> Damage List
     </button>
     <button onclick="window.location.href='report.php?id=<?= htmlspecialchars($id) ?>'" class="btn btn-outline-info">
         <i class="bi bi-file-text"></i> View Report

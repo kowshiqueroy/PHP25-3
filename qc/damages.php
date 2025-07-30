@@ -2,6 +2,24 @@
 include_once 'header.php';
 ?>
 <?php
+
+
+if (isset($_GET['delid'])) {
+    $delid = $_GET['delid'];
+    $stmt = $conn->prepare("DELETE FROM damage_details WHERE id = ?");
+    $stmt->bind_param("i", $delid);
+    if ($stmt->execute()) {
+        $msg = "Damage report deleted successfully!";
+    } else {
+        $msg = "Error deleting damage report: " . $conn->error;
+    }
+    $stmt->close();
+}
+
+
+
+
+
 if (isset($_GET['toggle'])) {
     $user_id = $_GET['toggle'];
 
@@ -10,10 +28,10 @@ if (isset($_GET['toggle'])) {
     $stmt->bind_param("i", $user_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
+    $row = $result->fetch_assoc(); 
 
     // Toggle status
-    $new_status = ($row['status'] == '0') ? '1' : '0';
+    $new_status = ($row['status'] == '0') ? '1' : '1';
 
     // Update status in the database
     $stmt = $conn->prepare("UPDATE damage_details SET status = ? WHERE id = ?");
@@ -78,6 +96,7 @@ if (isset($_GET['date_from']) && isset($_GET['date_to'])) {
                         <th>Shop</th>
                         <th>Receive</th>
                         <th>Actual</th>
+                        <th></th>
                    
                     </tr>
                 </thead>
@@ -98,15 +117,21 @@ if (isset($_GET['date_from']) && isset($_GET['date_to'])) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td><a style= 'text-decoration: none' href='damage_edit.php?id=" . $row['id'] .
-                         "' class='btn-sm'>" . ($row['status']==1 ? "📝" : "✏️") . "</a> {$row['id']} <a style= 'text-decoration: none' href='damages.php?toggle=" 
-                         . $row['id'] . "' class='btn-sm'>" . ($row['status']==1 ? "" : "🔴") . "</a> </td>";
+                         "' class='btn-sm'>" . ($row['status']==1 ? "" : "✏️Edit") . "</a> {$row['id']} <a style= 'text-decoration: none' href='damages.php?toggle=" 
+                         . $row['id'] . "' class='btn-sm'>" . ($row['status']==1 ? "" : "🔴Confirm") . "</a> 
+
+
+                        " . ($row['status']==1 ? "<a style='text-decoration: none' href='report.php?id={$row['id']}&type=full'>🖨️Full</a> <a style='text-decoration: none' href='report_mini.php?id={$row['id']}&type=mini'><small>🖨️</small>Mini</a>" : "") . "
+                         </td>";
                        
                         echo "<td>{$row['received_date']}</td>";
                         echo "<td>{$row['inspection_date']}</td>";
                         echo "<td>{$row['shop_type']} - {$row['trader_name']}</td>";
                         echo "<td>{$row['shop_total_qty']} ={$row['shop_total_amount']}/-</td>";
                         echo "<td>{$row['received_total_qty']} ={$row['received_total_amount']}/-</td>";
-                        echo "<td><a style='text-decoration: none' href='report.php?id={$row['id']}'>{$row['actual_total_qty']} ={$row['actual_total_amount']}/- 📊</a></td>";
+                        echo "<td><a style='text-decoration: none' href='report.php?id={$row['id']}'>{$row['actual_total_qty']} ={$row['actual_total_amount']}/- </a></td>";
+
+                        echo "<td>" . ($row['status'] == 0 ? "<a onclick=\"return confirm('Are you sure you want to delete this record?')\" href='damages.php?delid={$row['id']}' style='text-decoration:none'>🗑️</a>" : "") . "</td>";
                         echo "</tr>";
                     }
                     $stmt->close();

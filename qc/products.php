@@ -195,7 +195,7 @@ if (isset($_POST['update_product'])) {
 
 
         <div class="table-container card">
-            <h2>Users</h2>
+            <h2>Products</h2>
             <table>
                 <thead>
                     <tr>

@@ -80,7 +80,7 @@ if ($result->num_rows > 0) {
 <body>
     <div class="button-group">
         <button onclick="window.history.back();">Go Back</button>
-        <button onclick="window.print();">Print</button> <button onclick="window.location.href='report_mini.php?id=<?php echo $id; ?>'">Print Mini</button>
+        <button onclick="window.print();">Print</button> <button onclick="window.location.href='report.php?id=<?php echo $id; ?>'">Print Full</button>
     </div>
     <div id="printable">
         <!-- Your report content goes here -->
@@ -127,14 +127,13 @@ if ($result->num_rows > 0): ?>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Date Problem</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Broken</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">V/H sealing</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Insect</th>
+
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Soft</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Body leakage</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Others</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Good</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Intentional</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Qty</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Amount</th>
+
+
                   <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Amount</th>
 
@@ -168,14 +167,12 @@ if ($result->num_rows > 0): ?>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['date_problem']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['broken']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['VHsealing']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['insect']) ?></td>
+             
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['soft']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['bodyleakage']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['others']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['good']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['intentional']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['total_negative_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['total_negative_amount']) ?></td>
+
                        <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_qty']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_amount']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['remarks']) ?></td>
