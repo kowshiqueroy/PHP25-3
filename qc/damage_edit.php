@@ -8,7 +8,7 @@ if (isset($_GET['id']) && isset($_GET['damage_details_id']) && is_numeric($_GET[
     $id = $_GET['id'];
     $damage_details_id = $_GET['damage_details_id'];
 
-    $sql = "INSERT INTO damage_items (damage_details_id, product_id, shop_qty, shop_amount, received_qty, received_amount, actual_qty, actual_amount, good, label, sealing, expired, date_problem, broken, VHsealing, insect, intentional, soft, bodyleakage, others, total_negative_qty, total_negative_amount, remarks) VALUES ('$damage_details_id', '".$_GET['product_id']."', '".$_GET['shop_qty']."', '".$_GET['shop_amount']."', '".$_GET['received_qty']."', '".$_GET['received_amount']."', '".$_GET['actual_qty']."', '".$_GET['actual_amount']."', '".$_GET['good']."', '".$_GET['label']."', '".$_GET['sealing']."', '".$_GET['expired']."', '".$_GET['date_problem']."', '".$_GET['broken']."', '".$_GET['VHsealing']."', '".$_GET['insect']."', '".$_GET['intentional']."', '".$_GET['soft']."', '".$_GET['bodyleakage']."', '".$_GET['others']."', '".$_GET['total_negative_qty']."', '".$_GET['total_negative_amount']."', '".$_GET['remarks']."')";
+    $sql = "INSERT INTO damage_items (damage_details_id, product_id, shop_qty, shop_amount, received_qty, received_amount, actual_qty, actual_amount, insect, label, sealing, expired, date_problem, broken, VHsealing, good, intentional, soft, bodyleakage, others, total_negative_qty, total_negative_amount, remarks) VALUES ('$damage_details_id', '".$_GET['product_id']."', '".$_GET['shop_qty']."', '".$_GET['shop_amount']."', '".$_GET['received_qty']."', '".$_GET['received_amount']."', '".$_GET['actual_qty']."', '".$_GET['actual_amount']."', '".$_GET['insect']."', '".$_GET['label']."', '".$_GET['sealing']."', '".$_GET['expired']."', '".$_GET['date_problem']."', '".$_GET['broken']."', '".$_GET['VHsealing']."', '".$_GET['good']."', '".$_GET['intentional']."', '".$_GET['soft']."', '".$_GET['bodyleakage']."', '".$_GET['others']."', '".$_GET['total_negative_qty']."', '".$_GET['total_negative_amount']."', '".$_GET['remarks']."')";
     if ($conn->query($sql) === TRUE) {
 
         $sql = "UPDATE damage_details SET shop_total_qty = shop_total_qty + '".$_GET['shop_qty']."' , shop_total_amount = shop_total_amount + '".$_GET['shop_amount']."' , received_total_qty = received_total_qty + '".$_GET['received_qty']."' , received_total_amount = received_total_amount + '".$_GET['received_amount']."' , actual_total_qty = actual_total_qty + '".$_GET['actual_qty']."' , actual_total_amount = actual_total_amount + '".$_GET['actual_amount']."' WHERE id = '$id'";
@@ -95,14 +95,14 @@ if ($itemid > 0) {
         $received_amount = $row['received_amount'];
         $actual_qty = $row['actual_qty'];
         $actual_amount = $row['actual_amount'];
-        $good = $row['good'];
+        $insect = $row['insect'];
         $label = $row['label'];
         $sealing = $row['sealing'];
         $expired = $row['expired'];
         $date_problem = $row['date_problem'];
         $broken = $row['broken'];
         $VHsealing = $row['VHsealing'];
-        $insect = $row['insect'];
+        $good = $row['good'];
         $intentional = $row['intentional'];
         $soft = $row['soft'];
         $bodyleakage = $row['bodyleakage'];
@@ -120,14 +120,14 @@ if ($itemid > 0) {
         $received_amount = 0.00;
         $actual_qty = 0;
         $actual_amount = 0.00;
-        $good = 0;
+        $insect = 0;
         $label = 0;
         $sealing = 0;
         $expired = 0;
         $date_problem = 0;
         $broken = 0;
         $VHsealing = 0;
-        $insect = 0;
+        $good = 0;
         $intentional = 0;
         $soft = 0;
         $bodyleakage = 0;
@@ -147,14 +147,14 @@ if ($itemid > 0) {
     $received_amount = 0.00;
     $actual_qty = 0;
     $actual_amount = 0.00;
-    $good = 0;
+    $insect = 0;
     $label = 0;
     $sealing = 0;
     $expired = 0;
     $date_problem = 0;
     $broken = 0;
     $VHsealing = 0;
-    $insect = 0;
+    $good = 0;
     $intentional = 0;
     $soft = 0;
     $bodyleakage = 0;
@@ -241,8 +241,8 @@ if ($itemid > 0) {
             <input type="number" class="form-control" id="VHsealing" name="VHsealing" value="<?= $VHsealing ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="insect">Insect</label>
-            <input type="number" class="form-control" id="insect" name="insect" value="<?= $insect ?>" required>
+            <label for="good">Good</label>
+            <input type="number" class="form-control" id="good" name="good" value="<?= $good ?>" required>
         </div>
         
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
@@ -258,8 +258,8 @@ if ($itemid > 0) {
             <input type="number" class="form-control" id="others" name="others" value="<?= $others ?>" required>
         </div>
          <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="good">Good</label>
-            <input type="number" class="form-control" id="good" name="good" value="<?= $good ?>" required>
+            <label for="insect">insect</label>
+            <input type="number" class="form-control" id="insect" name="insect" value="<?= $insect ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
             <label for="intentional">Intentional</label>
@@ -321,12 +321,12 @@ if ($result->num_rows > 0): ?>
                 <th>Date Problem</th>
                 <th>Broken</th>
                 <th>VHsealing</th>
-                <th>Insect</th>
+                <th>good</th>
               
                 <th>Soft</th>
                 <th>Bodyleakage</th>
                 <th>Others</th>
-                <th>Good</th>
+                <th>insect</th>
                 <th>Intentional</th>
                 <th>Total Negative Qty</th>
                 <th>Total Negative Amount</th>
@@ -370,12 +370,12 @@ if ($result->num_rows > 0): ?>
                     <td><?= htmlspecialchars($row['date_problem']) ?></td>
                     <td><?= htmlspecialchars($row['broken']) ?></td>
                     <td><?= htmlspecialchars($row['VHsealing']) ?></td>
-                    <td><?= htmlspecialchars($row['insect']) ?></td>
+                    <td><?= htmlspecialchars($row['good']) ?></td>
                 
                     <td><?= htmlspecialchars($row['soft']) ?></td>
                     <td><?= htmlspecialchars($row['bodyleakage']) ?></td>
                     <td><?= htmlspecialchars($row['others']) ?></td>
-                       <td><?= htmlspecialchars($row['good']) ?></td>
+                       <td><?= htmlspecialchars($row['insect']) ?></td>
                            <td><?= htmlspecialchars($row['intentional']) ?></td>
                     <td><?= htmlspecialchars($row['total_negative_qty']) ?></td>
                     <td><?= htmlspecialchars($row['total_negative_amount']) ?></td>
@@ -465,12 +465,12 @@ button:hover {
             document.getElementById('total_negative_amount').value = parseFloat(document.getElementById('rate').innerHTML.split(':')[1].trim()).toFixed(2) * this.value;
         });
 
-        document.getElementById('good').addEventListener('change', function() {
-            document.getElementById('total_negative_qty').value = parseInt(document.getElementById('good').value) + parseInt(document.getElementById('intentional').value);
+        document.getElementById('insect').addEventListener('change', function() {
+            document.getElementById('total_negative_qty').value = parseInt(document.getElementById('insect').value) + parseInt(document.getElementById('intentional').value);
             document.getElementById('total_negative_amount').value = (parseFloat(document.getElementById('rate').innerHTML.split(':')[1].trim()) * document.getElementById('total_negative_qty').value).toFixed(2);
         });
         document.getElementById('intentional').addEventListener('change', function() {
-            document.getElementById('total_negative_qty').value = parseInt(document.getElementById('good').value) + parseInt(document.getElementById('intentional').value);
+            document.getElementById('total_negative_qty').value = parseInt(document.getElementById('insect').value) + parseInt(document.getElementById('intentional').value);
             document.getElementById('total_negative_amount').value = (parseFloat(document.getElementById('rate').innerHTML.split(':')[1].trim()) * document.getElementById('total_negative_qty').value).toFixed(2);
         });
         document.getElementById('label').addEventListener('change', function() {
@@ -491,7 +491,7 @@ button:hover {
         document.getElementById('VHsealing').addEventListener('change', function() {
             updateActualQtyAndAmount();
         });
-        document.getElementById('insect').addEventListener('change', function() {
+        document.getElementById('good').addEventListener('change', function() {
             updateActualQtyAndAmount();
         });
         document.getElementById('soft').addEventListener('change', function() {
@@ -512,7 +512,7 @@ button:hover {
                 parseInt(document.getElementById('date_problem').value) + 
                 parseInt(document.getElementById('broken').value) + 
                 parseInt(document.getElementById('VHsealing').value) + 
-                parseInt(document.getElementById('insect').value) + 
+                parseInt(document.getElementById('good').value) + 
                 parseInt(document.getElementById('intentional').value) + 
                 parseInt(document.getElementById('soft').value) + 
                 parseInt(document.getElementById('bodyleakage').value) + 

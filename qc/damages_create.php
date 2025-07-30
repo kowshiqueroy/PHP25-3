@@ -129,23 +129,25 @@ if (isset($_POST['submit'])) {
 </style>
 
 <div class="form-wrapper">
-    <h3>Product Entry</h3>
+  
     <form action="damages_create.php" method="POST">
 
-            <div class="form-group">
+            <div class="form-row">
+                <div class="form-group">
                 <label for="shop_type">Type</label>
                 <select name="shop_type" id="shop_type" required>
                     <option value="TP">TP</option>
                     <option value="DP">DP</option>
                 </select>
-            </div>
-            <div class="form-group">
+                </div>
+                <div class="form-group">
                 <label for="received_date">R.date</label>
                 <input type="text" name="received_date" id="received_date" required value="<?= date('Y-m-d') ?>">
-            </div>
-             <div class="form-group">
+                </div>
+                 <div class="form-group">
                 <label for="inspection_date">I.date</label>
                 <input type="text" name="inspection_date" id="inspection_date" required value="<?= date('Y-m-d') ?>">
+                </div>
             </div>
             <div class="form-group">
                 <input type="text" name="trader_name" class="form-control" id="trader-name-input" placeholder="Trader" value="<?= htmlspecialchars($_POST['trader_name'] ?? '') ?>" autocomplete="off" required>

@@ -52,7 +52,7 @@ if (isset($_GET['date_from']) && isset($_GET['date_to'])) {
             <input type="number" class="form-control" id="id" name="id" value="<?= isset($id) ? $id : '' ?>">
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="date_from">Inspection From</label>
+            <label for="date_from">Inspection</label>
             <input type="date" class="form-control" id="date_from" name="date_from" value="<?= isset($date_from) ? $date_from : date('Y-m-d') ?>">
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">

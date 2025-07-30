@@ -120,8 +120,7 @@ if ($result->num_rows > 0): ?>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Shop Amount</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Received Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Received Amount</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Qty</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Amount</th>
+             
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Label</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Sealing</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Expired</th>
@@ -136,6 +135,9 @@ if ($result->num_rows > 0): ?>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Intentional</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Amount</th>
+                  <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Qty</th>
+                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Amount</th>
+               
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 50px; vertical-align: center; padding: 5px; border: 1px solid black;">Remarks</th>
             </tr>
         </thead>
@@ -159,8 +161,7 @@ if ($result->num_rows > 0): ?>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['shop_amount']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['received_qty']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['received_amount']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_amount']) ?></td>
+                 
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['label']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['sealing']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['expired']) ?></td>
@@ -175,6 +176,8 @@ if ($result->num_rows > 0): ?>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['intentional']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['total_negative_qty']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['total_negative_amount']) ?></td>
+                       <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_qty']) ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_amount']) ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['remarks']) ?></td>
                 </tr>
             <?php endwhile; ?>
@@ -195,16 +198,7 @@ if ($result->num_rows > 0): ?>
 <div style="display: flex; justify-content: space-around; position: fixed; bottom: 20px; width: 100%; padding: 20px;">
     <div style="text-align: center;">
         <div style="border-top: 1px solid black; width: 150px;">
-            QC Officer
-        </div>
-    </div>
-    <div style="text-align: center;">
-        <div style="border-top: 1px solid black; width: 150px;">
-            <?php if ($shop_type == 'TP' || $shop_type == 'DP'): ?>
-            Depot
-            <?php else: ?>
-            Distributor
-            <?php endif; ?>
+            Checked by
         </div>
     </div>
     <div style="text-align: center;">
@@ -214,12 +208,17 @@ if ($result->num_rows > 0): ?>
     </div>
     <div style="text-align: center;">
         <div style="border-top: 1px solid black; width: 150px;">
-            Store Incharge
+            AM Distribution
         </div>
     </div>
     <div style="text-align: center;">
         <div style="border-top: 1px solid black; width: 150px;">
-            Accounts Incharge
+            AM QC
+        </div>
+    </div>
+    <div style="text-align: center;">
+        <div style="border-top: 1px solid black; width: 150px;">
+            AM Accounts
         </div>
     </div>
     <div style="text-align: center;">
