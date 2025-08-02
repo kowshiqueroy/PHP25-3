@@ -236,17 +236,23 @@ if (isset($_GET['order_serial_update'])) {
 
 
         $order_serialq = $os_update_id_list2[1];
+    
+      
 
-        $sql = "UPDATE orders SET order_serial = '$order_serialq', order_status = 5 WHERE id = '$idq' AND order_status =2";
-        if ($conn->query($sql) === TRUE) {
+
+        if ($order_serialq > 0) {
+            $sql = "UPDATE orders SET order_serial = '$order_serialq', order_status = 5 WHERE id = '$idq' AND order_status =2";
+            if ($conn->query($sql) === TRUE) {
             echo '<div id="success_msg" style="text-align: center; display: none;">Order serial updated successfully</div>';
-          
-        } else {
+            } else {
             echo "Error updating record: " . $conn->error;
+            }
         }
 
             
-    }
+    
+
+}
     
    
 }
@@ -524,6 +530,7 @@ function setIdWithSerial(orderSerial, orderId) {
                 <!-- <th>Approved By</th> -->
                 <th></th>
                 <th></th>
+                <th></th>
 
                 
             </tr>
@@ -610,9 +617,7 @@ if ($result->num_rows > 0) {
                 echo '<span class="btn btn-success">Approve</span>';
             } else if ($row['order_status'] == 3) {
                 echo '<span class="btn btn-danger">Reject</span>';
-            } else if ($row['order_status'] == 4) {
-                echo '<a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-primary">Edit</a>';
-            } else if ($row['order_status'] == 5) {
+            }  else if ($row['order_status'] == 5) {
                 echo '<span class="btn btn-info">Serial</span>';
             } else if ($row['order_status'] == 6) {
                 echo '<span class="btn btn-secondary">Processing</span>';
@@ -623,6 +628,7 @@ if ($result->num_rows > 0) {
             } else {
                 echo '';
             }
+             
 if ($order_status == 2) {
         echo '<br><br><div style="display: flex; justify-content: center;">
          
@@ -726,8 +732,16 @@ if ($order_status == 2) {
        }
        
        
-       
-        echo '</td></tr>';
+        
+        echo '</td>';
+        
+        if ($row['order_status'] == 0 || $row['order_status'] == 1 || $row['order_status'] == 2 || $row['order_status'] == 3 || $row['order_status'] == 4 || $row['order_status'] == 5 || $row['order_status'] == 6) {
+                echo '<td><a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-success">Edit</a></td>';
+            }
+        
+        
+        
+        echo '</tr>';
 
                     //Show Products Here 
                             

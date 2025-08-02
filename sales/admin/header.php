@@ -73,7 +73,12 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'admin') {
             <li><a href="users.php"><i class="fas fa-users"></i> Users</a></li>
             <li><a href="settings.php"><i class="fas fa-cog"></i> Settings</a></li>
             <li><a href="notice.php"><i class="fas fa-bell"></i> Notice</a></li>
-           
+            <li><a href="order_edit.php"><i class="fas fa-chart-bar"></i> Order Edit</a></li>
+            <li><a href="routes.php"><i class="fas fa-exclamation-triangle"></i> Routes</a></li>
+            <li><a href="persons.php"><i class="fas fa-exclamation-triangle"></i> Persons</a></li>
+            <li><a href="products.php"><i class="fas fa-exclamation-triangle"></i> Products</a></li>
+
+
         </ul>
     </div>
 

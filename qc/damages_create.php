@@ -9,10 +9,11 @@ if (isset($_POST['submit'])) {
     $received_date = $_POST['received_date'];
     $inspection_date = $_POST['inspection_date'];
     $trader_name = $_POST['trader_name'];
+    $user_id = $_SESSION['user_id']; // Assuming user ID is stored in session
 
     // Prepare and execute the SQL statement
-    $stmt = $conn->prepare("INSERT INTO damage_details (shop_type, received_date, inspection_date, trader_name) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $shop_type, $received_date, $inspection_date, $trader_name);
+    $stmt = $conn->prepare("INSERT INTO damage_details (shop_type, received_date, inspection_date, trader_name, created_by) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssssi", $shop_type, $received_date, $inspection_date, $trader_name, $user_id);
     if ($stmt->execute()) {
         $msg = "Damage report created successfully!";
         $id = $conn->insert_id;

@@ -2,20 +2,21 @@
 include_once 'header.php';
 ?>
 <?php
-
+$user_id = $_SESSION['user_id']; // Assuming user ID is stored in session
 
 if (isset($_GET['id']) && isset($_GET['damage_details_id']) && is_numeric($_GET['id']) && is_numeric($_GET['damage_details_id'])) {
     $id = $_GET['id'];
     $damage_details_id = $_GET['damage_details_id'];
 
+
     $sql = "INSERT INTO damage_items (damage_details_id, product_id, shop_qty, shop_amount, received_qty, received_amount, actual_qty, actual_amount, insect, label, sealing, expired, date_problem, broken, VHsealing, good, intentional, soft, bodyleakage, others, total_negative_qty, total_negative_amount, remarks) VALUES ('$damage_details_id', '".$_GET['product_id']."', '".$_GET['shop_qty']."', '".$_GET['shop_amount']."', '".$_GET['received_qty']."', '".$_GET['received_amount']."', '".$_GET['actual_qty']."', '".$_GET['actual_amount']."', '".$_GET['insect']."', '".$_GET['label']."', '".$_GET['sealing']."', '".$_GET['expired']."', '".$_GET['date_problem']."', '".$_GET['broken']."', '".$_GET['VHsealing']."', '".$_GET['good']."', '".$_GET['intentional']."', '".$_GET['soft']."', '".$_GET['bodyleakage']."', '".$_GET['others']."', '".$_GET['total_negative_qty']."', '".$_GET['total_negative_amount']."', '".$_GET['remarks']."')";
     if ($conn->query($sql) === TRUE) {
 
-        $sql = "UPDATE damage_details SET shop_total_qty = shop_total_qty + '".$_GET['shop_qty']."' , shop_total_amount = shop_total_amount + '".$_GET['shop_amount']."' , received_total_qty = received_total_qty + '".$_GET['received_qty']."' , received_total_amount = received_total_amount + '".$_GET['received_amount']."' , actual_total_qty = actual_total_qty + '".$_GET['actual_qty']."' , actual_total_amount = actual_total_amount + '".$_GET['actual_amount']."' WHERE id = '$id'";
+        $sql = "UPDATE damage_details SET updated_by = $user_id, shop_total_qty = shop_total_qty + '".$_GET['shop_qty']."' , shop_total_amount = shop_total_amount + '".$_GET['shop_amount']."' , received_total_qty = received_total_qty + '".$_GET['received_qty']."' , received_total_amount = received_total_amount + '".$_GET['received_amount']."' , actual_total_qty = actual_total_qty + '".$_GET['actual_qty']."' , actual_total_amount = actual_total_amount + '".$_GET['actual_amount']."' WHERE id = '$id'";
         if ($conn->query($sql) === TRUE) {
 
 
-
+ 
         header("Location: damage_edit.php?id=$id");
         exit();
     } else {
@@ -35,7 +36,7 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id']) && isset($_GET['
     if ($conn->query($sql) === TRUE) {
         $msg = "Item deleted successfully!";
         // Update the damage_details table after deletion
-        $sql = "UPDATE damage_details SET shop_total_qty = shop_total_qty - (SELECT shop_qty FROM damage_items WHERE id = $delete_id),
+        $sql = "UPDATE damage_details SET SET updated_by = $user_id, shop_total_qty = shop_total_qty - (SELECT shop_qty FROM damage_items WHERE id = $delete_id),
          shop_total_amount = shop_total_amount - (SELECT shop_amount FROM damage_items WHERE id = $delete_id),
          received_total_qty = received_total_qty - (SELECT received_qty FROM damage_items WHERE id = $delete_id),
          received_total_amount = received_total_amount - (SELECT received_amount FROM damage_items WHERE id = $delete_id),
@@ -178,7 +179,7 @@ if ($status == 1) {
         <strong>Trader:</strong> <?php echo $trader_name; ?>
     </p>
     <p style="text-align: center;">
-        <strong>Shop </strong> <?php echo $shop_total_qty." = ".$shop_total_amount; ?>/-
+        <strong>Send </strong> <?php echo $shop_total_qty." = ".$shop_total_amount; ?>/-
         <strong>Received </strong> <?php echo $received_total_qty." = ".$received_total_amount; ?>/-
         <strong>Actual </strong> <?php echo $actual_total_qty." = ".$actual_total_amount; ?>/-
         <strong></strong> <?php echo $status ? "" : "Draft"; ?>
@@ -201,11 +202,11 @@ if ($status == 1) {
             </select>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="shop_qty">Shop Quantity</label>
+            <label for="shop_qty">Send Quantity</label>
             <input type="number" class="form-control" id="shop_qty" name="shop_qty" value="<?= $shop_qty ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="shop_amount">Shop Amount</label>
+            <label for="shop_amount">Send Amount</label>
             <input type="number" step="0.01" class="form-control" id="shop_amount" name="shop_amount" value="<?= $shop_amount ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
@@ -310,8 +311,8 @@ if ($result->num_rows > 0): ?>
                 <th>ID</th>
                 <th>Damage Details ID</th>
                 <th>Product ID</th>
-                <th>Shop Qty</th>
-                <th>Shop Amount</th>
+                <th>Send Qty</th>
+                <th>Send Amount</th>
                 <th>Received Qty</th>
                 <th>Received Amount</th>
                 <th>Actual Qty</th>

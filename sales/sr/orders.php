@@ -52,6 +52,8 @@ if (isset($_GET['order_serial_update'])) {
 
         $order_serialq = $os_update_id_list2[1];
 
+          if ($order_serialq > 0) {
+
         $sql = "UPDATE orders SET order_serial = '$order_serialq', order_status = 5 WHERE id = '$idq' AND order_status =2";
         if ($conn->query($sql) === TRUE) {
             echo '<div id="success_msg" style="text-align: center; display: none;">Order serial updated successfully</div>';
@@ -66,7 +68,8 @@ if (isset($_GET['order_serial_update'])) {
         } else {
             echo "Error updating record: " . $conn->error;
         }
-
+    }
+       
             
     }
     

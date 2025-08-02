@@ -93,7 +93,7 @@ if ($result->num_rows > 0) {
            </strong> <strong>Inspection:</strong> <?php echo $inspection_date; ?> <strong>Trader:</strong> <?php echo $trader_name; ?>
         </div>
         <div style="font-size: 1.1em; padding: 5px; background-color: #f8f9fa; border-radius: 4px; display: inline-block;">
-        <strong style="color: #2c3e50;">Shop:</strong> <?php echo $shop_total_qty." = ".$shop_total_amount; ?>/-
+        <strong style="color: #2c3e50;">Send:</strong> <?php echo $shop_total_qty." = ".$shop_total_amount; ?>/-
         <strong style="color: #2c3e50; margin-left: 5px;">Received:</strong> <?php echo $received_total_qty." = ".$received_total_amount; ?>/-
         <strong style="color: #2c3e50; margin-left: 5px;">Actual:</strong> <?php echo $actual_total_qty." = ".$actual_total_amount; ?>/-
         <?php if (!$status): ?><span style="color: #e74c3c; margin-left: 5px;">Draft</span><?php endif; ?>
@@ -116,8 +116,8 @@ if ($result->num_rows > 0): ?>
             <tr style="background-color: #f2f2f2; text-align: center; font-size: 14px;">
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">SN</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Product</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Shop Qty</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Shop Amount</th>
+                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Send Qty</th>
+                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Send Amount</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Received Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Received Amount</th>
 

@@ -90,12 +90,12 @@ if (isset($_GET['date_from']) && isset($_GET['date_to'])) {
                     <tr>
                         <th>ID</th>
                         
-                        <th>R.Date</th>
-                        <th>I.Date</th>
+                        <th>R. I. Date</th>
                         <th>Trader</th>
-                        <th>Shop</th>
+                        <th>Send</th>
                         <th>Receive</th>
                         <th>Actual</th>
+                        <th></th>
                         <th></th>
                    
                     </tr>
@@ -117,21 +117,34 @@ if (isset($_GET['date_from']) && isset($_GET['date_to'])) {
                     while ($row = $result->fetch_assoc()) {
                         echo "<tr>";
                         echo "<td><a style= 'text-decoration: none' href='damage_edit.php?id=" . $row['id'] .
-                         "' class='btn-sm'>" . ($row['status']==1 ? "" : "✏️Edit") . "</a> {$row['id']} <a style= 'text-decoration: none' href='damages.php?toggle=" 
-                         . $row['id'] . "' class='btn-sm'>" . ($row['status']==1 ? "" : "🔴Confirm") . "</a> 
+                         "' class='btn-sm'>" . ($row['status']==1 ? "" : "✏️Edit") . "</a> {$row['id']}
 
 
                         " . ($row['status']==1 ? "<a style='text-decoration: none' href='report.php?id={$row['id']}&type=full'>🖨️Full</a> <a style='text-decoration: none' href='report_mini.php?id={$row['id']}&type=mini'><small>🖨️</small>Mini</a>" : "") . "
                          </td>";
                        
-                        echo "<td>{$row['received_date']}</td>";
-                        echo "<td>{$row['inspection_date']}</td>";
+                        echo "<td>R: {$row['received_date']} I: {$row['inspection_date']} <a style= 'text-decoration: none' href='damages.php?toggle=" 
+                         . $row['id'] . "' class='btn-sm'>" . ($row['status']==1 ? "" : "🔴Confirm") . "</a> </td>";
                         echo "<td>{$row['shop_type']} - {$row['trader_name']}</td>";
                         echo "<td>{$row['shop_total_qty']} ={$row['shop_total_amount']}/-</td>";
                         echo "<td>{$row['received_total_qty']} ={$row['received_total_amount']}/-</td>";
                         echo "<td><a style='text-decoration: none' href='report.php?id={$row['id']}'>{$row['actual_total_qty']} ={$row['actual_total_amount']}/- </a></td>";
 
                         echo "<td>" . ($row['status'] == 0 ? "<a onclick=\"return confirm('Are you sure you want to delete this record?')\" href='damages.php?delid={$row['id']}' style='text-decoration:none'>🗑️</a>" : "") . "</td>";
+                       
+                       
+                        $createdByQuery = $conn->query("SELECT username FROM users WHERE id = '{$row['created_by']}'");
+                        $createdByUsername = ($createdByQuery->num_rows > 0) ? $createdByQuery->fetch_assoc()['username'] : "-";
+                        
+                        $updatedByQuery = $conn->query("SELECT username FROM users WHERE id = '{$row['updated_by']}'");
+                        $updatedByUsername = ($updatedByQuery->num_rows > 0) ? $updatedByQuery->fetch_assoc()['username'] : "-";
+                        
+                        echo "<td>by: {$createdByUsername} ";
+                        echo "{$row['created_at']} ";
+                        echo "Updated: {$updatedByUsername} ";
+                        echo "{$row['updated_at']}</td>";
+
+
                         echo "</tr>";
                     }
                     $stmt->close();

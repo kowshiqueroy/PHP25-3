@@ -2,7 +2,7 @@
 require_once '../conn.php';
 require_once 'header.php';
 ?>
-<div class="card p-1 text-center">New Order</div>
+<div class="card p-1 text-center" id="order-id"> <?php if(isset($_GET['id'])) { echo 'Order ID: ' . htmlspecialchars($_GET['id']); } else { echo 'New Order'; } ?></div>
 
 <?php
 
@@ -320,7 +320,7 @@ if($order_status != 0 && $order_status != 4) {
                 $sql = "INSERT INTO order_product (order_id, product_id, quantity, price, total) VALUES ('$id', '$product_id', '$quantity', '$price', '$total')";
                 if ($conn->query($sql) === TRUE) {
                     echo '<div style="text-align: center; color:green;">Product added successfully</div>';
-                    echo "<script>window.location.href='create.php?id=".$_REQUEST['id']."#create';</script>";
+                    echo "<script>window.location.href='create.php?id=".$_REQUEST['id']."'</script>";
                 } else {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }
@@ -425,13 +425,9 @@ if($order_status != 0 && $order_status != 4) {
                 $grandQuantity += $row['quantity'];
                 $grandTotal += $row['total'];
             }
-            echo '<tr>
-                    <td colspan="2" class="text-right"><strong>' . $productCount . ' Product(s):</strong></td>
-                    <td colspan="3">' . $grandQuantity . ' Quantity</td>
-                  </tr>';
-            echo '<tr>
-                    <td colspan="2" class="text-right"><strong>Grand Total:</strong></td>
-                    <td colspan="3"><strong>' . $grandTotal . '</strong>/=</td>
+         echo '<tr>
+                    <td colspan="4" class="text-center">' . $productCount . ' Product(s): ' 
+                    . $grandQuantity . ' Quantity <strong>Grand Total:</strong> <strong>' . $grandTotal . '</strong>/=</td> <td></td>
                   </tr>';
             ?>
         </tbody>
@@ -441,7 +437,7 @@ if($order_status != 0 && $order_status != 4) {
             $sql = "DELETE FROM order_product WHERE id = $id";
             if ($conn->query($sql) === TRUE) {
                 echo '<div class="alert alert-success">Deleted successfully</div>';
-                echo '<script>window.location.href="create.php?id=' . $_REQUEST['id'] . '#create"</script>';
+                echo '<script>window.location.href="create.php?id=' . $_REQUEST['id'] . '"</script>';
                 exit;
             } else {
                 echo '<div class="alert alert-danger">Error: ' . $sql . '<br>' . $conn->error . '</div>';
@@ -457,6 +453,47 @@ if($order_status != 0 && $order_status != 4) {
                 <form action="" method="post">
                     <input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>">
                     <input type="hidden" name="grandtotal" value="<?php echo $grandTotal; ?>">
+                     <button type="button" onclick="copyTableData()" class="btn btn-info"><i class="fas fa-copy"></i> Copy Data</button>
+
+                    <script>
+                    function copyTableData() {
+                        // Get order form data
+                        var route = document.getElementById('route_id').options[document.getElementById('route_id').selectedIndex].text;
+                        var person = document.getElementById('person_id').options[document.getElementById('person_id').selectedIndex].text;
+                        var orderDate = document.getElementById('order_date').value;
+                        var deliveryDate = document.getElementById('delivery_date').value;
+                        var remarks = document.getElementById('remarks').value;
+                        var serial = document.getElementById('order_serial').value;
+                        var orderId = document.getElementById('order-id').textContent;
+
+                        var formData = ''+orderId + '\n' +
+                                     'Route: ' + route + '\n' +
+                                     'Shop: ' + person + '\n' + 
+                                     'Order Date: ' + orderDate + '\n' +
+                                     'Delivery Date: ' + deliveryDate + '\n' +
+                                     'Remarks: ' + remarks + '\n' +
+                                     'Serial: ' + serial + '\n\n';
+
+                        // Get table data
+                        var table = document.querySelector('table');
+                        var text = formData;
+                        
+                        for (var i = 0; i < table.rows.length; i++) {
+                            var row = table.rows[i];
+                            var rowData = [];
+                            for (var j = 0; j < row.cells.length-1; j++) { // -1 to skip last column (delete button)
+                                rowData.push(row.cells[j].textContent.trim());
+                            }
+                            text += rowData.join('\t') + '\n';
+                        }
+                        
+                        navigator.clipboard.writeText(text).then(() => {
+                            alert('Order data copied to clipboard');
+                        }).catch(err => {
+                            console.error('Failed to copy: ', err);
+                        });
+                    }
+                    </script>
                     
                     <button type="submit" name="update_order_status" value="0" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Draft</button>
                     <button type="submit" name="update_order_status" value="1" class="btn btn-warning"><i class="fas fa-paper-plane"></i> Submit</button>

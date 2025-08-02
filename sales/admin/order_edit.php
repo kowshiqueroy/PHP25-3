@@ -2,6 +2,94 @@
 require_once '../conn.php';
 require_once 'header.php';
 ?>
+<?php
+
+if (isset($_POST['product_id'])) {
+    $product_id = mysqli_real_escape_string($conn, $_POST['product_id']);
+    $quantity = mysqli_real_escape_string($conn, $_POST['quantity']);
+    $price = mysqli_real_escape_string($conn, $_POST['price']);
+    $order_id = mysqli_real_escape_string($conn, $_POST['id']);
+    $order_product_id = mysqli_real_escape_string($conn, $_POST['order_product_id']);
+
+    $update_product_query = "UPDATE order_product SET 
+        quantity = '$quantity',
+        price = '$price',
+        total = '$quantity' * '$price',
+        product_id = '$product_id'
+        WHERE id = '$order_product_id' AND order_id = '$order_id'";
+
+    if (mysqli_query($conn, $update_product_query)) {
+        echo "<script>
+        toastr.success('Order product updated successfully!');
+        setTimeout(function() {
+            window.location.href='order_edit.php?id=" . $order_id . "';
+        }, 1000);
+        </script>";
+    } else {
+        echo "<script>
+        toastr.error('Error updating order product: " . mysqli_error($conn) . "');
+        setTimeout(function() {
+            window.location.href='order_edit.php?id=" . $order_id . "';
+        }, 1000);
+        </script>";
+    }
+}
+
+if (isset($_POST['update_order'])) {
+    $id = mysqli_real_escape_string($conn, $_POST['id']);
+    $route_id = mysqli_real_escape_string($conn, $_POST['route_id']);
+    $person_id = mysqli_real_escape_string($conn, $_POST['person_id']);
+
+    $delivery_date = mysqli_real_escape_string($conn, $_POST['delivery_date']);
+    $order_status = mysqli_real_escape_string($conn, $_POST['order_status']);
+    $remarks = mysqli_real_escape_string($conn, $_POST['remarks']);
+
+    $update_query = "UPDATE orders SET 
+        route_id = '$route_id',
+        person_id = '$person_id',
+     
+        delivery_date = '$delivery_date',
+        order_status = '$order_status',
+        remarks = '$remarks'
+        WHERE id = '$id'";
+
+    if (mysqli_query($conn, $update_query)) {
+        echo "<div class='alert alert-success'>Order updated successfully!</div>";
+    } else {
+        echo "<div class='alert alert-danger'>Error updating order: " . mysqli_error($conn) . "</div>";
+    }
+}
+?>
+<div class="card p-1 text-center">Order Edit <?php if (isset($_REQUEST['id'])) { echo " - " . $_REQUEST['id']; } ?></div>
+
+
+
+<div class="container mt-3">
+    <form method="GET" action="">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="input-group mb-3">
+                    <input type="number" name="id" class="form-control" placeholder="Enter Order ID" required>
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <?php
+    if (isset($_GET['id'])) {
+        $order_id = mysqli_real_escape_string($conn, $_GET['id']);
+        $query = "SELECT * FROM orders WHERE id = '$order_id'";
+        $result = mysqli_query($conn, $query);
+        
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+            echo "<div class='alert alert-success'>Order found!</div>";
+?>
+
+
+
+
 <div class="card p-1 text-center" id="order-id"> <?php if(isset($_GET['id'])) { echo 'Order ID: ' . htmlspecialchars($_GET['id']); } else { echo 'New Order'; } ?></div>
 
 <?php
@@ -14,6 +102,7 @@ if (isset($_POST['update'])) {
     $delivery_date = $_POST['delivery_date'];
     $remarks = $_POST['remarks'];
     $order_serial = $_POST['order_serial'];
+    $order_status = $_POST['order_status'];
 
 
 
@@ -51,10 +140,10 @@ if (!is_numeric($person_id)) {
 
 
 
-    $sql = "UPDATE orders SET route_id='$route_id', person_id='$person_id', order_date='$order_date', delivery_date='$delivery_date', remarks='$remarks', order_serial='$order_serial' WHERE id='$id'";
+    $sql = "UPDATE orders SET  route_id='$route_id', person_id='$person_id', order_date='$order_date', delivery_date='$delivery_date', remarks='$remarks', order_serial='$order_serial', order_status='$order_status' WHERE id='$id'";
     if ($conn->query($sql) === TRUE) {
         echo '<div style="text-align: center;">Order updated successfully</div>';
-       echo '<script>window.location.href="create.php?id='.$id.'"</script>';
+       echo '<script>window.location.href="order_edit.php?id='.$id.'"</script>';
         exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -115,7 +204,7 @@ if (!is_numeric($person_id)) {
     if ($conn->query($sql) === TRUE) {
         echo '<div style="text-align: center;">New order created successfully</div>';
         $id = $conn->insert_id;
-        echo '<script>window.location.href="create.php?id='.$id.'"</script>';
+        echo '<script>window.location.href="order_edit.php?id='.$id.'"</script>';
         exit;
     } else {
         echo "Error: " . $sql . "<br>" . $conn->error;
@@ -175,14 +264,14 @@ if (isset($_REQUEST['id'])) {
 // 6: Processing
 // 7: Delivered
 // 8: Returned
-if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_status != 3 && $order_status != 4 && $order_status != 5 && $order_status != 6) {
-    echo '<div style="text-align: center;">This order has been finalized. You cannot edit this.</div>';
-    exit;
-}
+// if($order_status != 0 && $order_status != 4) {
+//     echo '<div style="text-align: center;">This order has been finalized. You cannot edit this.</div>';
+//     exit;
+// }
 
 ?>
 
-<form  method="post" id="orderForm">
+<form  method="post">
     <div class="row">
         <div class="col-md-6">
             <label for="route_id">Route</label>
@@ -254,9 +343,23 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
             <input  type="text" class="form-control" id="remarks" name="remarks" value="<?php echo !empty($remarks) ? $remarks : ''; ?>" ></input>
         </div>
 
-        <div class="col-md-6 col-6">
+        <div class="col-md-3 col-3">
             <label for="order_serial">Serial</label>
             <input type="number" class="form-control" id="order_serial" name="order_serial" value="<?php echo !empty($order_serial) ? $order_serial : ''; ?>" >
+        </div>
+        <div class="col-md-3 col-3">
+            <label for="order_status">Status</label>
+            <select class="form-control" id="order_status" name="order_status">
+                <option value="0" <?php echo $order_status == 0 ? 'selected' : ''; ?>>Draft</option>
+                <option value="1" <?php echo $order_status == 1 ? 'selected' : ''; ?>>Submit</option>
+                <option value="2" <?php echo $order_status == 2 ? 'selected' : ''; ?>>Approve</option>
+                <option value="3" <?php echo $order_status == 3 ? 'selected' : ''; ?>>Reject</option>
+                <option value="4" <?php echo $order_status == 4 ? 'selected' : ''; ?>>Edit</option>
+                <option value="5" <?php echo $order_status == 5 ? 'selected' : ''; ?>>Serial</option>
+                <option value="6" <?php echo $order_status == 6 ? 'selected' : ''; ?>>Processing</option>
+                <option value="7" <?php echo $order_status == 7 ? 'selected' : ''; ?>>Delivered</option>
+                <option value="8" <?php echo $order_status == 8 ? 'selected' : ''; ?>>Returned</option>
+            </select>
         </div>
     </div>
     <div class="row mt-3">
@@ -320,14 +423,14 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
                 $sql = "INSERT INTO order_product (order_id, product_id, quantity, price, total) VALUES ('$id', '$product_id', '$quantity', '$price', '$total')";
                 if ($conn->query($sql) === TRUE) {
                     echo '<div style="text-align: center; color:green;">Product added successfully</div>';
-                    echo "<script>window.location.href='create.php?id=".$_REQUEST['id']."';</script>";
+                    echo "<script>window.location.href='order_edit.php?id=".$_REQUEST['id']."'</script>";
                 } else {
                     echo "Error: " . $sql . "<br>" . $conn->error;
                 }
                 ?>
             <?php } ?>
     <div class="text-center" id="create">Add Products</div>
-    <form  action="create.php?id=<?php echo $_REQUEST['id']; ?>" method="post">
+    <form  action="order_edit.php?id=<?php echo $_REQUEST['id']; ?>" method="post">
         <div class="row">
             <div class="col-md-4">
                 <label for="product_id">Product</label>
@@ -425,7 +528,7 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
                 $grandQuantity += $row['quantity'];
                 $grandTotal += $row['total'];
             }
-            echo '<tr>
+         echo '<tr>
                     <td colspan="4" class="text-center">' . $productCount . ' Product(s): ' 
                     . $grandQuantity . ' Quantity <strong>Grand Total:</strong> <strong>' . $grandTotal . '</strong>/=</td> <td></td>
                   </tr>';
@@ -437,7 +540,7 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
             $sql = "DELETE FROM order_product WHERE id = $id";
             if ($conn->query($sql) === TRUE) {
                 echo '<div class="alert alert-success">Deleted successfully</div>';
-                echo '<script>window.location.href="create.php?id=' . $_REQUEST['id'] . '"</script>';
+                echo '<script>window.location.href="order_edit.php?id=' . $_REQUEST['id'] . '"</script>';
                 exit;
             } else {
                 echo '<div class="alert alert-danger">Error: ' . $sql . '<br>' . $conn->error . '</div>';
@@ -453,8 +556,7 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
                 <form action="" method="post">
                     <input type="hidden" name="id" value="<?php echo $_REQUEST['id']; ?>">
                     <input type="hidden" name="grandtotal" value="<?php echo $grandTotal; ?>">
-
-                    <button type="button" onclick="copyTableData()" class="btn btn-info"><i class="fas fa-copy"></i> Copy Data</button>
+                     <button type="button" onclick="copyTableData()" class="btn btn-info"><i class="fas fa-copy"></i> Copy Data</button>
 
                     <script>
                     function copyTableData() {
@@ -496,9 +598,7 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
                     }
                     </script>
                     
-                    <button type="submit" name="update_order_status" value="0" class="btn btn-primary"><i class="fas fa-pencil-alt"></i> Draft</button>
-                    <button type="submit" name="update_order_status" value="1" class="btn btn-warning"><i class="fas fa-paper-plane"></i> Submit</button>
-                    <button type="submit" name="update_order_status" value="2" class="btn btn-success"><i class="fas fa-check"></i> Approve</button>
+             
                 </form>
             <?php } ?>
         </div>
@@ -528,6 +628,36 @@ if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_sta
 
 
     <?php } ?>
+
+
+
+
+
+
+
+
+
+
+
+<?php
+           
+                
+            } else {
+                echo "<div class='alert alert-warning'>No order products found for this order.</div>";
+            }
+
+
+        } else {
+            echo "<div class='alert alert-danger'>No order found with this ID.</div>";
+        }
+    
+    ?>
+</div>
+
+
+
+
+
 
 
 <?php

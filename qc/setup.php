@@ -47,6 +47,10 @@ $conn->query("CREATE TABLE IF NOT EXISTS damage_details (
     received_total_amount DECIMAL(10,2) NOT NULL,
     actual_total_qty INT(11) NOT NULL,
     actual_total_amount DECIMAL(10,2) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    created_by INT(11) UNSIGNED,
+    updated_by INT(11) UNSIGNED,
 
     status BOOLEAN DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
