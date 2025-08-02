@@ -1,0 +1,72 @@
+1.  **Project Scaffolding:**
+    -   Create `README.md`
+    -   Create `development_plan.txt`
+    -   Create `development_done.txt`
+    -   Create directory structure:
+        -   `config/`
+        -   `includes/`
+        -   `modules/`
+        -   `templates/`
+        -   `assets/` (for css, js)
+
+2.  **Database Setup:**
+    -   Create `setup.php` to:
+        -   Create database `company_db`
+        -   Create tables:
+            -   `departments` (id, name)
+            -   `roles` (id, name)
+            -   `users` (id, username, password, department_id, role_id)
+            -   `settings` (id, name, value)
+        -   Seed tables with sample data:
+            -   Departments: HR, IT, Sales
+            -   Roles: Superadmin, Admin, Manager, Staff, Auditor
+            -   Users: 2-3 users per role per department
+            -   Settings: branding, system preferences
+
+3.  **Core Files:**
+    -   Create `config/config.php` for database connection and other settings.
+    -   Create `includes/functions.php` for common functions (e.g., authentication, authorization).
+    -   Create `includes/session.php` for session management.
+
+4.  **UI/UX (Templates):**
+    -   Create `templates/header.php` with Bootstrap CSS and responsive meta tags.
+    -   Create `templates/footer.php` with Bootstrap JS.
+    -   Create `templates/sidebar.php` for navigation.
+    -   Create `templates/topbar.php` for top navigation.
+    -   Create `assets/css/style.css` for custom styles.
+
+5.  **Login System:**
+    -   Create `login.php` with a login form.
+    -   Implement login logic in `includes/functions.php`.
+    -   Create `logout.php` to destroy the session.
+    -   Redirect users to their respective dashboards upon successful login.
+
+6.  **Superadmin Panel:**
+    -   Create `superadmin/` directory.
+    -   Create `superadmin/index.php` as the main dashboard.
+    -   Implement features:
+        -   Create/edit/delete departments.
+        -   Create/edit/delete roles.
+        -   Assign users to departments and roles.
+        -   Manage global settings.
+
+7.  **Department Panels:**
+    -   Create `department/` directory.
+    -   Create `department/index.php` as the main dashboard.
+    -   Dynamically load modules based on the user's department.
+    -   Implement department-specific features (e.g., view department members).
+
+8.  **Role-Based Access Control (RBAC):**
+    -   Implement functions in `includes/functions.php` to check user permissions.
+    -   Show/hide UI elements based on user roles.
+    -   Restrict access to modules and features based on roles.
+
+9.  **Modular Loading:**
+    -   Create a module loader in `includes/functions.php`.
+    -   Create sample modules in `modules/` (e.g., `modules/sales`, `modules/hr`).
+    -   Each module will have its own `index.php` and other files.
+
+10. **Final Touches:**
+    -   Add comments to the code.
+    -   Review and test the entire application.
+    -   Update `development_done.txt` after each major step.

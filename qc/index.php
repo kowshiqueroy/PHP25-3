@@ -4,10 +4,10 @@ include_once 'header.php';
 
 <main class="printable">
 <div class="button-container">
-  <a href="create_damage.php" class="btn btn-primary">Create New Damage</a>
-  <a href="view_damages.php" class="btn btn-secondary">View All Damages</a>
+  <a href="damages_create.php" class="btn btn-primary">Create New Damage</a>
+  <a href="damages.php" class="btn btn-secondary">View All Damages</a>
 </div>
-
+ 
 <div class="developer-info">
   <h2>Developed by Ovijat IT</h2>
   <p>Version: 1.1.2</p>
