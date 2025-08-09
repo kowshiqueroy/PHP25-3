@@ -327,6 +327,7 @@ function setIdWithSerial(orderSerial, orderId) {
                 <!-- <th>Approved By</th> -->
                 <th></th>
                 <th></th>
+                <th></th>
 
                 
             </tr>
@@ -510,9 +511,20 @@ if ($_SESSION['role'] == 2 && $row['order_status'] ==2 && $order_status==2) {
       
       
        echo ' '. htmlspecialchars($row['remarks']) . ' '. '<a href="printfull.php?idall=' . htmlspecialchars($row['id']) . '" class="btn btn-success"><i class="fa fa-print" aria-hidden="false"></i></a>';
-       
-       
-        echo '</td></tr>';
+
+
+        echo '</td>';
+
+          if ($row['order_status'] == 0 || $row['order_status'] == 1 || $row['order_status'] == 2 || $row['order_status'] == 3 || $row['order_status'] == 4 || $row['order_status'] == 5 ) {
+                echo '<td><a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-success">Edit</a></td>';
+            }
+            else {
+                echo '<td>--</td>';
+            }
+        
+
+
+       echo '</tr>';
 
                     //Show Products Here 
                             

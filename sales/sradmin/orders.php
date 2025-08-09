@@ -738,7 +738,9 @@ if ($order_status == 2) {
         if ($row['order_status'] == 0 || $row['order_status'] == 1 || $row['order_status'] == 2 || $row['order_status'] == 3 || $row['order_status'] == 4 || $row['order_status'] == 5 || $row['order_status'] == 6) {
                 echo '<td><a href="create.php?id=' . htmlspecialchars($row['id']) . '" class="btn btn-success">Edit</a></td>';
             }
-        
+           else {
+                echo '<td>--</td>';
+            }
         
         
         echo '</tr>';

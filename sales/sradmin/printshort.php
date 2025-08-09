@@ -45,7 +45,7 @@ if (!isset($_GET["idall"]) || empty($_GET["idall"])) {
     <thead>
         <tr>
             <th>ID</th>
-            <th>Order & Delivery</th>
+            <th>Dates</th>
             <th>Route Shop Serial</th>
            
             <th>Products</th>
@@ -116,14 +116,12 @@ if ($row['order_status'] == 0) {
 
             $grandAmount += $totalTotal;
 
-            echo "<tr>
-                    <td>{$row['id']}<br>$order_status_text</td>
-                    <td>{$row['order_date']}<br>{$row['delivery_date']}<br>by ";
-                    
-                   
-                    
-                        $userQuery = $conn->query("SELECT username FROM users WHERE id = '{$row['created_by']}'");
-                        $username = ($userQuery->num_rows > 0) ? $userQuery->fetch_assoc()['username'] : "Unknown User";
+        echo "<tr >
+                    <td>{$row['id']} $order_status_text</td>
+                    <td style='font-size: 8px;'>".date('y-m-d', strtotime($row['order_date']))."<br> ".date('y-m-d', strtotime($row['delivery_date']))." <br>by ";
+
+                    $userQuery = $conn->query("SELECT username FROM users WHERE id = '{$row['created_by']}'");
+                    $username = ($userQuery->num_rows > 0) ? $userQuery->fetch_assoc()['username'] : "User";
                         echo $username." ".$row['created_by'];
                    
                     echo "</td>

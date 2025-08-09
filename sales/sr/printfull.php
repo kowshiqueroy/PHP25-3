@@ -52,7 +52,7 @@ function convertNumberToWords($number) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Invoices</title>
+   <title>Invoices - <?php echo htmlspecialchars($_SESSION['username'] . ' | ' . date('Y-m-d H:i:s')); ?></title>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 

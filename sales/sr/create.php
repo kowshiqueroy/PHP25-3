@@ -175,11 +175,11 @@ if (isset($_REQUEST['id'])) {
 // 6: Processing
 // 7: Delivered
 // 8: Returned
-if($order_status != 0 && $order_status != 4) {
+if($order_status != 0  && $order_status != 1 && $order_status != 2 && $order_status != 3 && $order_status != 4 && $order_status != 5 ) {
     echo '<div style="text-align: center;">This order has been finalized. You cannot edit this.</div>';
     exit;
 }
-
+ 
 ?>
 
 <form  method="post">
