@@ -1,0 +1,323 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; /* Prevent scrolling */
+    height: 100%;
+    width: 100%;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.app-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+canvas {
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    touch-action: none; /* Prevent default touch behaviors */
+}
+
+/* A4 ratio (210mm x 297mm) landscape: width = 1.414 * height */
+/* We'll set height to 100% of viewport height and calculate width */
+/* This will be handled dynamically in JS to fit screen while maintaining ratio */
+
+.app-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.app-button:hover {
+    background-color: #0056b3;
+}
+
+.app-button i { /* Style for Font Awesome icons */
+    font-size: 24px;
+    color: white;
+}
+
+.sidebar-toggle-button-container {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.camera-toggle-button-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.sidebar {
+    position: absolute;
+    top: 0;
+    left: -300px; /* Hidden by default */
+    width: 250px;
+    height: 100%;
+    background-color: #ffffff;
+    color: rgb(221, 219, 219);
+    padding: 10px;
+    box-shadow: 1px 0 2px rgba(0, 0, 0, 0.3);
+    transition: left 0.3s ease;
+    z-index: 999;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar h2 {
+    margin-top: 0;
+    color: #007bff;
+}
+
+.camera-view {
+    position: absolute;
+    bottom: 20px; /* Aligned with the camera toggle button */
+    right: 20px;
+    width: 200px;
+    height: 150px;
+    background-color: #000;
+    border-radius: 10px; /* Rounded corners */
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    display: none; /* Hidden by default */
+    z-index: 998;
+    border: 2px solid #007bff;
+}
+
+.camera-view.open {
+    display: block;
+}
+
+.camera-view video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1); /* Mirror effect for webcam */
+}
+
+.camera-view .close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1001;
+}
+
+.camera-view .close-button:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Sidebar Tooling Styles */
+.sidebar h2 {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.tool-section {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #555;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.tool-section:last-child {
+    border-bottom: none;
+}
+
+.tool-section h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #007bff;
+    font-size: 0.8em;
+}
+
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.tool-button, .action-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.tool-button:hover, .action-button:hover {
+    background-color: #479af1;
+}
+
+.tool-button.active {
+    background-color: #2ab300;
+    border: 1px solid #004085;
+}
+
+/* Color Palette */
+.color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.color-box {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.color-box:hover {
+    border-color: #007bff;
+}
+
+.color-box.active {
+    border-color: #fff;
+    box-shadow: 0 0 0 2px #007bff;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+input[type="color"]::-webkit-color-swatch {
+    border: 1px solid #555;
+    border-radius: 5px;
+}
+
+/* Range Sliders */
+input[type="range"] {
+    width: calc(100% - 60px); /* Adjust for text next to it */
+    -webkit-appearance: none;
+    height: 8px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+    border-radius: 50px;
+    margin-right: 10px;
+}
+
+input[type="range"]:hover {
+    opacity: 1;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #007bff;
+    cursor: pointer;
+}
+
+#penSizeValue, #cameraTransparencyValue, #canvasPageIndex {
+    color: #007bff;
+    font-weight: bold;
+    min-width: 30px; /* Ensure consistent width */
+    display: inline-block;
+    text-align: center;
+}
+
+#canvasPageIndex {
+    margin: 0 10px;
+}
+
+.no-camera-message {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+.no-camera-message img {
+    margin-bottom: 10px;
+}
+
+/* Custom Cursors for Tools */
+canvas.canvas-pencil-cursor {
+    cursor: crosshair;
+}
+
+canvas.canvas-highlighter-cursor {
+    cursor: text;
+}
+
+canvas.canvas-marker-cursor {
+    cursor: grab;
+}
+
+canvas.canvas-eraser-cursor {
+    cursor: cell;
+}
