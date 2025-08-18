@@ -38,8 +38,8 @@
                     <div class="contact-info bg-light p-4 rounded text-center">
                         <h4 class="mb-3">Get In Touch</h4>
                         <p class="mb-0">DELIGHT DISTRIBUTION INC. <br>
-                        <span class="d-block">5605, 55th DRIVE</span>
-                        <span class="d-block">MASPETH, NEW YORK 11378, USA.</span>
+                        <span class="d-block">55 Norman AveTrenton</span>
+                        <span class="d-block">NJ 08618, USA.</span>
                         </p>
                     </div>
                 </div>
@@ -49,9 +49,12 @@
                         <h4 class="mb-3">Contact Us</h4>
                         <p class="mb-0">
                             <span class="d-block">Mobile: </span>
-                            <a href="tel:+19173885447">(+1) 917 388 5447</a>  , <a href="tel:+8801733390301">(+88) 0173 339 0301</a><br>
+                            <a href="tel:+13479226750">+13479226750</a>  , <a href="tel:+13472641892">+13472641892</a><br>
                             <span class="d-block">Email: </span>
-                            <a href="mailto:director@ovijatfood.com">director@ovijatfood.com</a>
+                            <a href="mailto:delight.act06@gmail.com">delight.act06@gmail.com</a>
+                            <br>
+                            <a href="mailto:abukhan.delight@gmail.com">abukhan.delight@gmail.com</a>
+
                         </p>
                     </div>
                 </div>
