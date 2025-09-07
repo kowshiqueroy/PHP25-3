@@ -47,12 +47,13 @@ $lang = [
         'dashboard' => 'Dashboard',
         'users' => 'Users',
         'products' => 'Products',
-        'analytics' => 'Analytics',
+        'reports' => 'Reports',
         'settings' => 'Settings',
         'logout' => 'Logout',
         'Success' => 'Success',
         'Error' => 'Error',
-        
+        'sales' => 'Sales',
+        'stocks' => 'Stocks',
     ],
     // Bangla
     1 => [
@@ -60,11 +61,13 @@ $lang = [
         'dashboard' => 'ড্যাশবোর্ড',
         'users' => 'ব্যবহারকারী',
         'products' => 'পণ্য',
-        'analytics' => 'বিশ্লেষণ',
+        'reports' => 'রিপোর্ট',
         'settings' => 'সেটিংস',
         'logout' => 'লগআউট',
         'Success' => 'সফল',
         'Error' => 'ত্রুটি',
+        'sales' => 'বিক্রয়',
+        'stocks' => 'স্টকস',
         
     ]
 ];
@@ -87,7 +90,7 @@ $lang = [
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H3V5h18v14zM5 9h14v2H5V9zm0-4h14v2H5V5zm0-4h14v2H5V1z"></path>
                 </svg>
-                <span><?php echo $lang[$language]['admin_panel']; ?></span>
+                <span onClick="window.location.href='index.php'"><?php echo $lang[$language]['admin_panel']; ?></span>
             </a>
         </div>
         <ul class="sidebar-nav">
@@ -99,14 +102,7 @@ $lang = [
                     <span><?php echo $lang[$language]['dashboard']; ?></span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="users.php">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                    </svg>
-                    <span><?php echo $lang[$language]['users']; ?></span>
-                </a>
-            </li>
+           
             <li class="nav-item">
                 <a href="products.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -115,24 +111,51 @@ $lang = [
                     <span><?php echo $lang[$language]['products']; ?></span>
                 </a>
             </li>
+             <li class="nav-item">
+                <a href="sales.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span><?php echo $lang[$language]['sales']; ?></span>
+                </a>
+            </li>
+
             <li class="nav-item">
-                <a href="analytics.php">
+                <a href="stock.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h13a2 2 0 012 2v14a2 2 0 01-2 2h-5m-1 0a2 2 0 00-2 2v1a2 2 0 002 2h1a2 2 0 002-2v-1a2 2 0 00-2-2h-1z" />
+
+                    </svg>
+                    <span><?php echo $lang[$language]['stocks']; ?></span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="reports.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                         <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
                     </svg>
-                    <span><?php echo $lang[$language]['analytics']; ?></span>
+                    <span><?php echo $lang[$language]['reports']; ?></span>
                 </a>
             </li>
-            <li class="nav-item">
-                <a href="settings.php">
+
+             <li class="nav-item">
+                <a href="users.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.384.164.652.295.75.371.204.156.385.31.545.454.152.149.24.29.29.375l.089.152c.22.424.42.862.6 1.324.18.462.33.92.434 1.39.127.462.209.92.259 1.394.02.182.03.365.03.546 0 .18-.01.362-.03.543-.05.474-.132.932-.259 1.395-.104.47-.254.928-.434 1.39-.18.462-.38.9-.6 1.325-.089.153-.177.3-.29.376-.1.076-.368.207-.75.37-.396.166-.71.506-.78.93l-.15.894c-.09.542-.56.94-1.11.94h-2.594c-.55 0-1.02-.398-1.11-.94l-.148-.894c-.07-.424-.384-.764-.78-.93-.384-.164-.652-.295-.75-.371-.203-.156-.385-.31-.545-.454-.153-.149-.24-.29-.29-.375l-.089-.152c-.22-.424-.42-.862-.6-1.324-.18-.462-.33-.92-.435-1.39-.127-.462-.209-.92-.26-1.394-.02-.182-.03-.365-.03-.546 0-.18.01-.362.03-.543.05-.474.132-.932.26-1.395.103-.47.253-.928.434-1.39.18-.462.38-.9.6-1.325.089-.153.177-.3.29-.376.1-.076.368-.207.75-.37.396-.166.71-.506.78-.93l.149-.894z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                     </svg>
-                    <span><?php echo $lang[$language]['settings']; ?></span>
+                    <span><?php echo $lang[$language]['users']; ?></span>
                 </a>
             </li>
+        <li class="nav-item">
+    <a href="settings.php" class="nav-link">
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 2.25c.414 0 .75.336.75.75v1.5a.75.75 0 01-.75.75h-1.5a.75.75 0 01-.75-.75V3a.75.75 0 01.75-.75h1.5zM4.5 11.25c0-.414.336-.75.75-.75h1.5a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75H5.25a.75.75 0 01-.75-.75v-1.5zM11.25 20.25c-.414 0-.75-.336-.75-.75v-1.5a.75.75 0 01.75-.75h1.5a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-1.5zM20.25 11.25c0 .414-.336.75-.75.75h-1.5a.75.75 0 01-.75-.75v-1.5a.75.75 0 01.75-.75h1.5c.414 0 .75.336.75.75v1.5zM12 15a3 3 0 100-6 3 3 0 000 6z" />
+        </svg>
+        <span><?php echo $lang[$language]['settings']; ?></span>
+    </a>
+</li>
 
 <li class="nav-item">
    <hr>
@@ -155,7 +178,7 @@ $lang = [
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
                 </button>
             </div>
-            <div class="header-center">
+            <div class="header-center" onClick="window.location.href='index.php'">
                 <?php echo $lang[$language]['admin_panel']; ?>
             </div>
             <div class="header-right">

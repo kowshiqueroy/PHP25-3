@@ -47,7 +47,7 @@ if ($result->num_rows > 0) {
     
 
 
-  <div class="modal-content">
+  <div class="modal-content" style="max-width: 600px; margin: 0 auto;">
     <div class="modal-header">
         <h2><?php echo $lang[$language]['settings']; ?>  <?php
     if (isset($_GET['msg'])) {
