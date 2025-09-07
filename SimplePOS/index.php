@@ -2,6 +2,52 @@
 
 include 'config.php';
 
+if (isset($_SESSION['role'])) {
+    header("Location: {$_SESSION['role']}/");
+    exit;
+}
+
+if (isset($_POST['username']) && isset($_POST['password'])) {
+   setcookie('username', $_POST['username'], time() + (86400 * 30), '/');
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    $stmt = $conn->prepare("SELECT id, username, role, password FROM users WHERE username = ? AND blocked = 0");
+    if ($stmt) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows === 1) {
+            $user = $result->fetch_assoc();
+              
+              
+            if (password_verify($_POST['password'], $user['password'])) {
+
+                // Start session and set session variables
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['role'] = $user['role'];
+
+                // Redirect to dashboard or main page
+                header("Location: " . ($user['role'] ? '1/' : '0/'));
+                exit();
+            } else {
+                $msg = "Invalid credentials or user is blocked.";
+                echo "<script>window.location.href='index.php?msg=".urlencode($msg)."';</script>";
+            }
+        } else {
+            $msg = "No user found.";
+            echo "<script>window.location.href='index.php?msg=".urlencode($msg)."';</script>";
+        }
+
+        $stmt->close();
+    } else {
+        $msg = "Database error. Please try again later.";
+        echo "<script>window.location.href='index.php?msg=".urlencode($msg)."';</script>";
+    }
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -92,6 +138,7 @@ include 'config.php';
 <body>
   <div class="login-container">
     <h1>SimplePOS</h1>
+    <div style="color: red;" id="msg"><?php echo isset($_GET['msg']) ? htmlspecialchars($_GET['msg']) : ''; ?></div>
     <form id="loginForm" method="POST" >
       <div class="input-group">
         <label for="username">Username</label>
@@ -102,10 +149,18 @@ include 'config.php';
         <input type="password" id="password" name="password" required />
       </div>
       <button type="submit" class="login-btn">Login</button>
+
   
+
     </form>
   </div>
 
- 
+    <?php
+    if (isset($_COOKIE['username'])) {
+      echo '<script>document.getElementById("username").value = "'.htmlspecialchars($_COOKIE['username']).'";</script>';
+    }
+    ?>
+
+  
 </body>
 </html>

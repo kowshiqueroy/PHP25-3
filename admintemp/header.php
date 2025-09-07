@@ -1,5 +1,5 @@
 <?php
-$theme = 0; // 0 for light, 1 for dark
+$theme = 1; // 0 for light, 1 for dark
 $language = 0; // 0 for English, 1 for Bangla
 $username = 'User1234';
 $role = 'Admin';
