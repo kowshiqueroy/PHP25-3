@@ -53,6 +53,7 @@ $lang = [
         'Success' => 'Success',
         'Error' => 'Error',
         'sales' => 'Sales',
+        'purchases' => 'Purchases',
         'stocks' => 'Stocks',
         'new' => 'New',
         'view' => 'View',
@@ -82,6 +83,8 @@ $lang = [
         'id' => 'ID',
         'buy' => 'Buy',
         'categories' => 'Categories',
+        'in' => 'In',
+        'out' => 'Out',
 
     ],
     // Bangla
@@ -96,6 +99,7 @@ $lang = [
         'Success' => 'সফল',
         'Error' => 'ত্রুটি',
         'sales' => 'বিক্রয়',
+        'purchases' => 'ক্রয়',
         'stocks' => 'স্টকস',
         'new' => 'নতুন',
         'view' => 'দেখুন',
@@ -125,6 +129,8 @@ $lang = [
         'id' => 'আইডি',
         'buy' => 'কেনা',
         'categories' => 'বিভাগসমূহ',
+        'in' => 'ইন',
+        'out' => 'আউট',
 
     ],
 ];
@@ -141,7 +147,7 @@ $lang = [
 </head>
 <body>
 
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar no-print" id="sidebar">
         <div class="sidebar-header">
             <a href="#" class="logo">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -177,7 +183,7 @@ $lang = [
                         
                         <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     </svg>
-                    <span><?php echo $lang[$language]['buy']; ?></span>
+                    <span><?php echo $lang[$language]['purchases']; ?></span>
                 </a>
             </li>
 
@@ -242,7 +248,7 @@ $lang = [
     </nav>
 
     <div class="main-container" id="main-container">
-        <header class="fixed-header">
+        <header class="fixed-header no-print">
             <div class="header-left">
                 <button class="menu-toggle" id="menu-toggle">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>

@@ -11,13 +11,13 @@
 
 <div class="cards-container">
                 <div class="card" onClick="location.href='sales.php';" style="cursor: pointer;">
-                    <h3><?php echo $lang[$language]['sales']; ?></h3>
+                    <h3><?php echo $lang[$language]['out']; ?></h3>
                     <div class="value"><?php echo $lang[$language]['new']; ?> <?php echo $lang[$language]['sales']; ?></div>
                     <!-- <div class="details">+15% from last month</div> -->
                 </div>
                 <div class="card" onClick="location.href='products.php';" style="cursor: pointer;">
-                    <h3><?php echo $lang[$language]['products']; ?></h3>
-                    <div class="value"><?php echo $lang[$language]['new']; ?> <?php echo $lang[$language]['products']; ?></div>
+                    <h3><?php echo $lang[$language]['in']; ?></h3>
+                    <div class="value"><?php echo $lang[$language]['new']; ?> <?php echo $lang[$language]['purchases']; ?></div>
                     <!-- <div class="details">+20% from last month</div> -->
                 </div>
                 <div class="card" onClick="location.href='reports.php';" style="cursor: pointer;">
