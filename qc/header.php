@@ -34,6 +34,7 @@ if (!isset($_SESSION['user_id'])) {
             <li><a href="products.php">Products</a></li>
             <li><a href="damages.php">Damages</a></li>
             <li><a href="analytics.php">Analytics</a></li>
+            <li><a href="shops.php">Shops</a></li>
 
         </ul>
     </nav>

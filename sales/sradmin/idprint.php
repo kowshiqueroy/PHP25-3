@@ -94,7 +94,7 @@ function convertNumberToWords($number) {
             align-items: center;
             justify-content: center;
               width: 95%;
-              margin: 5px auto;
+              margin: 1px auto;
         }
 
         .invoice-header img {
@@ -109,7 +109,7 @@ function convertNumberToWords($number) {
 
         .invoice-details, .invoice-items, .signature-block {
             width: 95%;
-              margin: 5px auto;
+              margin: 1px auto;
             padding: 0 5px;
         }
 
@@ -117,7 +117,7 @@ function convertNumberToWords($number) {
             display: flex;
             justify-content: space-between;
             font-size: 14px; /* Smaller font size for compactness */
-            margin-top: 2px;
+            margin-top: 0px;
         }
         .invoice-billto {
 

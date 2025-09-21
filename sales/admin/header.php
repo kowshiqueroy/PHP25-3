@@ -77,6 +77,7 @@ if (!isset($_SESSION['rolename']) || $_SESSION['rolename'] !== 'admin') {
             <li><a href="routes.php"><i class="fas fa-exclamation-triangle"></i> Routes</a></li>
             <li><a href="persons.php"><i class="fas fa-exclamation-triangle"></i> Persons</a></li>
             <li><a href="products.php"><i class="fas fa-exclamation-triangle"></i> Products</a></li>
+            <li><a href="reports.php"><i class="fas fa-exclamation-triangle"></i> Reports</a></li>
 
 
         </ul>

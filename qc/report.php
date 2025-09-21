@@ -114,13 +114,17 @@ if ($result->num_rows > 0): ?>
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="background-color: #f2f2f2; text-align: center; font-size: 14px;">
+
+
+
+
+
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">SN</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Product</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Send Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Send Amount</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Received Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Received Amount</th>
-
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Label</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Sealing</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Expired</th>
@@ -137,8 +141,14 @@ if ($result->num_rows > 0): ?>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Amount</th>
                   <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Amount</th>
-
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Remarks</th>
+            
+            
+            
+            
+            
+            
+            
             </tr>
         </thead>
         <tbody>
@@ -157,28 +167,32 @@ if ($result->num_rows > 0): ?>
                     <?php endif;
                     $product_stmt->close();
                     ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['shop_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['shop_amount']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['received_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['received_amount']) ?></td>
-                 
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['label']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['sealing']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['expired']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['date_problem']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['broken']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['VHsealing']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['insect']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['soft']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['bodyleakage']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['others']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['good']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['intentional']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['total_negative_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['total_negative_amount']) ?></td>
-                       <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_amount']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['remarks']) ?></td>
+
+
+
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['shop_qty']) && $row['shop_qty'] != 0 ? htmlspecialchars($row['shop_qty']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['shop_amount']) && $row['shop_amount'] != 0 ? htmlspecialchars($row['shop_amount']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['received_qty']) && $row['received_qty'] != 0 ? htmlspecialchars($row['received_qty']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['received_amount']) && $row['received_amount'] != 0 ? htmlspecialchars($row['received_amount']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['label']) && $row['label'] != 0 ? htmlspecialchars($row['label']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['sealing']) && $row['sealing'] != 0 ? htmlspecialchars($row['sealing']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['expired']) && $row['expired'] != 0 ? htmlspecialchars($row['expired']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['date_problem']) && $row['date_problem'] != 0 ? htmlspecialchars($row['date_problem']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['broken']) && $row['broken'] != 0 ? htmlspecialchars($row['broken']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['VHsealing']) && $row['VHsealing'] != 0 ? htmlspecialchars($row['VHsealing']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['insect']) && $row['insect'] != 0 ? htmlspecialchars($row['insect']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['soft']) && $row['soft'] != 0 ? htmlspecialchars($row['soft']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['bodyleakage']) && $row['bodyleakage'] != 0 ? htmlspecialchars($row['bodyleakage']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['others']) && $row['others'] != 0 ? htmlspecialchars($row['others']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['good']) && $row['good'] != 0 ? htmlspecialchars($row['good']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['intentional']) && $row['intentional'] != 0 ? htmlspecialchars($row['intentional']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['total_negative_qty']) && $row['total_negative_qty'] != 0 ? htmlspecialchars($row['total_negative_qty']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['total_negative_amount']) && $row['total_negative_amount'] != 0 ? htmlspecialchars($row['total_negative_amount']) : ''; ?></td>
+                       <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['actual_qty']) && $row['actual_qty'] != 0 ? htmlspecialchars($row['actual_qty']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['actual_amount']) && $row['actual_amount'] != 0 ? htmlspecialchars($row['actual_amount']) : ''; ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo isset($row['remarks']) && $row['remarks'] != 0 ? htmlspecialchars($row['remarks']) : ''; ?></td>
+               
+               
                 </tr>
             <?php endwhile; ?>
         </tbody>

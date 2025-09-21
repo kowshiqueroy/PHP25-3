@@ -156,26 +156,30 @@ if ($result->num_rows > 0): ?>
                     <?php endif;
                     $product_stmt->close();
                     ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['shop_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['shop_amount']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['received_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['received_amount']) ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['shop_qty'] == 0 ? '' : htmlspecialchars($row['shop_qty'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['shop_amount'] == 0 ? '' : htmlspecialchars($row['shop_amount'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['received_qty'] == 0 ? '' : htmlspecialchars($row['received_qty'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['received_amount'] == 0 ? '' : htmlspecialchars($row['received_amount'])); ?></td>
                  
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['label']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['sealing']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['expired']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['date_problem']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['broken']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['VHsealing']) ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['label'] == 0 ? '' : htmlspecialchars($row['label'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['sealing'] == 0 ? '' : htmlspecialchars($row['sealing'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['expired'] == 0 ? '' : htmlspecialchars($row['expired'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['date_problem'] == 0 ? '' : htmlspecialchars($row['date_problem'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['broken'] == 0 ? '' : htmlspecialchars($row['broken'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['VHsealing'] == 0 ? '' : htmlspecialchars($row['VHsealing'])); ?></td>
              
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['soft']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['bodyleakage']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['others']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['good']) ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['soft'] == 0 ? '' : htmlspecialchars($row['soft'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['bodyleakage'] == 0 ? '' : htmlspecialchars($row['bodyleakage'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['others'] == 0 ? '' : htmlspecialchars($row['others'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['good'] == 0 ? '' : htmlspecialchars($row['good'])); ?></td>
 
-                       <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_qty']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['actual_amount']) ?></td>
-                    <td style="border: 1px solid black; padding: 5px;"><?= htmlspecialchars($row['remarks']) ?></td>
+                       <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['actual_qty'] == 0 ? '' : htmlspecialchars($row['actual_qty'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['actual_amount'] == 0 ? '' : htmlspecialchars($row['actual_amount'])); ?></td>
+                    <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['remarks'] == 0 ? '' : htmlspecialchars($row['remarks'])); ?></td>
+              
+              
+              
+              
                 </tr>
             <?php endwhile; ?>
         </tbody>
