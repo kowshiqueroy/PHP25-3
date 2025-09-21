@@ -54,6 +54,35 @@ $lang = [
         'Error' => 'Error',
         'sales' => 'Sales',
         'stocks' => 'Stocks',
+        'new' => 'New',
+        'view' => 'View',
+        'companyname' => 'Company Name',
+        'address' => 'Address',
+        'phone' => 'Phone',
+        'photopath' => 'Photo Path',
+        'bannerpath' => 'Banner Path',
+        'theme' => 'Theme',
+        'light' => 'Light',
+        'dark' => 'Dark',
+        'language' => 'Language',
+        'english' => 'English',
+        'bangla' => 'Bangla',
+        'update' => 'Update',
+        'password' => 'Password',
+        'old_password' => 'Old Password',
+        'new_password' => 'New Password',
+        'create' => 'Create',
+        'new_user' => 'New User',
+        'username' => 'Username',
+        'role' => 'Role',
+        'admin' => 'Admin',
+        'manager' => 'Manager',
+        'submit' => 'Submit',
+        'actions' => 'Actions',
+        'id' => 'ID',
+        'buy' => 'Buy',
+        'categories' => 'Categories',
+
     ],
     // Bangla
     1 => [
@@ -68,8 +97,36 @@ $lang = [
         'Error' => 'ত্রুটি',
         'sales' => 'বিক্রয়',
         'stocks' => 'স্টকস',
-        
-    ]
+        'new' => 'নতুন',
+        'view' => 'দেখুন',
+        'companyname' => 'কোম্পানির নাম',
+        'address' => 'ঠিকানা',
+        'phone' => 'ফোন',
+        'photopath' => 'ফটো পথ',
+        'bannerpath' => 'ব্যানার পথ',
+        'theme' => 'থিম',
+        'light' => 'লাইট',
+        'dark' => 'ডার্ক',
+        'language' => 'ভাষা',
+        'english' => 'ইংরেজি',
+        'bangla' => 'বাংলা',
+        'update' => 'আপডেট',
+        'password' => 'পাসওয়ার্ড',
+        'old_password' => 'পুরাতন পাসওয়ার্ড',
+        'new_password' => 'নতুন পাসওয়ার্ড',
+        'create' => 'তৈরি করুন',
+        'new_user' => 'নতুন ব্যবহারকারী',
+        'username' => 'ব্যবহারকারীর নাম',
+        'role' => 'ভূমিকা',
+        'admin' => 'অ্যাডমিন',
+        'manager' => 'ম্যানেজার',
+        'submit' => 'সাবমিট',
+        'actions' => 'কর্ম',
+        'id' => 'আইডি',
+        'buy' => 'কেনা',
+        'categories' => 'বিভাগসমূহ',
+
+    ],
 ];
 
 ?>
@@ -103,14 +160,7 @@ $lang = [
                 </a>
             </li>
            
-            <li class="nav-item">
-                <a href="products.php">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
-                    </svg>
-                    <span><?php echo $lang[$language]['products']; ?></span>
-                </a>
-            </li>
+          
              <li class="nav-item">
                 <a href="sales.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -121,15 +171,35 @@ $lang = [
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a href="stock.php">
+             <li class="nav-item">
+                <a href="sales.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h13a2 2 0 012 2v14a2 2 0 01-2 2h-5m-1 0a2 2 0 00-2 2v1a2 2 0 002 2h1a2 2 0 002-2v-1a2 2 0 00-2-2h-1z" />
-
+                        
+                        <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
                     </svg>
-                    <span><?php echo $lang[$language]['stocks']; ?></span>
+                    <span><?php echo $lang[$language]['buy']; ?></span>
                 </a>
             </li>
+
+
+                <li class="nav-item">
+                <a href="products.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                    <span><?php echo $lang[$language]['categories']; ?></span>
+                </a>
+            </li>
+              <li class="nav-item">
+                <a href="products.php">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+                    </svg>
+                    <span><?php echo $lang[$language]['products']; ?></span>
+                </a>
+            </li>
+
+         
             <li class="nav-item">
                 <a href="reports.php">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

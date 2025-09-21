@@ -93,33 +93,33 @@ if($_SESSION['role'] == 0 ) {
                 <div class="card">
 
                     <form action="users.php" method="post">
-                        <h2>Update Password</h2>
+                        <h2><?php echo $lang[$language]['update']; ?> <?php echo $lang[$language]['password']; ?></h2>
                         <div class="form-group">
-                            <label for="old_password">Old Password</label>
+                            <label for="old_password"><?php echo $lang[$language]['old_password']; ?></label>
                             <input type="password" id="old_password" name="old_password" required>
                         </div>
                         <div class="form-group">
-                            <label for="new_password">New Password</label>
+                            <label for="new_password"><?php echo $lang[$language]['new_password']; ?></label>
                             <input type="password" id="new_password" name="new_password" required>
                         </div>
-                        <button type="submit" class='btn' style='text-decoration: none; color: white; background-color: blue' name="update_user">Submit</button>
+                        <button type="submit" class='btn' style='text-decoration: none; color: white; background-color: blue' name="update_user"><?php echo $lang[$language]['update']; ?></button>
                     </form>
                     <br>
                     <form action="users.php" method="post">
-                        <h2>Create New User</h2>
+                        <h2><?php echo $lang[$language]['create']; ?> <?php echo $lang[$language]['new_user']; ?></h2>
                         <div class="form-group">
-                            <label for="username">Username</label>
+                            <label for="username"><?php echo $lang[$language]['username']; ?></label>
                             <input type="text" id="username" name="username" required>
                         </div>
                         <div class="form-group">
-                            <label for="role">Role</label>
+                            <label for="role"><?php echo $lang[$language]['role']; ?></label>
                             <select id="role" name="role" required>
-                                <option value="0">Admin</option>
-                                <option value="1">Manager</option>
+                                <option value="0"><?php echo $lang[$language]['admin']; ?></option>
+                                <option value="1"><?php echo $lang[$language]['manager']; ?></option>
                             </select>
                         </div>
-                     
-                        <button type="submit" class='btn' style='text-decoration: none; color: white; background-color: green' name="add_user">Submit</button>
+
+                        <button type="submit" class='btn' style='text-decoration: none; color: white; background-color: green' name="add_user"><?php echo $lang[$language]['submit']; ?></button>
                     </form>
                     
                 </div>
@@ -131,11 +131,11 @@ if($_SESSION['role'] == 0 ) {
                         <table style="width: 100%; border-collapse: collapse; margin-top: 1rem; item-align: center;">
                             <thead style="height: 40px;">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Username</th>
-                                    <th>Password</th>
-                                    <th>Role</th>
-                                    <th>Actions</th>
+                                    <th><?php echo $lang[$language]['id']; ?></th>
+                                    <th><?php echo $lang[$language]['username']; ?></th>
+                                    <th><?php echo $lang[$language]['password']; ?></th>
+                                    <th><?php echo $lang[$language]['role']; ?></th>
+                                    <th><?php echo $lang[$language]['actions']; ?></th>
                                 </tr>
                             </thead>
                             <tbody style="text-align: center;">

@@ -62,43 +62,43 @@ if ($result->num_rows > 0) {
     </div>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
         <div class="form-group">
-            <label for="companyname">Company Name</label>
+            <label for="companyname"><?php echo $lang[$language]['companyname']; ?></label>
             <input type="text" id="companyname" name="companyname" class="modern-input" value="<?php echo $row['companyname']; ?>" required>
         </div>
         <div class="form-group">
-            <label for="address">Address</label>
+            <label for="address"><?php echo $lang[$language]['address']; ?></label>
             <input type="text" id="address" name="address" class="modern-input" value="<?php echo $row['address']; ?>" required>
         </div>
         <div class="form-group">
-            <label for="photopath">Photo Path</label>
+            <label for="photopath"><?php echo $lang[$language]['photopath']; ?></label>
             <input type="text" id="photopath" name="photopath" class="modern-input" value="<?php echo $row['photopath']; ?>" required>
         </div>
         <div class="form-group">
-            <label for="bannerpath">Banner Path</label>
+            <label for="bannerpath"><?php echo $lang[$language]['bannerpath']; ?></label>
             <input type="text" id="bannerpath" name="bannerpath" class="modern-input" value="<?php echo $row['bannerpath']; ?>" required>
         </div>
         <div class="form-group">
-            <label for="phone">Phone</label>
+            <label for="phone"><?php echo $lang[$language]['phone']; ?></label>
             <input type="text" id="phone" name="phone" class="modern-input" value="<?php echo $row['phone']; ?>" required>
         </div>
         <div class="form-group">
-            <label for="theme">Theme</label>
+            <label for="theme"><?php echo $lang[$language]['theme']; ?></label>
             <select id="theme" name="theme" class="modern-select" required>
-                <option value="0" <?php echo $row['theme'] == 0 ? 'selected' : ''; ?>>Light</option>
-                <option value="1" <?php echo $row['theme'] == 1 ? 'selected' : ''; ?>>Dark</option>
+                <option value="0" <?php echo $row['theme'] == 0 ? 'selected' : ''; ?>><?php echo $lang[$language]['light']; ?></option>
+                <option value="1" <?php echo $row['theme'] == 1 ? 'selected' : ''; ?>><?php echo $lang[$language]['dark']; ?></option>
             </select>
         </div>
         <div class="form-group">
-            <label for="language">Language</label>
+            <label for="language"><?php echo $lang[$language]['language']; ?></label>
             <select id="language" name="language" class="modern-select" required>
-                <option value="0" <?php echo $row['language'] == 0 ? 'selected' : ''; ?>>English</option>
-                <option value="1" <?php echo $row['language'] == 1 ? 'selected' : ''; ?>>Bangla</option>
+                <option value="0" <?php echo $row['language'] == 0 ? 'selected' : ''; ?>><?php echo $lang[$language]['english']; ?></option>
+                <option value="1" <?php echo $row['language'] == 1 ? 'selected' : ''; ?>><?php echo $lang[$language]['bangla']; ?></option>
             </select>
         </div>
 
        
         <div class="modal-footer">
-            <button type="submit" name="submit" class="btn-submit">Update</button>
+            <button type="submit" name="submit" class="btn-submit"><?php echo $lang[$language]['update']; ?></button>
         </div>
     </form>
 </div>

@@ -9,9 +9,10 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
     role BOOLEAN DEFAULT 0,
     blocked BOOLEAN DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_by INT(11) UNSIGNED DEFAULT 0
+    created_by INT(11) UNSIGNED DEFAULT 0,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
-
+ 
 
 // Insert default admin user if table is empty
 $res = $conn->query("SELECT COUNT(*) as count FROM users");
