@@ -166,7 +166,7 @@ if (isset($_GET['sr_id']) && isset($_GET['date_from']) && isset($_GET['date_to']
         <div>Date: <?php echo date("d-m-Y"); ?></div>
         <div>Time: <?php echo date("h:i:s a"); ?></div>
     </div>
-<table>
+<table id="table_data" >
     <thead>
         <tr>
             <th>ID</th>
@@ -316,7 +316,7 @@ if ( isset($_GET['date_from']) && isset($_GET['date_to']) && isset($_GET['visit'
 $sql = "SELECT created_by FROM orders GROUP BY created_by";
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
-    echo "<table  border='1' cellpadding='5' cellspacing='0' style='width: 100%; border-collapse: collapse;'>";
+    echo "<table  id='table_data' border='1' cellpadding='5' cellspacing='0' style='width: 100%; border-collapse: collapse;'>";
     echo "<thead>";
     echo "<tr><th>SR</th> <th></th></tr>";
     echo "</thead>";
@@ -346,7 +346,7 @@ if ($result->num_rows > 0) {
                echo "<td>";
                $sql2 = "SELECT DISTINCT route_id FROM orders WHERE created_by = '$created_by'";
                $result2 = $conn->query($sql2);
-               if ($result2->num_rows > 0) {
+               if ($result2->num_rows > 0) { //     if (C.N>0) { 
                    echo "<table  border='1' cellpadding='5' cellspacing='0' style='width: 100%; border-collapse: collapse;'>";
                    echo "<thead><tr><th>Route</th><th>Shop</th></tr></thead><tbody>";
                    while ($row2 = $result2->fetch_assoc()) {
@@ -407,14 +407,28 @@ if ($result->num_rows > 0) {
 
 
 
+                   <button type="button" class="btn btn-primary" onclick="exportTableToExcel('table_data', 'sales_report')">Export to Excel</button>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+function exportTableToExcel(tableID, filename = 'sales_report') {
+    var table = document.getElementById(tableID);
+    var wb = XLSX.utils.book_new();
 
+    // Convert each nested table separately if needed
+    var mainSheet = XLSX.utils.table_to_sheet(table);
+    XLSX.utils.book_append_sheet(wb, mainSheet, "Main");
 
+    // Optional: extract nested tables manually
+    var nestedTables = table.querySelectorAll("table");
+    nestedTables.forEach((nested, index) => {
+        var nestedSheet = XLSX.utils.table_to_sheet(nested);
+        XLSX.utils.book_append_sheet(wb, nestedSheet, "Nested_" + (index + 1));
+    });
 
-
-
-
-
+    XLSX.writeFile(wb, filename + ".xlsx");
+}
+</script>
 <?php
 if (!isset($_GET['date_from'])) {
   require_once 'stat.php';
