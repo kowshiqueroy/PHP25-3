@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AI Web App</title>
+  <title>Ovijat</title>
   <style>
     :root {
       --primary: #2ecc71;
@@ -236,13 +236,14 @@
 </head>
 <body ontouchstart="">
   <header>
-    <h1>AI Web App</h1>
+    <h1>Ovijat</h1>
   </header>
 
   <main>
     <section class="search-section no-print">
       <h2>Search Panel</h2>
       <p>Demo search inputs below</p>
+      <form action="" method="post">
       <div class="search-grid">
         <input type="text" placeholder="Search 1" />
         <input type="text" placeholder="Search 2" />
@@ -254,11 +255,12 @@
           <option>Option 1</option>
         </select>
       </div>
-      <button>Search</button>
+      <button type="submit">Search</button>
+      </form>
     </section>
 
     <section class="form-section no-print">
-      <form>
+      <form action="" method="post">
         <div class="form-group group-1">
           <input type="text" placeholder="Full Name" />
         </div>
@@ -278,12 +280,12 @@
         <button type="submit">Submit</button>
       </form>
     </section>
-
+ 
     <section class="table-section">
       <h2>Data Table</h2>
       <p>Demo details and actions</p>
       <div class="table-actions">
-        <button>Print</button>
+        <button onClick="window.print()">Print</button>
         <button>Export</button>
         <button>Copy</button>
       </div>
@@ -407,19 +409,19 @@
   </main>
 
   <nav>
-    <button ontouchstart="">🏠</button>
-    <button ontouchstart="">🛒</button>
-    <button ontouchstart="">💰</button>
+    <button onClick="window.location.href = 'index.php'">🏠</button>
+    <button onClick="window.location.href = 'index.php'">🛒</button>
+    <button onClick="window.location.href = 'index.php'">💰</button>
     <button id="settingsBtn" ontouchstart="">⚙️</button>
   </nav>
 
   <div class="dropdown" id="settingsDropdown">
-    <button>👨🏻‍💼Profile</button>
-    <button>🏪Shops</button>
-    <button>📦Items</button>
-    <button>📈Stocks</button>
-    <button>💰Balances</button>
-    <button>🔒Logout</button>
+    <button onClick="window.location.href = 'profile.php'">👨🏻‍💼Profile</button>
+    <button onClick="window.location.href = 'shops.php'">🏪Shops</button>
+    <button onClick="window.location.href = 'items.php'">📦Items</button>
+    <button onClick="window.location.href = 'stocks.php'">📈Stocks</button>
+    <button onClick="window.location.href = 'balances.php'">💰Balances</button>
+    <button onClick="window.location.href = 'logout.php'">🔒Logout</button>
     
   </div>
 
