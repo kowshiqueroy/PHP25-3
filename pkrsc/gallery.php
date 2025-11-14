@@ -16,13 +16,19 @@ require_once 'header.php';
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
+                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
+                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
                             <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
+                            <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
+                            <div class="gallery-item"><img src="p.png" alt="গ্যালারি ছবি"></div>
+                         
                            
                         </div>
                     </div>
+                    
                 </div>
          
         </section>

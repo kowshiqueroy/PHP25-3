@@ -1,9 +1,45 @@
+<?php
+require_once '../config.php';
+$message = '';
+if (isset($_POST['login'])) {
+
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+  // Prepare and execute the query
+  $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?");
+  $stmt->bind_param("s", $username);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  if ($result->num_rows === 1) {
+      $user = $result->fetch_assoc();
+      // Verify password
+      if (password_verify($password, $user['password'])) {
+          // Successful login
+            $message = 'Login successful. Welcome, ' . htmlspecialchars($username) . '!';
+       
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $user['role'];
+            header('Location: '.$user['role']);
+            exit();
+      } else {
+          // Invalid password
+          $message = 'Invalid username or password.';
+      }
+  } else {
+      // User not found
+      $message = 'Invalid username or password.';
+  }
+  $stmt->close();
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Glassy Login</title>
+  <title>Admin Login</title>
   <style>
     * {
       box-sizing: border-box;
@@ -13,7 +49,7 @@
       margin: 0;
       padding: 0;
       font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+      background: linear-gradient(135deg, #3661f1ff, #ACB6E5);
       height: 100vh;
       display: flex;
       justify-content: center;
@@ -93,16 +129,16 @@
     <form action="" method="post">
     <div class="form-group">
       <label for="username">Username</label>
-      <input type="text" id="username" placeholder="Enter username" />
+      <input type="text" id="username" name="username" placeholder="Enter username" />
     </div>
     <div class="form-group">
       <label for="password">Password</label>
-      <input type="password" id="password" placeholder="Enter password" />
+      <input type="password" id="password" name="password" placeholder="Enter password" />
     </div>
-    <button class="login-btn" type="submit">Login</button>
+    <button class="login-btn" type="submit" name="login">Login</button>
     </form>
 
-    <div class="message-box" id="messageBox">Login Message</div>
+    <div class="message-box" id="messageBox"><?php echo isset($message) ? $message : ''; ?></div>
   </div>
 
 

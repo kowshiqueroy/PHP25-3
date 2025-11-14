@@ -8,7 +8,7 @@ require_once 'header.php';
             <h2 class="section-title">ভর্তি তথ্য</h2>
             <div class="grid-2">
                 <div class="admission-form card">
-                    <h3>ভর্তি ফর্ম (ডেমো)</h3>
+                    <h3>ভর্তি ফর্ম</h3>
                     <form>
                         <div class="form-group">
                             <label for="name">শিক্ষার্থীর নাম</label>
@@ -18,9 +18,19 @@ require_once 'header.php';
                             <label for="fname">পিতার নাম</label>
                             <input type="text" id="fname" required>
                         </div>
+                          <div class="form-group">
+                            <label for="address">ঠিকানা</label>
+                            <input type="text" id="address" required>
+                        </div>
                         <div class="form-group">
                             <label for="class">আগ্রহী শ্রেণী</label>
                             <select id="class">
+                                <option value="0">নার্সারী</option>
+                                <option value="1">১ম শ্রেণী</option>
+                                <option value="2">২য় শ্রেণী</option>
+                                <option value="3">৩য় শ্রেণী</option>
+                                <option value="4">৪র্থ শ্রেণী</option>
+                                <option value="5">৫র্থ শ্রেণী</option>
                                 <option value="6">৬ষ্ঠ শ্রেণী</option>
                                 <option value="7">৭ম শ্রেণী</option>
                                 <option value="8">৮ম শ্রেণী</option>
@@ -47,8 +57,8 @@ require_once 'header.php';
                     <h4>যোগাযোগ</h4>
                     <p>
                         <strong>ঠিকানা:</strong> হাড়োয়া, দেবীর ডাঙ্গা, নীলফামারী।<br>
-                        <strong>ফোন:</strong> ০১৫২১২১২১২১১<br>
-                        <strong>ইমেইল:</strong> admission@pkrsac.edu.bd
+                        <strong>ফোন:</strong> 01724-162121<br>
+                        <strong>ইমেইল:</strong> pkrsc.2018@gmail.com
                     </p>
                 </div>
             </div>

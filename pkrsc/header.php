@@ -226,7 +226,7 @@
 
         /* --- 3. হিরো সেকশন (ব্যানার) --- */
         #hero {
-            background: url('b.jpg') center center/cover no-repeat;
+            background: url('b.jpeg') center center/cover no-repeat;
             color: #fff;
             padding: 80px 0;
             text-align: center;
@@ -333,20 +333,23 @@
         }
 
         .gallery-grid {
+            margin: 100px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 10px;
         }
         .gallery-item img {
             width: 100%;
             height: 100px;
-            object-fit: cover;
+            object-fit: fill;
             border-radius: 5px;
             cursor: pointer;
             transition: transform 0.3s;
         }
         .gallery-item img:hover {
-            transform: scale(1.05);
+            transform: scale(2.05);
+        
+            max-height: 100%;
         }
 
         /* --- 8. জাতীয় সংগীত --- */
@@ -685,12 +688,12 @@
     <header class="top-bar">
         <div class="container">
             <div class="top-bar-info">
-                <span><i class="fa-solid fa-phone"></i>০১৫২১২১২১২১১</span>
+                <span><i class="fa-solid fa-phone"></i>01724-162121</span>
                 <span><i class="fa-solid fa-envelope"></i>pkrsc.2018@gmail.com</span>
             </div>
             <div class="top-bar-links">
                 <span>EMIS: 00704051910</span> | <span>SC: 487425</span>
-                <a href="admin.php" style="color: #fff; margin-left: 15px;">লগইন</a>
+                <a href="admin" style="color: #fff; margin-left: 15px;">লগইন</a>
             </div>
         </div>
     </header>

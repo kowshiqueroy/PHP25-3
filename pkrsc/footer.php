@@ -6,7 +6,7 @@
                 <p>EMIS: 00704051910 SC: 487425</p>
                 <p>স্থাপিত: ২০১৮</p>
                 <p><i class="fa-solid fa-location-dot"></i> ঠিকানা: হাড়োয়া, দেবীর ডাঙ্গা, নীলফামারী</p>
-                <p><i class="fa-solid fa-phone"></i> ফোন: ০১৫২১২১২১২১১</p>
+                <p><i class="fa-solid fa-phone"></i> ফোন: 01724-162121</p>
                 <p><i class="fa-solid fa-envelope"></i> ইমেইল: pkrsc.2018@gmail.com</p>
             </div>
             

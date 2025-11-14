@@ -28,7 +28,7 @@ require_once 'header.php';
                 </div>
                 <div class="card message-card">
                     <img src="p.png" alt="অধ্যক্ষ">
-                    <h4>অধ্যাপক ড. আশরাফ আলী (ডেমো)</h4>
+                    <h4>-</h4>
                     <p class="title">উপাধ্যক্ষ</p>
                     <p>"শৃঙ্খলা, অধ্যবসায় এবং সৃজনশীলতাই সাফল্যের চাবিকাঠি। আমরা আমাদের শিক্ষার্থীদের এই মন্ত্রেই দীক্ষিত করি এবং তাদের সুপ্ত প্রতিভার বিকাশ ঘটাই।"</p>
                 </div>
@@ -40,15 +40,15 @@ require_once 'header.php';
                 <div class="card award-card">
                     <h3 class="section-title" style="font-size: 1.8rem; margin-bottom: 20px;">মাস সেরা শিক্ষক</h3>
                     <img src="p.png" alt="মাস সেরা শিক্ষক">
-                    <h4>জনাব মোঃ রবিউল ইসলাম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (গণিত)</p>
+                    <h4>-</h4>
+                    <p>-</p>
                     <p class="achievement">"শিক্ষার্থীদের মধ্যে গণিতের প্রতি ভালোবাসা তৈরি এবং উদ্ভাবনী পাঠদানের জন্য তিনি প্রশংসিত।"</p>
                 </div>
                 <div class="card award-card">
                     <h3 class="section-title" style="font-size: 1.8rem; margin-bottom: 20px;">মাস সেরা শিক্ষার্থী</h3>
                     <img src="p.png" alt="মাস সেরা শিক্ষার্থী">
-                    <h4>জান্নাতুল ফেরদৌস (ডেমো)</h4>
-                    <p>শ্রেণী: দশম, বিজ্ঞান বিভাগ</p>
+                    <h4>-</h4>
+                    <p>-</p>
                     <p class="achievement">"শ্রেণীকক্ষে সর্বোচ্চ উপস্থিতি, দুর্দান্ত ফলাফল এবং সহ-শিক্ষা কার্যক্রমে অংশগ্রহণের জন্য নির্বাচিত।"</p>
                 </div>
             </div>
