@@ -1,16 +1,12 @@
 
   <nav>
     <button onClick="window.location.href = 'index.php'">🏠</button>
-    <button onClick="window.location.href = 'index.php'">👥</button>
-    <button onClick="window.location.href = 'index.php'">📈</button>
-    <button id="settingsBtn" ontouchstart="">⚙️</button>
+    <button onClick="window.location.href = 'students.php'">👥</button>
+    <button onClick="window.location.href = 'print.php'">📑</button>
+    <button onClick="window.location.href = 'logout.php'">🔒</button>
   </nav>
 
-  <div class="dropdown" id="settingsDropdown">
-   
-    <button onClick="window.location.href = 'logout.php'">🔒Logout</button>
-    
-  </div>
+ 
 
 <script>
   const settingsBtn = document.getElementById('settingsBtn');
