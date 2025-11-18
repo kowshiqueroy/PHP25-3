@@ -459,7 +459,7 @@ if (isset($_GET['search_id']) && !empty($_GET['search_id'])) {
  
                             <div class="detail-row"><span class="detail-label">Reg. ID</span>:<span class="detail-value"><?php echo htmlspecialchars($student['reg_id']); ?></span></div>
                             <div class="detail-row"><span class="detail-label">Address</span>:<span class="detail-value"><?php echo htmlspecialchars($student['address']); ?></span></div>
-                            <div class="detail-row"><span class="detail-label">Blood</span>:<span class="detail-value"><?php echo htmlspecialchars($student['blood'] != '-' ? $student['blood'] : ''); ?></span></div>
+                            <!-- <div class="detail-row"><span class="detail-label">Blood</span>:<span class="detail-value"><?php echo htmlspecialchars($student['blood'] != '-' ? $student['blood'] : ''); ?></span></div> -->
                         </div>
 
                         <div class="footer-contact">
