@@ -100,7 +100,7 @@ if (isset($_POST['addwp'])){
       <div class="search-grid">
         <input type="text" name="name" placeholder="name" value="<?php echo $name; ?>"  required />
         <input type="text" name="father_name" placeholder="father name" value="<?php echo $father_name; ?>" required />
-        <input type="text" name="mother_name" placeholder="mother name" value="<?php echo $mother_name; ?>" required />
+        <input type="text" name="mother_name" placeholder="mother name / details" value="<?php echo $mother_name; ?>" required />
         <input type="date" name="dob" placeholder="date of birth" value="<?php echo $dob; ?>" required />
         <select name="blood" placeholder="blood"  required>
             <option value="-" <?php if ($blood == "-") echo "selected"; ?>>Blood N/A</option>
@@ -123,11 +123,11 @@ if (isset($_POST['addwp'])){
       <?php } else { ?>
       <form action="" method="post" enctype="multipart/form-data">
       <div class="search-grid">
-        <input type="text" name="name" placeholder="name" value=""  required />
-        <input type="text" name="father_name" placeholder="father name" value="" required />
-        <input type="text" name="mother_name" placeholder="mother name" value="" required />
-        <input type="date" name="dob" placeholder="date of birth" value="<?php echo date('Y-m-d', strtotime('-10 years')); ?>" required />
-        <select name="blood" placeholder="blood" required>
+        <input type="text" name="name" placeholder="Name (e.g. Abc Def)" value="" required pattern="^([A-Z][a-z]*\s?){1,3}$" />
+        <input type="text" name="father_name" placeholder="Father's Name (e.g. Abc Def)" value="" required pattern="^([A-Z][a-z]*\s?){1,3}$" />
+        <input type="hidden" name="mother_name" placeholder="mother name  / details" value="-" required />
+        <input type="date" name="dob" placeholder="date of birth" value="<?php echo date('Y-m-d', strtotime('-10 years')); ?>" hidden required />
+        <select name="blood" placeholder="blood" hidden required>
             <option value="-">Blood N/A</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
@@ -138,9 +138,9 @@ if (isset($_POST['addwp'])){
             <option value="O+">O+</option>
             <option value="O-">O-</option>
         </select>
-        <input type="text" name="phone" placeholder="phone" value="" required />
-        <input type="text" name="reg_id" placeholder="reg id" value="<?php echo '487425-' . date('y').'-000'; ?>" required />
-        <input type="text" name="address" placeholder="address" value="" required />
+        <input type="text" name="phone" placeholder="phone" value="" required pattern="^0[0-9]{10}$" maxlength="11" />
+        <input type="text" name="reg_id" placeholder="reg id" value="<?php echo substr('487425-' . date('y') .'-' . '000', 0, 13); ?>" required maxlength="13" pattern="487425-[0-9]{2}-[0-9]{3}$" />
+        <input type="text" name="address" placeholder="Address (e.g. Address)" value="" required pattern="^Address$|^([A-Z][a-z]*(\s|[\/,])?[A-Z][a-z]*(\s|[\/,])?[A-Z][a-z]*$"/>
         <input type="file" name="photo" placeholder="photo" accept="image/*" capture="camera" required />
 
       </div>

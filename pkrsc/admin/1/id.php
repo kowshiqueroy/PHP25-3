@@ -109,7 +109,7 @@ if (isset($_GET['search_id']) && !empty($_GET['search_id'])) {
         /* Wrapper for one student's front and back */
         .student-card-wrapper {
             display: flex;
-            gap: 4mm; /* Gutter between front and back */
+            gap: 1mm; /* Gutter between front and back */
             page-break-inside: avoid;
         }
 
@@ -480,22 +480,25 @@ if (isset($_GET['search_id']) && !empty($_GET['search_id'])) {
                         </div>
                         
                         <div class="info-block">
-                            <p>If found, please return to: <br><?php echo htmlspecialchars($school_name_line_1. ' '.$school_name_line_2).'<BR>'. $school_address; ?></p>
+                            <p>If found, please return to: <br><?php echo htmlspecialchars($school_name_line_1. ' '.$school_name_line_2).'<BR>'. $school_address; ?>
+                        <br><br>Issue Date: <?php echo date("Y-m-d"); ?></p>
                         </div>
                         
-                        <div class="emergency-contact">
-                            <h5>Emergency Contact</h5>
-                         
-                            <p><?php echo htmlspecialchars($school_phone); ?> (School Office)</p>
-                            <p><?php echo htmlspecialchars('pkrsc.2018@gmail.com'); ?></p>
-                        </div>
-
-                        <div class="qr-signature-block">
+                         <div class="qr-signature-block">
                             <div class="qr-code">
                                 <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=<?php echo urlencode('https://pkrsc.com/admin/1/print.php?search_id=' . $student['id']); ?>" alt="QR Code">
                             </div>
                             
                         </div>
+                        <div class="emergency-contact">
+                            <h5>Emergency Contact</h5>
+                         
+                            <p><?php echo htmlspecialchars($school_phone); ?> (School Office)</p>
+                            <p><?php echo htmlspecialchars('pkrsc.2018@gmail.com'); ?></p>
+                            <p>www.pkrsc.com</p>
+                        </div>
+
+                       
                     </div>
 
                 </div> </div> <?php

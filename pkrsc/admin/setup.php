@@ -15,8 +15,8 @@ $res = $conn->query("SELECT COUNT(*) as count FROM user");
 if ($res) {
     $row = $res->fetch_assoc();
     if ($row && isset($row['count']) && $row['count'] == 0) {
-        $default_user1 = 'user1';
-        $default_pass1 = password_hash('user1234', PASSWORD_DEFAULT);
+        $default_user1 = 'admin';
+        $default_pass1 = password_hash('1234', PASSWORD_DEFAULT);
         $role1 = 0; // User role
         $stmt1 = $conn->prepare("INSERT INTO user (username, password, role) VALUES (?, ?, ?)");
         if ($stmt1) {
@@ -25,8 +25,8 @@ if ($res) {
             $stmt1->close();
         }
 
-        $default_user2 = 'user2';
-        $default_pass2 = password_hash('user1234', PASSWORD_DEFAULT);
+        $default_user2 = 'user';
+        $default_pass2 = password_hash('1234', PASSWORD_DEFAULT);
         $role2 = 1; // Admin role
         $stmt2 = $conn->prepare("INSERT INTO user (username, password, role) VALUES (?, ?, ?)");
         if ($stmt2) {
