@@ -26,4 +26,36 @@ if ($res) {
         }
     }
 }
+
+// Create route table if not exists
+$conn->query("CREATE TABLE IF NOT EXISTS route (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+   role INT(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+// Create shop table if not exists
+$conn->query("CREATE TABLE IF NOT EXISTS shop (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    route_id INT(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+$conn->query("CREATE TABLE IF NOT EXISTS item (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+   role INT(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+$conn->query("CREATE TABLE IF NOT EXISTS order_info (
+    `id` INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `route_id` INT(11) NOT NULL,
+    `shop_id` INT(11) NOT NULL,
+    `order_date` TIMESTAMP NOT NULL,
+    `user_id` INT(11) NOT NULL,
+    `status` TINYINT(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+//$conn->query("ALTER TABLE `order_info` ADD COLUMN `status` TINYINT(1) NOT NULL DEFAULT 0");
+
+
 ?>

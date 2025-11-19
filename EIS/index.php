@@ -2,6 +2,12 @@
 include_once 'config.php'; // Include your database connection and configuration file
 ?>
 <?php
+if(isset($_SESSION['user_id'])) {
+    // User is already logged in, redirect to dashboard or home page
+    header("Location:". $_SESSION['role']);
+    exit();
+}
+
 if (isset($_POST['login'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -63,7 +69,7 @@ if (isset($_POST['login'])) {
         .title {
             margin: 0;
             font-size: 1.8rem;
-            color: #6366f1; /* Indigo */
+            color: #3bf822ff; /* Indigo */
             font-weight: 800;
         }
 
@@ -93,7 +99,7 @@ if (isset($_POST['login'])) {
         .btn {
             width: 100%;
             padding: 0.8rem;
-            background-color: #6366f1;
+            background-color: #e6e927ff;
             color: white;
             border: none;
             border-radius: 8px;

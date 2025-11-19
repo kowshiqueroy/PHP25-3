@@ -6,4 +6,6 @@
     session_start();
     $website_name = "EIS";
     date_default_timezone_set('Asia/Dhaka');
+
+    include_once 'setup.php';
 ?>

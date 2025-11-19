@@ -265,8 +265,11 @@ if(isset($_SESSION['role']) && $_SESSION['role'] != 1){
             </div>
             <nav class="nav-menu">
                 <a href="index.php" class="nav-item active"><span>📊</span> Dashboard</a>
-                <a href="user.php" class="nav-item"><span> 👤</span> User</a>
-              
+                <a href="route.php" class="nav-item"><span>🚛</span> Route</a>
+                 <a href="shop.php" class="nav-item"><span>🏬</span> Shop</a>
+                  <a href="item.php" class="nav-item"><span>📦</span> Item</a>
+                <a href="order.php" class="nav-item"><span>🛒</span> Order</a>
+                <a href="list.php" class="nav-item"><span>📋</span> List</a>
 
 
             </nav>
