@@ -1,17 +1,10 @@
 <?php
 // Database configuration
-
-if ($_SERVER['SERVER_NAME'] == 'localhost') {
-    $db_host = 'localhost';
-    $db_name = 'qc';
-    $db_user = 'root'; // Change to your database username
-    $db_pass = '';
-} else {
 $db_host = 'localhost';
-$db_name = 'u312077073_qc';
-$db_user = 'u312077073_kushqc'; // Change to your database username
-$db_pass = '6Q?eaoj4';
-}
+$db_name = 'qc';
+$db_user = 'root'; // Change to your database username
+$db_pass = '';
+
 // Database connection using MySQLi
 $conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
 

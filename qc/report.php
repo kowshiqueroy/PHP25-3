@@ -137,8 +137,8 @@ if ($result->num_rows > 0): ?>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Others</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Good</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Intentional</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Qty</th>
-                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total Negative Amount</th>
+                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total NCLU  Qty</th>
+                <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Total NCLU Amount</th>
                   <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Qty</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Actual Amount</th>
                 <th style="writing-mode: vertical-rl; transform: rotate(180deg); height: 80px; vertical-align: center; padding: 5px; border: 1px solid black;">Remarks</th>

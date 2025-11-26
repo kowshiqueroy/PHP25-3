@@ -176,6 +176,10 @@ if ($result->num_rows > 0): ?>
                        <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['actual_qty'] == 0 ? '' : htmlspecialchars($row['actual_qty'])); ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['actual_amount'] == 0 ? '' : htmlspecialchars($row['actual_amount'])); ?></td>
                     <td style="border: 1px solid black; padding: 5px;"><?php echo htmlspecialchars($row['remarks'] == 0 ? '' : htmlspecialchars($row['remarks'])); ?></td>
+              
+              
+              
+              
                 </tr>
             <?php endwhile; ?>
         </tbody>

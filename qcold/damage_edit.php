@@ -8,16 +8,6 @@ if (isset($_GET['id']) && isset($_GET['damage_details_id']) && is_numeric($_GET[
     $id = $_GET['id'];
     $damage_details_id = $_GET['damage_details_id'];
 
-    $stmt = $conn->prepare("SELECT * FROM damage_items WHERE damage_details_id = ? AND product_id = ?");
-    $stmt->bind_param("ii", $damage_details_id, $_GET['product_id']);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($result->num_rows > 0) {
-        echo "<script>alert('Item already added.'); window.location.href = 'damage_edit.php?id=$id';</script>";
-
-        exit();
-    }
-
 
     $sql = "INSERT INTO damage_items (damage_details_id, product_id, shop_qty, shop_amount, received_qty, received_amount, actual_qty, actual_amount, insect, label, sealing, expired, date_problem, broken, VHsealing, good, intentional, soft, bodyleakage, others, total_negative_qty, total_negative_amount, remarks) VALUES ('$damage_details_id', '".$_GET['product_id']."', '".$_GET['shop_qty']."', '".$_GET['shop_amount']."', '".$_GET['received_qty']."', '".$_GET['received_amount']."', '".$_GET['actual_qty']."', '".$_GET['actual_amount']."', '".$_GET['insect']."', '".$_GET['label']."', '".$_GET['sealing']."', '".$_GET['expired']."', '".$_GET['date_problem']."', '".$_GET['broken']."', '".$_GET['VHsealing']."', '".$_GET['good']."', '".$_GET['intentional']."', '".$_GET['soft']."', '".$_GET['bodyleakage']."', '".$_GET['others']."', '".$_GET['total_negative_qty']."', '".$_GET['total_negative_amount']."', '".$_GET['remarks']."')";
     if ($conn->query($sql) === TRUE) {
@@ -41,51 +31,27 @@ if (isset($_GET['delete_id']) && is_numeric($_GET['delete_id']) && isset($_GET['
     $delete_id = $_GET['delete_id'];
     $id = $_GET['id'];
     
-    // // Prepare and execute the deletion query
-    // $sql = "UPDATE damage_details SET updated_by = ?, shop_total_qty = shop_total_qty - (SELECT shop_qty FROM damage_items WHERE id = ?),
-    //      shop_total_amount = shop_total_amount - (SELECT shop_amount FROM damage_items WHERE id = ?),
-    //      received_total_qty = received_total_qty - (SELECT received_qty FROM damage_items WHERE id = ?),
-    //      received_total_amount = received_total_amount - (SELECT received_amount FROM damage_items WHERE id = ?),
-    //      actual_total_qty = actual_total_qty - (SELECT actual_qty FROM damage_items WHERE id = ?),
-    //      actual_total_amount = actual_total_amount - (SELECT actual_amount FROM damage_items WHERE id = ?) WHERE id = ?";
-    // if ($stmt = $conn->prepare($sql)) {
-    //     $stmt->bind_param("iiiiii", $user_id, $delete_id, $delete_id, $delete_id, $delete_id, $delete_id, $id);
-    //     if ($stmt->execute()) {
-    //         header("Location: damage_edit.php?id=$id");
-    //         exit();
-    //     } else {
-    //         $msg = "Error updating damage report: " . $conn->error;
-    //     }
-    // } else {
-    //     $msg = "Error preparing query to update damage report: " . $conn->error;
-    // }
-
-    $stmt = $conn->prepare("SELECT * FROM damage_items WHERE damage_details_id = ? AND id = ?");
-    $stmt->bind_param("ii", $id, $delete_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
-
-        $sql = "UPDATE damage_details SET updated_by = $user_id, shop_total_qty = shop_total_qty - '".$row['shop_qty']."' , shop_total_amount = shop_total_amount - '".$row['shop_amount']."' , received_total_qty = received_total_qty - '".$row['received_qty']."' , received_total_amount = received_total_amount - '".$row['received_amount']."' , actual_total_qty = actual_total_qty - '".$row['actual_qty']."' , actual_total_amount = actual_total_amount - '".$row['actual_amount']."' WHERE id = '$id'";
+    // Prepare and execute the deletion query
+    $sql = "DELETE FROM damage_items WHERE id = $delete_id";
+    if ($conn->query($sql) === TRUE) {
+        $msg = "Item deleted successfully!";
+        // Update the damage_details table after deletion
+        $sql = "UPDATE damage_details SET SET updated_by = $user_id, shop_total_qty = shop_total_qty - (SELECT shop_qty FROM damage_items WHERE id = $delete_id),
+         shop_total_amount = shop_total_amount - (SELECT shop_amount FROM damage_items WHERE id = $delete_id),
+         received_total_qty = received_total_qty - (SELECT received_qty FROM damage_items WHERE id = $delete_id),
+         received_total_amount = received_total_amount - (SELECT received_amount FROM damage_items WHERE id = $delete_id),
+         actual_total_qty = actual_total_qty - (SELECT actual_qty FROM damage_items WHERE id = $delete_id),
+         actual_total_amount = actual_total_amount - (SELECT actual_amount FROM damage_items WHERE id = $delete_id) WHERE id = $id";
         if ($conn->query($sql) === TRUE) {
-            $stmt = $conn->prepare("DELETE FROM damage_items WHERE id = ?");
-            $stmt->bind_param("i", $delete_id);
-            if ($stmt->execute()) {
-                header("Location: damage_edit.php?id=$id");
-                exit();
-            } else {
-                $msg = "Error deleting damage item: " . $conn->error;
-            }
+            header("Location: damage_edit.php?id=$id");
+            exit();
         } else {
-            $msg = "Error updating damage report totals: " . $conn->error;
+            $msg = "Error updating damage report: " . $conn->error;
         }
+
     } else {
-        $msg = "Damage item not found.";
+        $msg = "Error deleting item: " . $conn->error;
     }
-
-
 }
 
 // Include database connection
@@ -225,7 +191,6 @@ if ($status == 1) {
         <div class="form-group" style="flex: 1 0 100%; margin: 0.5rem;">
             <label for="product_id">Product Details   <span type="hidden" id="rate"></span></label>
             <select name="product_id" id="product_id" class="form-control" required>
-                <option value="">Select Product</option>
                 <?php
                 $stmt = $conn->prepare("SELECT id, name FROM products");
                 $stmt->execute();
@@ -304,11 +269,11 @@ if ($status == 1) {
             <input type="number" class="form-control" id="intentional" name="intentional" value="<?= $intentional ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="total_negative_qty">T.NCLU Quantity</label>
+            <label for="total_negative_qty">T.Negative Quantity</label>
             <input type="number" class="form-control" id="total_negative_qty" name="total_negative_qty" value="<?= $total_negative_qty ?>" required>
         </div>
         <div class="form-group" style="flex: 1 0 20%; margin: 0.5rem;">
-            <label for="total_negative_amount">T.NCLU Amount</label>
+            <label for="total_negative_amount">T.Negative Amount</label>
             <input type="number" step="0.01" class="form-control" id="total_negative_amount" name="total_negative_amount" value="<?= $total_negative_amount ?>" required>
         </div>
          <div class="form-group" style="flex: 1 0 45%; margin: 0.5rem;">
