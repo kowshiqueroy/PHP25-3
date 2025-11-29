@@ -30,7 +30,7 @@ include 'header.php';
 
             <main class="content-area">
                 
-                <h1 class="page-title">Order</h1>
+                <h1 class="page-title">Order Route</h1>
 
 
               
@@ -38,6 +38,7 @@ include 'header.php';
    <form method="GET" action="order2.php">               
 <div class="card">
     <h4 style="margin-bottom: 1rem;">Select Route</h4>
+    <h4 style="margin-bottom: 1rem; color: red;"><?php echo $_GET['msg'] ?? ''; ?></h4>
     <div class="input-group">
         
         <!-- <div>

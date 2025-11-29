@@ -24,7 +24,9 @@ include 'header.php';
                     </div>
                 </div>
 
-                
+                <div style="display: flex; justify-content: center; align-items: center; border: 1px solid var(--border-color); padding: 1rem; margin: 1rem auto; max-width: 400px;">
+                    <p style="text-align: center;">Welcome to the Enterprise Information System (EIS) dashboard. <br>Developed by Kowshique Roy, IT Engineer.</p>
+                </div>
 
                
                 </main>

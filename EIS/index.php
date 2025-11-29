@@ -2,10 +2,10 @@
 include_once 'config.php'; // Include your database connection and configuration file
 ?>
 <?php
-if(isset($_SESSION['user_id'])) {
+if(isset($_SESSION['user_id']) && isset($_SESSION['role'])) {
     // User is already logged in, redirect to dashboard or home page
-    header("Location:". $_SESSION['role']);
-    exit();
+        header("Location:". $_SESSION['role']);
+        exit();
 }
 
 if (isset($_POST['login'])) {

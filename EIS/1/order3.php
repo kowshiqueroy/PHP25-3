@@ -2,6 +2,9 @@
 include 'header.php';
 ?>
 <?php
+if($_GET['route_id'] == "" || $_GET['route_name'] == "" || $_GET['shop_id'] == "" || $_GET['shop_name'] == "" ){
+    echo '<script> window.location.href = "order2.php?msg=Error Name"; </script>';
+}
 if (isset($_GET['route_id']) && isset($_GET['route_name']) && isset($_GET['shop_id']) && isset($_GET['shop_name'])) {
     $route_id = (int)$_GET['route_id'];
     $shop_id = (int)$_GET['shop_id'];

@@ -4,7 +4,7 @@
         die("Connection failed: " . $conn->connect_error);
     }
     session_start();
-    $website_name = "EIS";
+    $website_name = "Ovijat EIS";
     date_default_timezone_set('Asia/Dhaka');
 
     include_once 'setup.php';

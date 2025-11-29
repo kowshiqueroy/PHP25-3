@@ -37,7 +37,7 @@ $shop_name = $shop_row['name'];
 
             <main class="content-area">
                 
-                <h1 class="page-title">Order 4</h1>
+                <h1 class="page-title">Order Items</h1>
                 <p>ID: <?php echo intval($_GET['order_id']); ?> Date: <?php echo $order_details['order_date']; ?> Status: <?php echo $order_details['status']; ?><br>Route: <?php echo $route_name; ?> Shop: <?php echo $shop_name; ?> </p>
 
 

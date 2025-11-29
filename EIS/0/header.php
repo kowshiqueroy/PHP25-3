@@ -1,6 +1,6 @@
 <?php require_once '../config.php'; ?>
 <?php
-if(isset($_SESSION['role']) && $_SESSION['role'] != 1){
+if(isset($_SESSION['role']) && $_SESSION['role'] != 0){
     header("Location: ../");
     exit();
 }

@@ -2,35 +2,14 @@
 include 'header.php';
 ?>
 <?php
-// if (isset($_POST['create'])) {
-//     $role=$_SESSION['role'];
-//     $route_id = $_POST['route_id'];
-
-//     if (!is_numeric($route_id) || $route_id <= 0) {
-//         echo "<script>alert('Invalid route id.'); window.location.href = 'shop.php';</script>";
-//         exit;
-//     }
-
-
-//     $shop_name = $_POST['shop_name'];
-//     $check_query = "SELECT id FROM shop WHERE name='$shop_name' AND route_id=$route_id";
-//     $check_result = mysqli_query($conn, $check_query);
-//     if (mysqli_num_rows($check_result) > 0) {
-//         echo "<script>alert('Shop $shop_name already exists for the selected route.'); window.location.href = 'shop.php';</script>";
-//         exit;
-//     }
-//     $insert_query = "INSERT INTO shop (name, route_id) VALUES ('$shop_name', $route_id)";
-//     if (mysqli_query($conn, $insert_query)) {
-//         echo "<script>alert('New shop $shop_name added successfully.'); window.location.href = 'shop.php';</script>";
-//     } else {
-//         echo "<script>alert('Error creating route: " . mysqli_error($conn) . "');</script>";
-//     }
-// }
+if($_GET['route_id'] == "" || $_GET['route_name'] == "" ){
+    echo '<script> window.location.href = "order.php?msg=Error Name"; </script>';
+}
 ?>
 
             <main class="content-area">
                 
-                <h1 class="page-title">Order 2</h1>
+                <h1 class="page-title">Order Shop Info</h1>
 
 
               
