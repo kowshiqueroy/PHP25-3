@@ -22,7 +22,7 @@ if(isset($_SESSION['role']) && $_SESSION['role'] != 1){
             --text-main: #111827;
             --text-secondary: #6b7280;
             --border-color: #e5e7eb;
-            --sidebar-bg: #3cdb3cff; /* Slate 800 */
+            --sidebar-bg: #64b864ff; /* Slate 800 */
             --sidebar-text: #ffffffff;
             
             /* Spacing & Shape */
