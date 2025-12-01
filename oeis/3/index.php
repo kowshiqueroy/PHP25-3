@@ -14,77 +14,11 @@ include 'header.php';
             <p style="color: #666;">Manage your data with our modern, vibrant interface.</p>
         </div>
 
-        <div class="glass-panel form-section">
-            <span class="section-title">Edit Profile</span>
-            <form>
-                <div class="grid-layout desktop-3">
-                    <div class="col-1">
-                        <label>Profile Photo</label>
-                        <div class="file-input-wrapper">
-                            <i class="fa-solid fa-cloud-arrow-up" style="font-size: 2rem; color: #ccc;"></i>
-                            <p style="font-size: 0.8rem; margin-top: 5px;">Click to Upload</p>
-                            <input type="file" style="display: none;">
-                        </div>
-                    </div>
-                    
-                    <div class="col-2 desktop-span-2">
-                        <div class="grid-layout desktop-2">
-                            <div><label>First Name</label><input type="text" value="Alex"></div>
-                            <div><label>Last Name</label><input type="text" value="Morgan"></div>
-                            <div class="desktop-span-2"><label>Email Address</label><input type="email" value="alex@techsolutions.com"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-actions-split">
-                    <button type="button" class="btn btn-red">Cancel</button>
-                    <button type="button" class="btn btn-green">Save Changes</button>
-                </div>
-            </form>
-        </div>
+        
 
-        <div class="glass-panel form-section">
-            <span class="section-title">Quick Inventory Add</span>
-            <form>
-                <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
-                    <div><label>SKU</label><input type="text" placeholder="PROD-001"></div>
-                    <div><label>Product Name</label><input type="text" placeholder="Widget A"></div>
-                    <div><label>Stock Qty</label><input type="number" placeholder="100"></div>
-                    <div><label>Unit Price ($)</label><input type="number" step="0.01" placeholder="19.99"></div>
-                </div>
-                
-                <div style="margin-top: 15px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                    <div><label>Restock Date</label><input type="date"></div>
-                    <div><label>Warehouse Color</label><input type="color" value="#10b981" style="height: 48px; padding: 5px;"></div>
-                </div>
+        
 
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add Item</button>
-                </div>
-                  <div class="form-actions-split">
-                    <button type="button" class="btn btn-red">Cancel</button>
-                    <button type="button" class="btn btn-green">Save Changes</button>
-                </div>
-            </form>
-        </div>
-
-        <div class="glass-panel form-section">
-            <span class="section-title">System Settings</span>
-            <div class="grid-layout desktop-2">
-                <div>
-                    <label>Sensitivity Level (Range)</label>
-                    <input type="range" min="1" max="100" value="75" style="width: 100%;">
-                    <div style="display: flex; justify-content: space-between; font-size: 0.7rem; color: #888;"><span>Low</span><span>High</span></div>
-                </div>
-                <div>
-                    <label>Notifications</label>
-                    <div style="display: flex; gap: 20px; align-items: center; height: 45px;">
-                        <label style="display: flex; align-items: center; gap: 5px; margin: 0;"><input type="radio" name="notif" checked> Email</label>
-                        <label style="display: flex; align-items: center; gap: 5px; margin: 0;"><input type="radio" name="notif"> SMS</label>
-                        <label style="display: flex; align-items: center; gap: 5px; margin: 0;"><input type="radio" name="notif"> Push</label>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
 
         <div class="glass-panel printable">
             <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">

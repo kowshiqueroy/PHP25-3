@@ -4,20 +4,30 @@ if(!isset($_SESSION['user_id'])) {
     header("Location: ..\index.php");
     exit;
 }
-if(isset($_SESSION['role']) && $_SESSION['role'] != 0) {
+if(isset($_SESSION['role']) && $_SESSION['role'] != 3) {
     header("Location: ".$_SESSION['role']);
     exit;
  
 }
 // --- MENU DATA ---
 $menuItems = [
-    ['icon' => 'fa-house', 'label' => 'Home', 'link' => '#'],
-    ['icon' => 'fa-users', 'label' => 'Team', 'link' => '#'],
-    ['icon' => 'fa-clipboard-list', 'label' => 'Tasks', 'link' => '#'],
-    ['icon' => 'fa-box-open', 'label' => 'Stock', 'link' => '#'],
+    ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
+     ['icon' => 'fa-clipboard', 'label' => 'Orders', 'link' => '#'],
+     ['icon' => 'fa-money-bill', 'label' => 'Cash', 'link' => '#'],
+    ['icon' => 'fa-map', 'label' => 'Routes', 'link' => '#'],
+      ['icon' => 'fa-store', 'label' => 'Shops', 'link' => '#'],
+    ['icon' => 'fa-box', 'label' => 'Items', 'link' => '#'],
+      ['icon' => 'fa-question', 'label' => 'Survey', 'link' => '#'],
+  //damage
+    ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
     ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
-    ['icon' => 'fa-gear', 'label' => 'Config', 'link' => '#'],
-    ['icon' => 'fa-bell', 'label' => 'Notify', 'link' => '#'],
+   //gift
+    ['icon' => 'fa-gift', 'label' => 'Gift', 'link' => '#'],
+    //promotions
+    ['icon' => 'fa-tag', 'label' => 'Promotions', 'link' => '#'],
+    //branding
+    ['icon' => 'fa-palette', 'label' => 'Branding', 'link' => '#'],
+
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '..\logout.php'],
 ];
 ?>
