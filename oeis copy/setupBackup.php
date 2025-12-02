@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS users (
 $conn->query("
 CREATE TABLE IF NOT EXISTS routes (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    route_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     company_id INT(11) UNSIGNED NOT NULL,
     status TINYINT(1) DEFAULT 1,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
@@ -44,10 +44,9 @@ CREATE TABLE IF NOT EXISTS routes (
 $conn->query("
 CREATE TABLE IF NOT EXISTS shops (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    shop_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     route_id INT(11) UNSIGNED NOT NULL,
     company_id INT(11) UNSIGNED NOT NULL,
-    user_id INT(11) UNSIGNED,
     balance DECIMAL(15,2) DEFAULT 0,
     status TINYINT(1) DEFAULT 1,
     FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
@@ -59,7 +58,7 @@ CREATE TABLE IF NOT EXISTS shops (
 $conn->query("
 CREATE TABLE IF NOT EXISTS items (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    item_name VARCHAR(255) NOT NULL,
+    name VARCHAR(255) NOT NULL,
     price DECIMAL(15,2) NOT NULL,
     stock INT(11) DEFAULT 0,
     company_id INT(11) UNSIGNED NOT NULL,
@@ -119,10 +118,9 @@ CREATE TABLE IF NOT EXISTS order_items (
 $conn->query("
 CREATE TABLE IF NOT EXISTS cash_collections (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    route_id INT(11) UNSIGNED NOT NULL,
     shop_id INT(11) UNSIGNED NOT NULL,
     amount DECIMAL(15,2) NOT NULL,
-    collection_date TIMESTAMP ,
+    collection_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     collected_by INT(11) UNSIGNED NOT NULL,
     remarks VARCHAR(255),
     approved_at TIMESTAMP NULL,
@@ -134,47 +132,6 @@ CREATE TABLE IF NOT EXISTS cash_collections (
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
-
-// 9. Damage Reports TABLE
-$conn->query("
-CREATE TABLE IF NOT EXISTS damage_reports (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    item_id INT(11) UNSIGNED NOT NULL,
-    quantity INT(11) NOT NULL,
-    report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    reported_by INT(11) UNSIGNED NOT NULL,
-    remarks VARCHAR(255),
-    company_id INT(11) UNSIGNED NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TINYINT(1) DEFAULT 1,
-    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-");
-
-// 10. Market Surveys TABLE
-$conn->query("
-CREATE TABLE IF NOT EXISTS market_surveys (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    route_id INT(11) UNSIGNED NOT NULL,
-    shop_id INT(11) UNSIGNED NOT NULL,
-    survey_data TEXT NOT NULL,
-    survey_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    surveyed_by INT(11) UNSIGNED NOT NULL,
-    company_id INT(11) UNSIGNED NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TINYINT(1) DEFAULT 1,
-    FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
-    FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-");
-
-// 11. Gifts TABLE
-
-// 12. Brandings TABLE
-
-// 13. Promotions TABLE
 
 // --- Insert Default Company & Admin ---
 $res = $conn->query("SELECT COUNT(*) AS count FROM companies");
