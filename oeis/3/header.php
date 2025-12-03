@@ -22,11 +22,8 @@ $menuItems = [
     ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
     ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
    //gift
-    ['icon' => 'fa-gift', 'label' => 'Gift', 'link' => '#'],
-    //promotions
-    ['icon' => 'fa-tag', 'label' => 'Promotions', 'link' => '#'],
-    //branding
-    ['icon' => 'fa-palette', 'label' => 'Branding', 'link' => '#'],
+    ['icon' => 'fa-gift', 'label' => 'Brand Gift Promos', 'link' => '#'],
+   
 
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '..\logout.php'],
 ];

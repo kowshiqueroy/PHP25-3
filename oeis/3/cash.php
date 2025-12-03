@@ -325,14 +325,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php
             $search_text='';
               $company_id = $_SESSION['company_id'];
-                        $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' ORDER BY id DESC LIMIT 5";
+                        $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' AND collected_by='{$_SESSION['user_id']}' ORDER BY id DESC LIMIT 5";
                         if (isset($_GET['show_all']) && $_GET['show_all'] == 1) {
-                            $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' ORDER BY id DESC";
+                            $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' AND collected_by='{$_SESSION['user_id']}' ORDER BY id DESC";
                         }
                         $result = mysqli_query($conn, $query);
                         
 
-                       $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' ";
+                       $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' AND collected_by='{$_SESSION['user_id']}' ";
                         if (isset($_GET['search_id']) && $_GET['search_id'] !== '') {
                             $search_id = $_GET['search_id'];
                             $query .= " AND id='$search_id'";
@@ -377,7 +377,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $search_text .= "Date Range: $date_from to $date_to";
                         }
                     }
-                        $query .= " ORDER BY id DESC";
+                        $query .= "  ORDER BY id DESC";
                         $result = mysqli_query($conn, $query); 
                         if ($search_text != '') {
                             echo "<p class='badge bg-green' style='text-align: center; margin-bottom: 10px;' >Search Results for <b>$search_text</b></p>";
