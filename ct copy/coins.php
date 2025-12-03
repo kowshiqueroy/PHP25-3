@@ -2,7 +2,7 @@
 require_once 'head.php';
 ?>
     <section>
-      <h2>🪙 Coin Transfer</h2>
+      <h2>🪙 Coin Transfer </h2>
       <form>
       <div class="form-group">
         <label>Username (Phone)</label>
