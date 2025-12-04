@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <select name="route_id" id="route_id" onchange="getShopsByRouteId(this.value)" required>
                             <option value="">Select Route</option>
                             <?php
-                            $query = "SELECT id, route_name FROM routes";
+                            $query = "SELECT id, route_name FROM routes WHERE status = 1 AND company_id='{$_SESSION['company_id']}' ORDER BY id DESC";
                             $result = mysqli_query($conn, $query);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -121,7 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         
                         <label>Shop Name</label>
                         <select name="shop_id" id="shop_id" required>
-                            <option value="">Select Shop</option>
+                            <?php if (isset($_GET['shop_id'])): ?>
+                                <option value="<?php echo $_GET['shop_id']; ?>" selected><?php echo $_GET['shop_name']; ?></option>
+                            <?php else: ?>
+                                <option value="">Select Shop</option>
+                            <?php endif; ?>
                             <?php
                             $route_id = isset($_POST['route_id']) ? $_POST['route_id'] : '';
                             $query = "SELECT id, shop_name FROM shops WHERE route_id='$route_id' ORDER BY id DESC";
@@ -445,7 +449,7 @@ if (isset($row['approved_at']) && !is_null($row['approved_at'])) {
     echo "
         <i class='fa-solid fa-pen' 
            style='color: var(--warning); margin-right: 10px; cursor: pointer;' 
-           onclick=\"window.location.href='cash.php?cash_edit_id={$row['id']}'\">
+           onclick=\"window.location.href='cash.php?shop_name={$shop_name}& shop_id={$row['shop_id']}&cash_edit_id={$row['id']}'\">
         </i>";}
 
         echo"

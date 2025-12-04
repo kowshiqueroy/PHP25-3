@@ -81,8 +81,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ?>
                 <div class="desktop-span-2">
                     <div class="col-1">
-                        <label>Shop Name</label>
-                        <input type="text" placeholder="Shop Name" name="shop_name" value="<?php echo htmlspecialchars(isset($shop_data['shop_name']) ? $shop_data['shop_name'] : ''); ?>" required>
+                        <label>Shop Details</label>
+                        <input type="text" placeholder="Shop Name Address Phone" name="shop_name" value="<?php echo htmlspecialchars(isset($shop_data['shop_name']) ? $shop_data['shop_name'] : ''); ?>" required>
                     </div>
                    <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
                   
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <select name="route_id" id="route_id" required>
                         <option value="">Select Route</option>
                         <?php
-                            $query = "SELECT id, route_name FROM routes WHERE company_id='{$_SESSION['company_id']}' ORDER BY route_name ASC";
+                            $query = "SELECT id, route_name FROM routes WHERE company_id='{$_SESSION['company_id']}' AND status=1 ORDER BY route_name ASC";
                             $result = mysqli_query($conn, $query);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
