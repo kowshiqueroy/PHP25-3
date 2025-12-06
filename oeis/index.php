@@ -23,6 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->close();
                 return;
             }
+            $last_login = date('Y-m-d H:i:s');
+           // echo "<script>alert('Login successful!');</script>";
+            $stmt = $conn->prepare("UPDATE users SET last_login = ? WHERE id = ?");
+            $stmt->bind_param("si", $last_login, $row['id']);
+            $stmt->execute();
+            $stmt->close();
            $status = $row['status'];
            $company_id = $row['company_id'];
            $role = $row['role'];

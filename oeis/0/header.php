@@ -13,11 +13,8 @@ if(isset($_SESSION['role']) && $_SESSION['role'] != 0) {
 $menuItems = [
     ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
     ['icon' => 'fa-users', 'label' => 'Users', 'link' => 'users.php'],
-    ['icon' => 'fa-clipboard-list', 'label' => 'Logs', 'link' => '#'],
-    ['icon' => 'fa-box-open', 'label' => 'Stock', 'link' => '#'],
-    ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
-    ['icon' => 'fa-gear', 'label' => 'Config', 'link' => '#'],
-    ['icon' => 'fa-bell', 'label' => 'Notify', 'link' => '#'],
+       ['icon' => 'fa-gear', 'label' => 'DB Manage', 'link' => 'dbmanage.php'],
+   
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '..\logout.php'],
 ];
 ?>

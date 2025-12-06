@@ -3,246 +3,262 @@ include 'header.php';
 ?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['add_company'])) {
-        $name = $_POST['name'];
-        $address = $_POST['address'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $website = $_POST['website'];
-        $logo = $_POST['logo'];
+   
 
-        $query = "INSERT INTO companies (name, address, phone, email, website, logo) VALUES ('$name', '$address', '$phone', '$email', '$website', '$logo')";
-        mysqli_query($conn, $query);    
-        header("Location: users.php");
-        exit();
-    }
-
-    if (isset($_POST['add_user'])) {
-        $username = $_POST['username'];
-        $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-        $role = $_POST['role'];
+    if (isset($_POST['add_order'])) {
+        $shop_id = $_POST['shop_id'];
+        $route_id = $_POST['route_id'];
+        $order_date = $_POST['order_date'];
+        $delivery_date = $_POST['delivery_date'];
+        $order_status = $_POST['order_status'];
+        $user_id = $_SESSION['user_id'];
         $status = $_POST['status'];
-        $company_id = $_POST['company_id'];
-        $check_query = "SELECT id FROM users WHERE username='$username'";
-        $check_result = mysqli_query($conn, $check_query);
-        if (mysqli_num_rows($check_result) > 0) {
-            echo "<script>alert('Username already exists'); window.location.href='users.php';</script>";
+        $company_id = $_SESSION['company_id'];
+        $remarks = $_POST['remarks'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
+       
+
+        $query = "INSERT INTO orders (shop_id, route_id, order_date, delivery_date, order_status, created_by, created_at, status, company_id, remarks, latitude, longitude) 
+        VALUES ('$shop_id', '$route_id', '$order_date', '$delivery_date', '$order_status', '$user_id', NOW(), '$status', '$company_id', '$remarks', '$latitude', '$longitude')";
+        if (mysqli_query($conn, $query) === TRUE) {
+             //get the id
+        $order_id = $conn->insert_id;
+        header("Location: order_item.php?order_id=$order_id");
+        exit();
+            exit();
+        } else {
+            echo "<script>alert('An error occurred. Please try again.'); window.location.href='orders.php';</script>";
             exit();
         }
 
-        $query = "INSERT INTO users (username, password, role, status, company_id) VALUES ('$username', '$password', '$role', '$status', '$company_id')";
-        mysqli_query($conn, $query);
-        header("Location: users.php");
-        exit();
-    }
-    if (isset($_POST['update_user'])) {
-        $user_id = $_GET['user_edit_id'];
-        $username = $_POST['username'];
-        $role = $_POST['role'];
-        $status = $_POST['status'];
-        $company_id = $_POST['company_id'];
+        // $update_balance_query = "UPDATE shops SET balance = balance + $amount WHERE id = $shop_id";
+        // mysqli_query($conn, $update_balance_query);
 
-        $check_query = "SELECT id FROM users WHERE username='$username' AND id != '$user_id'";
-        $check_result = mysqli_query($conn, $check_query);
-        if (mysqli_num_rows($check_result) > 0) {
-            echo "<script>alert('Username already exists'); window.location.href='users.php';</script>";
+      
+    }
+    if (isset($_POST['update_order'])) {
+        $order_id = $_GET['order_edit_id'];
+        $order_date = $_POST['order_date'];
+        $delivery_date = $_POST['delivery_date'];
+        $order_status = $_POST['order_status'];
+        $shop_id = $_POST['shop_id'];
+        $route_id = $_POST['route_id'];
+        $status = $_POST['status'];
+
+        //check if approved
+        $approval_check_query = "SELECT order_status FROM orders WHERE id = '$order_id'";
+        $approval_check_result = mysqli_query($conn, $approval_check_query);
+        $approval_check_row = mysqli_fetch_assoc($approval_check_result);
+        $order_status = $approval_check_row['order_status'];
+        if ($order_status == 1) {
+            echo "<script>alert('This order  has already been approved.'); window.location.href='orders.php';</script>";
             exit();
         }
 
-        $update_fields = "username='$username', role='$role', status='$status', company_id='$company_id'";
+        // $previous_amount_query = "SELECT amount FROM orders WHERE id = '$order_id'";
+        // $previous_amount_result = mysqli_query($conn, $previous_amount_query);
+        // $previous_amount_row = mysqli_fetch_assoc($previous_amount_result);
+        // $previous_amount = $previous_amount_row['amount'];
 
-        if (!empty($_POST['password'])) {
-            $password = password_hash($_POST['password'], PASSWORD_BCRYPT);
-            $update_fields .= ", password='$password'";
-        }
+        // $update_balance_query = "UPDATE shops SET balance = balance - '$previous_amount' + '$amount' WHERE id = $shop_id";
+        // mysqli_query($conn, $update_balance_query);
 
-        $query = "UPDATE users SET $update_fields WHERE id='$user_id'";
+        $update_fields = " shop_id='$shop_id', route_id='$route_id', order_date='$order_date', delivery_date='$delivery_date', order_status='$order_status', status='$status'";
+        $query = "UPDATE orders SET $update_fields WHERE id='$order_id'";
         mysqli_query($conn, $query);
-        header("Location: users.php");
+
+        header("Location: orders.php");
         exit();
     }
-    if (isset($_POST['update_company'])) {
-        $company_id = $_GET['company_edit_id'];
-        $name = $_POST['name'];
-        $address = $_POST['address'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $website = $_POST['website'];
-        $logo = $_POST['logo'];
-
-        $query = "UPDATE companies SET name='$name', address='$address', phone='$phone', email='$email', website='$website', logo='$logo' WHERE id='$company_id'";
-        mysqli_query($conn, $query);
-        header("Location: users.php");
-        exit();
-    }
+    
 }
+      
+ 
 ?>
     <div class="print-header">
-        <h1>EIS Report</h1>
-        <p>Generated by: @<?php echo $_SESSION['username']; ?> | Date: <?php echo date("Y-m-d"); ?></p>
+           <h1><?php echo APP_NAME; ?> Report</h1>
+        <p>Generated by: <?php echo $_SESSION['user_id'] . "@".$_SESSION['username']. " | C: " .
+         $_SESSION['company_id']." ";?>| Date: <?php echo date("Y-m-d"); ?></p>
+
     </div>
+
 
     <div class="container">
 
         <div class="text-center" style="text-align: center; margin: 30px 0;">
-            <h2 style="font-weight: 300; font-size: 2rem;">User List</h2>
-            <p style="color: #666;">Create and manage user accounts.</p>
+            <h2 style="font-weight: 300; font-size: 2rem;">Order  List</h2>
+            <p style="color: #666;">Create and manage order.</p>
         </div>
 
         
         
-        <div class="glass-panel form-section">
-            <span class="section-title">New Company Add</span>
-
-            
-
-
-            <form method="POST">
-                <?php
-                if (isset($_GET['company_edit_id'])) {
-                    $company_edit_id = $_GET['company_edit_id'];
-                    $query = "SELECT * FROM companies WHERE id='$company_edit_id'";
-                    $result = mysqli_query($conn, $query);
-                    if (mysqli_num_rows($result) > 0) {
-                        $company_data = mysqli_fetch_assoc($result);
-                    }
-                }
-                ?>
-                <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
-                  
-                    <div><label>Name</label><input type="text" placeholder="Company Name" name="name" value="<?php echo htmlspecialchars(isset($company_data['name']) ? $company_data['name'] : ''); ?>" required></div>
-                    <div><label>Address</label><input type="text" placeholder="Address" name="address" value="<?php echo htmlspecialchars(isset($company_data['address']) ? $company_data['address'] : ''); ?>" ></div>
-                    <div><label>Phone</label><input type="text" placeholder="Phone Number" name="phone" value="<?php echo htmlspecialchars(isset($company_data['phone']) ? $company_data['phone'] : ''); ?>"></div>
-                    <div><label>Email</label><input type="email" placeholder="Email Address" name="email" value="<?php echo htmlspecialchars(isset($company_data['email']) ? $company_data['email'] : ''); ?>"></div> 
-                    <div><label>Website</label><input type="text" placeholder="Company Website" name="website" value="<?php echo htmlspecialchars(isset($company_data['website']) ? $company_data['website'] : ''); ?>"></div>
-                    <div><label>Logo</label><input type="text" placeholder="Logo URL" name="logo" value="<?php echo htmlspecialchars(isset($company_data['logo']) ? $company_data['logo'] : ''); ?>"></div>
-                </div>
-                
-                <div class="form-actions">
-                    <?php
-                    if (isset($company_edit_id)) {
-                        echo '<button type="submit" name="update_company" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update Company</button>';
-                    } else {
-                        echo '<button type="submit" name="add_company" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add Company</button>';
-                    }
-                    ?>
-                </div>
-                 
-            </form>
-
-
-        </div>
-
         
-
-        <div class="glass-panel printable">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span class="section-title" style="margin:0;">All Company</span>
-                <button onclick="window.print()" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.8rem;"><i class="fa-solid fa-print"></i></button>
-            </div>
-            
-            <div class="table-responsive">
-                <table class="table-simple">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Address</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Website</th>
-                            <th>Logo</th>
-                            <th style="text-align: right;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $query = "SELECT * FROM companies";
-                        $result = mysqli_query($conn, $query);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr><td>" . $row['id'] . "</td><td>" . $row['name'] . "</td><td>" . $row['address'] . "</td><td>" . $row['phone'] .
-                                 "</td><td>" . $row['email'] . "</td><td>" . $row['website'] . "</td><td><img src='" . $row['logo'] .
-                                  "' width='50' height='50'></td> <td style='text-align: right;'>
-                                 <i class='fa-solid fa-pen' style='color:var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='users.php?company_edit_id=" . $row['id'] . "'\"><i></i>
-                               
-                            </td></tr>";
-                            }
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
 
 
         
 
         <div class="glass-panel form-section">
-            <span class="section-title">New User Add</span>
+            <span class="section-title">New Order  Add</span>
             <form method="POST">
 
 
-                <?php if (isset($_GET['user_edit_id'])) {
-                    $user_edit_id = $_GET['user_edit_id'];
-                    $query = "SELECT * FROM users WHERE id='$user_edit_id'";
+                <?php if (isset($_GET['order_edit_id'])) {
+                    $order_edit_id = $_GET['order_edit_id'];
+                    $query = "SELECT * FROM orders WHERE id='$order_edit_id'";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
-                        $user_data = mysqli_fetch_assoc($result);
+                        $order_data = mysqli_fetch_assoc($result);
                     }
                 }
                 ?>
                 <div class="desktop-span-2">
-                      <div>
-                        <label>Company</label>
-                        <select name="company_id" id="company_id" required>
-                            <option value="">Select Company</option>
+                    <div class="col-1">
+                        <label>Route Name</label>
+                        
+                        <select name="route_id" id="route_id" onchange="getShopsByRouteId(this.value)" required>
+                            <option value="">Select Route</option>
                             <?php
-                            $query = "SELECT id, name FROM companies";
+                            $query = "SELECT id, route_name FROM routes WHERE status = 1 AND company_id='{$_SESSION['company_id']}' ORDER BY id DESC";
                             $result = mysqli_query($conn, $query);
-
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['id'] . "'" . (isset($user_data) && $user_data['company_id'] == $row['id'] ? 'selected' : '') . ">" . $row['name'] . "</option>";
+                                    $selected = (isset($order_data['route_id']) && $order_data['route_id'] == $row['id']) ? 'selected' : '';
+                                    echo "<option value='" . $row['id'] . "' $selected>" . $row['route_name'] . "</option>";
                                 }
                             }
                             ?>
                         </select>
                     </div>
-                </div>
-                <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
-                  
-                    <div><label>User Name</label><input type="text" placeholder="User Name" name="username" value="<?php echo htmlspecialchars(isset($user_data['username']) ? $user_data['username'] : ''); ?>" required></div>
-                    <div><label>Password</label><input type="password" placeholder="Password" name="password"  ></div>
-                    <div>
-                        <label>Role</label>
-                        <select name="role" required>
-                            <option value="">Select Role</option>
-                            <option value="0" <?php if (isset($user_data) && $user_data['role'] == 0) echo 'selected'; ?>>Admin</option>
-                            <option value="1" <?php if (isset($user_data) && $user_data['role'] == 1) echo 'selected'; ?>>Manager</option>
-                            <option value="2" <?php if (isset($user_data) && $user_data['role'] == 2) echo 'selected'; ?>>Viewer</option>
-                            <option value="3" <?php if (isset($user_data) && $user_data['role'] == 3) echo 'selected'; ?>>SR</option>
-                            <option value="4" <?php if (isset($user_data) && $user_data['role'] == 4) echo 'selected'; ?>>Store</option>
+
+
+                    <div class="col-1">
+                    
                         
+                        <label>Shop Name</label>
+                        <select name="shop_id" id="shop_id" required>
+                            <?php if (isset($_GET['shop_id'])): ?>
+                                <option value="<?php echo $_GET['shop_id']; ?>" selected><?php echo $_GET['shop_name']; ?></option>
+                            <?php else: ?>
+                                <option value="">Select Shop</option>
+                            <?php endif; ?>
+                            <?php
+                            $route_id = isset($_POST['route_id']) ? $_POST['route_id'] : '';
+                            $query = "SELECT id, shop_name FROM shops WHERE route_id='$route_id' ORDER BY id DESC";
+                            $result = mysqli_query($conn, $query);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $selected = (isset($order_data['shop_id']) && $order_data['shop_id'] == $row['id']) ? 'selected' : '';
+                                    echo '<option value="' . $row['id'] . '" ' . $selected . '>' . $row['shop_name'] . '</option>';
+                                }
+                            }
+                            ?>
                         </select>
+
+                       <script>
+    $(document).ready(function() {
+        // Initialize Select2 on the Add/Edit form elements
+        $('#route_id').select2({
+            width: '100%',
+            placeholder: "Select Route"
+        });
+        $('#shop_id').select2({
+            width: '100%',
+            placeholder: "Select Shop"
+        });
+
+        // Optional: Initialize on the Search Filter elements at the top
+        $('select[name="search_route_id"]').select2({ width: '100%' });
+        $('select[name="search_shop_id"]').select2({ width: '100%' });
+    });
+
+    function getShopsByRouteId(route_id) {
+        // Clear the current shop selection
+        $('#shop_id').empty();
+        
+        $.ajax({
+            url: 'get_shops_by_route_id.php', // I removed ?route_id= here because you are sending it in `data` below
+            type: 'GET',
+            data: {
+                route_id: route_id
+            },
+            success: function(response) {
+                // Update the select options
+                $('#shop_id').html(response);
+                
+                // IMPORTANT: Trigger the change event so Select2 updates the list
+                $('#shop_id').trigger('change');
+            },
+            error: function(xhr, status, error) {
+                console.log("Error: " + error);
+            }
+        });
+    }
+</script>
                     </div>
+                    
+                   <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
                   
                     <div>
-                        <label>Status</label>
-                        <select name="status" required>
-                            <option value="1" <?php if (isset($user_data) && $user_data['status'] == 1) echo 'selected'; ?>>Active</option>
-                            <option value="0" <?php if (isset($user_data) && $user_data['status'] == 0) echo 'selected'; ?>>Inactive</option>
-                        </select>
+                    <label>Order Date</label>
+                    <input type="date" class="form-control" id="order_date" name="order_date" value="<?php echo htmlspecialchars(isset($order_data['order_date']) ? $order_data['order_date'] : date('Y-m-d')); ?>" required>
                     </div>
+                    <div>
+                    <label>Delivery Date</label>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="<?php echo htmlspecialchars(isset($order_data['delivery_date']) ? $order_data['delivery_date'] : date('Y-m-d', strtotime('+1 days'))); ?>" required>
+                    </div>
+                    
+                    <div><label>Order Status</label>
+                    <select name="order_status">
+                        <option value="0" <?php echo isset($shop_data['status']) && $shop_data['status'] == 0 ? 'selected' : ''; ?>>Draft</option>
+                        <option value="1" <?php echo isset($shop_data['status']) && $shop_data['status'] == 1 ? 'selected' : ''; ?>>Confirmed</option>
+
+                    </select>
                 </div>
+                    <div><label>Status</label>
+                    <select name="status">
+                        <option value="1" <?php echo isset($shop_data['status']) && $shop_data['status'] == 1 ? 'selected' : ''; ?>>Active</option>
+                        <option value="0" <?php echo isset($shop_data['status']) && $shop_data['status'] == 0 ? 'selected' : ''; ?>>Inactive</option>
+                    </select>
+                </div>
+                    </div>
+
+
+                
+  <div class="col-1">
+                        <label>Remarks</label>
+                        
+                        <input type="text" placeholder="Remarks" name="remarks" value="<?php echo htmlspecialchars(isset($order_data['remarks']) ? $order_data['remarks'] : ''); ?>">
+                    </div>
+
+                    <input type="hidden" id="latitude" name="latitude" >
+                    <input type="hidden" id="longitude" name="longitude" >
+                    <script>
+                        function getLocation() {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(function(position) {
+                                function showError(error) {
+                                    alert('Error getting location: ' + error.message);
+                                }
+                                    document.getElementById("latitude").value = position.coords.latitude;
+                                    document.getElementById("longitude").value = position.coords.longitude;
+                                });
+                            }
+                        }
+                        getLocation();
+                    </script>
+                
+
+
+                </div>
+                
                 
                 
                 <div class="form-actions">
-                    <?php if (isset($user_edit_id)) {
-                        echo '<button type="submit" name="update_user" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update User</button>';
+                    <?php if (isset($order_edit_id)) {
+                        echo '<button type="submit" name="update_order" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update order</button>';
                     } else {
-                        echo '<button type="submit" name="add_user" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add User</button>';
+                        echo '<button type="submit" name="add_order" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add order</button>';
                     }
 
                     ?>
@@ -254,39 +270,287 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </form>
         </div>
 
-        
+        <div class=" form-section" style="margin-bottom: 20px;">
+          
+            <form method="GET">
+
+
+                <?php if (isset($_GET['order_edit_id'])) {
+                    $order_edit_id = $_GET['order_edit_id'];
+                    $query = "SELECT * FROM orders WHERE id='$order_edit_id'";
+                    $result = mysqli_query($conn, $query);
+                    if (mysqli_num_rows($result) > 0) {
+                        $order_data = mysqli_fetch_assoc($result);
+                    }
+                }
+                ?>
+                <div class="desktop-span-2">
+                   
+
+
+                   
+                    
+                <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
+                    <div><label>Date From</label>
+                    <input type="date" placeholder="Date" name="date_from" value="<?php echo isset($_GET['date_from']) ? $_GET['date_from'] : date('Y-m-d'); ?>" required>
+                    </div>
+                    <div><label>Date To</label>
+                    <input type="date" placeholder="Date" name="date_to" value="<?php echo isset($_GET['date_to']) ? $_GET['date_to'] : date('Y-m-d'); ?>" required>
+                    </div>
+                    <div><label>Route Name</label>
+                        
+                        <select name="search_route_id" >
+                            <option value="">All Route</option>
+                            <?php
+                            $query = "SELECT id, route_name FROM routes WHERE status = 1 ORDER BY id DESC";
+                            $result = mysqli_query($conn, $query);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $selected = (isset($_GET['search_route_id']) && $_GET['search_route_id'] == $row['id']) ? 'selected' : '';
+                                    echo "<option value='" . $row['id'] . "' $selected>" . $row['route_name'] . "</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <div>
+                                                                    
+                        
+                        <label>Shop Name</label>
+                        <select name="search_shop_id" >
+                            <option value="">All Shop</option>
+                            <?php
+                            $query = "SELECT id, shop_name FROM shops WHERE status = 1 ORDER BY id DESC";
+                            $result = mysqli_query($conn, $query);
+                            if (mysqli_num_rows($result) > 0) {
+                                while ($row = mysqli_fetch_assoc($result)) {
+                                    $selected = (isset($_GET['search_shop_id']) && $_GET['search_shop_id'] == $row['id']) ? 'selected' : '';
+                                    echo '<option value="' . $row['id'] . '" ' . $selected . '>' . $row['shop_name'] . '</option>';
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+            
+
+                  
+                    <div><label>ID</label>
+                    <input type="number"  placeholder="All" name="search_id" value="<?php echo htmlspecialchars(isset($_GET['search_id']) ? $_GET['search_id'] : ''); ?>">
+                    </div>
+                    <div><label>Status</label>
+                    <select name="search_status">
+                         <option value="">All</option>
+                        <option value="1" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 1 ? 'selected' : ''; ?>>Active</option>
+                        <option value="0" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 0 ? 'selected' : ''; ?>>Inactive</option>
+                        <option value="3" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 3 ? 'selected' : ''; ?>>Draft</option>
+                        <option value="4" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 4 ? 'selected' : ''; ?>>Confirmed</option>
+
+                    </select>
+                </div>
+                    </div>
+                </div>
+                
+                
+                
+                <div class="form-actions">
+                   <button type="submit" name="search_order" class="btn btn-green"><i class="fa-solid fa-search"></i> Search</button>
+                </div>
+                 
+             
+ 
+
+            </form>
+        </div>
 
         <div class="glass-panel printable">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span class="section-title" style="margin:0;">All User</span>
-                <button onclick="window.print()" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.8rem;"><i class="fa-solid fa-print"></i></button>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; m">
+                <span class="section-title" style="margin:0;">All Order </span>
+                   <button onclick="window.location.href='orders.php?show_all=1'" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem;">Show All</button>
+                   <button onclick="window.print()" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem;"><i class="fa-solid fa-file-pdf"></i> / <i class="fa-solid fa-print"></i></button>
+     
             </div>
+
+          
             
-            <div class="table-responsive">
+            <div class="table-responsive" id="table">
+
+            <?php
+            $search_text='';
+              $company_id = $_SESSION['company_id'];
+                        $query = "SELECT * FROM orders WHERE company_id='$company_id' AND created_by='{$_SESSION['user_id']}' ORDER BY id DESC LIMIT 5";
+                        if (isset($_GET['show_all']) && $_GET['show_all'] == 1) {
+                            $query = "SELECT * FROM orders WHERE company_id='$company_id' AND created_by='{$_SESSION['user_id']}' ORDER BY id DESC";
+                        }
+                        $result = mysqli_query($conn, $query);
+                        
+
+                       $query = "SELECT * FROM orders WHERE company_id='$company_id' AND created_by='{$_SESSION['user_id']}' ";
+                        if (isset($_GET['search_id']) && $_GET['search_id'] !== '') {
+                            $search_id = $_GET['search_id'];
+                            $query .= " AND id='$search_id'";
+                            $search_text .= " ID: $search_id ";
+                        }
+                        else {
+
+                        if (isset($_GET['search_route_id']) && $_GET['search_route_id'] !== '') {
+                            $search_route_id = $_GET['search_route_id'];
+                            $query .= " AND route_id='$search_route_id'";
+                            $search_text .= " Route: $search_route_id";
+                      
+                            $route_query = "SELECT route_name FROM routes WHERE id='$search_route_id'";
+                            $route_result = mysqli_query($conn, $route_query);
+                            if (mysqli_num_rows($route_result) > 0) {
+                                $route_row = mysqli_fetch_assoc($route_result);
+                                $search_text .= " " . $route_row['route_name'];
+                            }
+                        }
+
+                        if (isset($_GET['search_shop_id']) && $_GET['search_shop_id'] !== '') {
+                            $search_shop_id = $_GET['search_shop_id'];
+                            $query .= " AND shop_id='$search_shop_id'";
+                            $search_text .= " Shop: $search_shop_id";
+                             $shop_query = "SELECT shop_name FROM shops WHERE id='$search_shop_id'";
+                            $shop_result = mysqli_query($conn, $shop_query);
+                            if (mysqli_num_rows($shop_result) > 0) {
+                                $shop_row = mysqli_fetch_assoc($shop_result);
+                                $search_text .= " " . $shop_row['shop_name'];
+                            }
+                        }
+
+                        if (isset($_GET['search_status']) && $_GET['search_status'] !== '') {
+                            $search_status = $_GET['search_status'];
+                            if ($search_status == 3) {
+                                $query .= " AND order_status='0'";
+                            } else if ($search_status == 4) {
+                                $query .= " AND order_status='1'";
+                            } else {
+                                $query .= " AND status='$search_status'";
+                            }
+                            $search_text .= " Status: $search_status";
+                        }
+                         if (isset($_GET['date_from']) && $_GET['date_from'] !== '' && isset($_GET['date_to']) && $_GET['date_to'] !== '') {
+                            $date_from = $_GET['date_from'] . ' 00:00:00';
+                            $date_to = $_GET['date_to']. ' 23:59:59';
+                            $query .= " AND order_date BETWEEN '$date_from' AND '$date_to'";
+                            $search_text .= " Date Range: $date_from to $date_to";
+                        }
+                    }
+                        $query .= "  ORDER BY id DESC";
+                        $result = mysqli_query($conn, $query); 
+                        if ($search_text != '') {
+                            echo "<p class='badge bg-green' style='text-align: center; margin-bottom: 10px;' >Search Results for <b>$search_text</b></p>";
+                        }
+
+
+            ?>
                 <table class="table-simple">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>User Name</th>
-                            <th>Company</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Created At</th>
+                            <th>Route Name</th>
+                            <th>Shop Name</th>
+                            <th>Dates</th>
+                         
+                           
+                            <th class="print-hide">Status</th>
+                           
                       
-                            <th style="text-align: right;">Actions</th>
+                            
+                            <th style="text-align: right;" class="print-hide">Actions</th>
+                            <th>Approval</th>
+                            <th>Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        $query = "SELECT * FROM users";
-                        $result = mysqli_query($conn, $query);
+                      
+
+                        
+
 
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr><td>" . $row['id'] . "</td><td>" . $row['username'] . "</td><td>" . $row['company_id'] . "</td><td>" . $row['role'] .
-                                 "</td><td>" . $row['status'] . "</td><td>" . $row['created_at'] . "</td> <td  style='text-align: right;'>
-                                <i class='fa-solid fa-pen' style='color:var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='users.php?user_edit_id=" . $row['id'] . "'\"><i></i>
-                                </td></tr>";
+                                $route_name_query = "SELECT route_name FROM routes WHERE id='{$row['route_id']}'";
+                                $route_name_result = mysqli_query($conn, $route_name_query);
+                                $route_name = mysqli_fetch_assoc($route_name_result)['route_name'];
+                                
+                                $shop_name_query = "SELECT shop_name, balance FROM shops WHERE id='{$row['shop_id']}'";
+                                $shop_name_result = mysqli_query($conn, $shop_name_query);
+                                $shop_name_result_data = mysqli_fetch_assoc($shop_name_result);
+                                $shop_name = isset($shop_name_result_data['shop_name']) ? $shop_name_result_data['shop_name'] : '';
+                                // $shop_balance = isset($shop_name_result_data['balance']) ? $shop_name_result_data['balance'] : 0;
+
+                              echo "
+<tr>
+    <td >{$row['id']}
+    <i class='fa-solid fa-box' 
+           style='color: green; margin-right: 10px; cursor: pointer;' 
+           onclick=\"window.location.href='order_item.php?order_id={$row['id']}'\">
+        </i>
+    
+    </td>
+   
+    <td>{$route_name}</td>
+     <td>{$shop_name}</td>
+    
+    <td>{$row['order_date']} {$row['delivery_date']}</td>
+
+
+  
+    <td class='print-hide' style='text-align: center;'>" . 
+        ($row['status'] 
+            ? "<span class='badge bg-green'>Active</span>" 
+            : "<span class='badge bg-red'>Inactive</span>") . " <br>".
+        ($row['order_status'] 
+            ? "<span class='badge bg-green'>Confirmed</span>" 
+            : "<span class='badge bg-yellow'>Draft</span>") . " ".
+
+    "</td>
+    <td style='text-align: right;' class='print-hide' >";
+if (isset($row['order_status']) && !is_null($row['order_status']) && $row['order_status'] == 1 ) {
+            echo "<i class='fa-solid fa-user' style='color: green; cursor: not-allowed;' title='Confirmed records cannot be edited.'></i>";
+        } else {
+    echo "
+        <i class='fa-solid fa-pen' 
+           style='color: var(--warning); margin-right: 10px; cursor: pointer;' 
+           onclick=\"window.location.href='orders.php?shop_name={$shop_name}& shop_id={$row['shop_id']}&order_edit_id={$row['id']}'\">
+        </i>";}
+
+        echo"
+    </td>
+    <td >" . 
+        (isset($row['approved_at']) && !is_null($row['approved_at'])
+            ? "<span class='badge bg-green'>Approved</span>" 
+            : "<span class='badge bg-red'>Pending</span>") . 
+    "</td>
+    <td>{$row['remarks']}</td>
+</tr>";
+
+$order_item_query = "
+    SELECT oi.quantity, oi.price, i.item_name
+    FROM order_items oi
+    JOIN items i ON oi.item_id = i.id
+    WHERE oi.order_id = '{$row['id']}'
+";
+$order_item_result = mysqli_query($conn, $order_item_query);
+
+if (mysqli_num_rows($order_item_result) > 0) {
+    echo "<tr>
+                <td colspan='4'>";
+    while ($order_item_row = mysqli_fetch_assoc($order_item_result)) {
+        $item_name = $order_item_row['item_name'];
+        $quantity = $order_item_row['quantity'];
+        $price = $order_item_row['price'];
+        $total = $price * $quantity;
+
+        echo "<strong>{$item_name}</strong>  {$quantity} × " . number_format($price, 2) . " = " . number_format($total, 2). "<br>";
+    }
+                echo "</td>
+              </tr>";
+}
+
+
+
                             }
                         }
                         ?>

@@ -5,39 +5,41 @@ include 'header.php';
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    
 
-    if (isset($_POST['add_route'])) {
-        $route_name = $_POST['route_name'];
+    if (isset($_POST['add_item'])) {
+        $item_name = $_POST['item_name'];
         $status = $_POST['status'];
+        $price = $_POST['price'];
         $company_id = $_SESSION['company_id'];
-        $check_query = "SELECT id FROM routes WHERE route_name='$route_name'";
+        $check_query = "SELECT id FROM items WHERE item_name='$item_name'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
-            echo "<script>alert('Route name already exists'); window.location.href='routes.php';</script>";
+            echo "<script>alert('item name already exists'); window.location.href='items.php';</script>";
             exit();
         }
 
-        $query = "INSERT INTO routes (route_name, status, company_id) VALUES ('$route_name', '$status', '$company_id')";
+        $query = "INSERT INTO items (item_name, status, price, company_id) VALUES ('$item_name', '$status', '$price', '$company_id')";
         mysqli_query($conn, $query);
-        header("Location: routes.php");
+        header("Location: items.php");
         exit();
     }
-    if (isset($_POST['update_route'])) {
-        $route_id = $_GET['route_edit_id'];
-        $route_name = $_POST['route_name'];
+    if (isset($_POST['update_item'])) {
+        $item_id = $_GET['item_edit_id'];
+        $item_name = $_POST['item_name'];
+        $price = $_POST['price'];
         $status = $_POST['status'];
 
-        $check_query = "SELECT id FROM routes WHERE route_name='$route_name' AND id != '$route_id'";
+        $check_query = "SELECT id FROM items WHERE item_name='$item_name' AND id != '$item_id'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
-            echo "<script>alert('Route name already exists'); window.location.href='routes.php';</script>";
+            echo "<script>alert('item name already exists'); window.location.href='items.php';</script>";
             exit();
         }
 
-        $update_fields = "route_name='$route_name', status='$status'";
+        $update_fields = "item_name='$item_name', status='$status', price='$price'";
 
-        $query = "UPDATE routes SET $update_fields WHERE id='$route_id'";
+        $query = "UPDATE items SET $update_fields WHERE id='$item_id'";
         mysqli_query($conn, $query);
-        header("Location: routes.php");
+        header("Location: items.php");
         exit();
     }
     
@@ -54,8 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container">
 
         <div class="text-center" style="text-align: center; margin: 30px 0;">
-            <h2 style="font-weight: 300; font-size: 2rem;">Route List</h2>
-            <p style="color: #666;">Create and manage routes.</p>
+            <h2 style="font-weight: 300; font-size: 2rem;">Item List</h2>
+            <p style="color: #666;">Create and manage items.</p>
         </div>
 
         
@@ -66,27 +68,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
 
         <div class="glass-panel form-section">
-            <span class="section-title">New Route Add</span>
+            <span class="section-title">New Item Add</span>
             <form method="POST">
 
 
-                <?php if (isset($_GET['route_edit_id'])) {
-                    $route_edit_id = $_GET['route_edit_id'];
-                    $query = "SELECT * FROM routes WHERE id='$route_edit_id'";
+                <?php if (isset($_GET['item_edit_id'])) {
+                    $item_edit_id = $_GET['item_edit_id'];
+                    $query = "SELECT * FROM items WHERE id='$item_edit_id'";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
-                        $route_data = mysqli_fetch_assoc($result);
+                        $item_data = mysqli_fetch_assoc($result);
                     }
                 }
                 ?>
+                <div>
+                    <label>Item Name</label>
+                    <input type="text" placeholder="Item Name Unit [Jirasail KG]" name="item_name" value="<?php echo htmlspecialchars(isset($item_data['item_name']) ? $item_data['item_name'] : ''); ?>" required>
+                </div>
                 <div class="desktop-span-2">
                    <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
                   
-                    <div><label>Route Name</label><input type="text" placeholder="Route Name" name="route_name" value="<?php echo htmlspecialchars(isset($route_data['route_name']) ? $route_data['route_name'] : ''); ?>" required></div>
+                    
+                    <div><label>Price</label><input type="text" placeholder="Price" step="0.01" name="price" value="<?php echo htmlspecialchars(isset($item_data['price']) ? $item_data['price'] : ''); ?>"></div>
                     <div><label>Status</label>
                     <select name="status">
-                        <option value="1" <?php echo isset($route_data['status']) && $route_data['status'] == 1 ? 'selected' : ''; ?>>Active</option>
-                        <option value="0" <?php echo isset($route_data['status']) && $route_data['status'] == 0 ? 'selected' : ''; ?>>Inactive</option>
+                        <option value="1" <?php echo isset($item_data['status']) && $item_data['status'] == 1 ? 'selected' : ''; ?>>Active</option>
+                        <option value="0" <?php echo isset($item_data['status']) && $item_data['status'] == 0 ? 'selected' : ''; ?>>Inactive</option>
                     </select>
                 </div>
                     </div>
@@ -95,10 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 
                 <div class="form-actions">
-                    <?php if (isset($route_edit_id)) {
-                        echo '<button type="submit" name="update_route" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update Route</button>';
+                    <?php if (isset($item_edit_id)) {
+                        echo '<button type="submit" name="update_item" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update item</button>';
                     } else {
-                        echo '<button type="submit" name="add_route" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add Route</button>';
+                        echo '<button type="submit" name="add_item" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add item</button>';
                     }
 
                     ?>
@@ -114,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <div class="glass-panel printable">
             <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span class="section-title" style="margin:0;">All Routes</span>
+                <span class="section-title" style="margin:0;">All items</span>
                 <button onclick="window.print()" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.8rem;"><i class="fa-solid fa-print"></i></button>
             </div>
             
@@ -123,7 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Route Name</th>
+                            <th>Item Name</th>
+                            <th>Price</th>
                             <th>Status</th>
                            
                       
@@ -132,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </thead>
                     <tbody>
                         <?php
-                        $query = "SELECT * FROM routes WHERE company_id='{$_SESSION['company_id']}' ORDER BY id DESC";
+                        $query = "SELECT * FROM items WHERE company_id='{$_SESSION['company_id']}' ORDER BY id DESC";
                         $result = mysqli_query($conn, $query);
 
                         if (mysqli_num_rows($result) > 0) {
@@ -140,7 +148,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                               echo "
 <tr>
     <td>{$row['id']}</td>
-    <td>{$row['route_name']}</td>
+    <td>{$row['item_name']}</td>
+    <td>" . number_format($row['price'], 2) . "</td>
     <td>" . 
         ($row['status'] 
             ? "<span class='badge bg-green'>Active</span>" 
@@ -149,7 +158,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <td style='text-align: right;'>
         <i class='fa-solid fa-pen' 
            style='color: var(--warning); margin-right: 10px; cursor: pointer;' 
-           onclick=\"window.location.href='routes.php?route_edit_id={$row['id']}'\">
+           onclick=\"window.location.href='items.php?item_edit_id={$row['id']}'\">
         </i>
     </td>
 </tr>";

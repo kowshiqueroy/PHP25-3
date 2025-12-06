@@ -4,7 +4,7 @@ if(!isset($_SESSION['user_id'])) {
     header("Location: ..\index.php");
     exit;
 }
-if(isset($_SESSION['role']) && $_SESSION['role'] != 3) {
+if(isset($_SESSION['role']) && ($_SESSION['role'] != 3 && $_SESSION['role'] != 1)) {
     header("Location: ".$_SESSION['role']);
     exit;
  
@@ -13,10 +13,12 @@ if(isset($_SESSION['role']) && $_SESSION['role'] != 3) {
 $menuItems = [
     ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
      ['icon' => 'fa-clipboard', 'label' => 'Orders', 'link' => 'orders.php'],
+     //truck
+     ['icon' => 'fa-truck', 'label' => 'Serial', 'link' => 'serials.php'],
      ['icon' => 'fa-money-bill', 'label' => 'Cash', 'link' => 'cash.php'],
     ['icon' => 'fa-map', 'label' => 'Routes', 'link' => 'routes.php'],
       ['icon' => 'fa-store', 'label' => 'Shops', 'link' => 'shops.php'],
-    ['icon' => 'fa-box', 'label' => 'Items', 'link' => '#'],
+    ['icon' => 'fa-box', 'label' => 'Items', 'link' => 'items.php'],
       ['icon' => 'fa-question', 'label' => 'Survey', 'link' => '#'],
   //damage
     ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
