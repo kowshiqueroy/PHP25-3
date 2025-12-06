@@ -149,7 +149,11 @@ foreach ($unique_requested_ids as $req_id) {
             // Note: If same item appears twice due to diff prices, it shows up twice here too, which is correct
             $item_summary_parts = [];
             foreach($group['items'] as $itm) {
-                $item_summary_parts[] = $itm['item_name'] . " (" . $itm['quantity'] . ")";
+                $price_str = number_format($itm['price'], 2);
+                if (substr($price_str, -3) == '.00') {
+                    $price_str = substr($price_str, 0, -3);
+                }
+                $item_summary_parts[] =  $itm['item_name'] .   " (" . $itm['quantity'] . "@" . $price_str . ")";
             }
             $group['item_summary_str'] = implode(', ', $item_summary_parts);
             
