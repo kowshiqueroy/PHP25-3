@@ -198,9 +198,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <div>
                         <label>Company</label>
                         <select name="company_id" id="company_id" required>
-                            <option value="">Select Company</option>
+                           
                             <?php
-                            $query = "SELECT id, name FROM companies";
+                            $query = "SELECT id, name FROM companies ORDER BY id DESC";
                             $result = mysqli_query($conn, $query);
 
                             if (mysqli_num_rows($result) > 0) {

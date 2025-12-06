@@ -83,7 +83,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ?>
                 <div>
                     <label>Item Name</label>
-                    <input type="text" placeholder="Item Name Unit [Jirasail KG]" name="item_name" value="<?php echo htmlspecialchars(isset($item_data['item_name']) ? $item_data['item_name'] : ''); ?>" required>
+<input type="text"
+       pattern="^[A-Z\s]+(?:\d+\s)?\d+(?:KG|G|ML|L|BAG|CTN)$"
+       placeholder="Item Name Unit [e.g. JIRASAIL 50KG, MUSTARD OIL 1L, RICE 1BAG, BISCUIT 1CTN]"
+       id="item_name"
+       name="item_name"
+       value="<?php echo htmlspecialchars(isset($item_data['item_name']) ? $item_data['item_name'] : ''); ?>"
+       required>
+       
+       <script>
+                        // JavaScript function to validate Item Name input
+                      function validateItemName() {
+    const input = document.getElementById('item_name');
+    let value = input.value;
+
+    // Force uppercase, remove invalid chars
+    value = value.toUpperCase()
+                 .replace(/[^A-Z0-9\s]/g, '')  // allow only A-Z, digits, spaces
+                 .replace(/\s+/g, ' ')         // normalize spaces
+                 .trim();
+
+    input.value = value;
+
+    const pattern = /^[A-Z\s]+(?:\d+\s)?\d+(?:KG|G|ML|L|BAG|CTN)$/;
+    if (!pattern.test(value)) {
+        alert("Format must be like: JIRASAIL 50KG / BR 25KG / SWEET TOAST 25G / MUSTARD OIL 1L / RICE 1BAG / BISCUIT 1CTN");
+    }
+}
+
+document.getElementById('item_name').addEventListener('change', validateItemName);
+                    </script>
+                
+                
                 </div>
                 <div class="desktop-span-2">
                    <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">

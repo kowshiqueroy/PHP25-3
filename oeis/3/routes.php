@@ -82,8 +82,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="desktop-span-2">
                    <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
                   
-                    <div><label>Route Name</label><input type="text" placeholder="Route Name" name="route_name" value="<?php echo htmlspecialchars(isset($route_data['route_name']) ? $route_data['route_name'] : ''); ?>" required></div>
+                    <div><label>Route Name</label><input type="text"  id="route_name" placeholder="Route Name" name="route_name" value="<?php echo htmlspecialchars(isset($route_data['route_name']) ? $route_data['route_name'] : ''); ?>"
+                    pattern="[A-Z]+(?:\s[A-Z]+)?" required></div>
+
+                    
+                     <script>
+                        // JavaScript function to validate Route Name input
+                       
+
+                    function validateName() {
+                        const routeNameInput = document.getElementById('route_name');
+                        const routeName = routeNameInput.value;
+                        const pattern = /^[A-Z]+(?:\s[A-Z]+)?$/;
+
+                        if (!pattern.test(routeName)) {
+                            // If the input does not match the pattern, modify it
+                            routeNameInput.value = routeName.toUpperCase().replace(/[^A-Z\s]/g, '').replace(/\s+/g, ' ').trim();
+                        }
+                    }
+                     //onchange id = "route_name" calls this function
+                     document.getElementById('route_name').addEventListener('change', validateName);
+                </script>
+
+
+
+
+
                     <div><label>Status</label>
+
+
                     <select name="status">
                         <option value="1" <?php echo isset($route_data['status']) && $route_data['status'] == 1 ? 'selected' : ''; ?>>Active</option>
                         <option value="0" <?php echo isset($route_data['status']) && $route_data['status'] == 0 ? 'selected' : ''; ?>>Inactive</option>

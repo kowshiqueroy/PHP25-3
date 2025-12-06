@@ -83,7 +83,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="desktop-span-2">
                     <div class="col-1">
                         <label>Shop Details</label>
-                        <input type="text" placeholder="Shop Name Address Phone" name="shop_name" value="<?php echo htmlspecialchars(isset($shop_data['shop_name']) ? $shop_data['shop_name'] : ''); ?>" required>
+              <input type="text"
+       pattern="^[A-Z\s]+,\s[A-Z\s]+(?:,\s[A-Z\s]+)?\s\d{11}$"
+       placeholder="SHOP NAME, ADDRESS, DISTRICT 01765236683 or SHOP NAME, ADDRESS 01765236683"
+       id="shop_name"
+       name="shop_name"
+       value="<?php echo htmlspecialchars(isset($shop_data['shop_name']) ? $shop_data['shop_name'] : ''); ?>"
+       required>
+
+       <script>
+    function validateName() {
+    const input = document.getElementById('shop_name');
+    let value = input.value;
+
+    // Force uppercase, remove invalid chars
+    value = value.toUpperCase()
+                 .replace(/[^A-Z0-9,\s]/g, '')  // allow only A-Z, digits, commas, spaces
+                 .replace(/\s+/g, ' ')          // normalize spaces
+                 .trim();
+
+    input.value = value;
+
+    const pattern = /^[A-Z\s]+,\s[A-Z\s]+(?:,\s[A-Z\s]+)?\s\d{11}$/;
+    if (!pattern.test(value)) {
+        alert("Format must be: SHOP NAME, ADDRESS 017XXXXXXXXX or SHOP NAME, ADDRESS, DISTRICT 017XXXXXXXXX");
+    }
+}
+
+document.getElementById('shop_name').addEventListener('change', validateName);
+         </script>
+                   
                     </div>
                    <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
                   

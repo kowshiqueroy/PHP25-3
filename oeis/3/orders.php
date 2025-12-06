@@ -463,6 +463,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </thead>
                     <tbody>
                         <?php
+
+                        $ids='';
                       
 
                         
@@ -470,6 +472,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
+                                $ids .= $row['id'] . ",";
                                 $route_name_query = "SELECT route_name FROM routes WHERE id='{$row['route_id']}'";
                                 $route_name_result = mysqli_query($conn, $route_name_query);
                                 $route_name = mysqli_fetch_assoc($route_name_result)['route_name'];
@@ -523,7 +526,7 @@ if (isset($row['order_status']) && !is_null($row['order_status']) && $row['order
             ? "<span class='badge bg-green'>Approved</span>" 
             : "<span class='badge bg-red'>Pending</span>") . 
     "</td>
-    <td>{$row['remarks']}</td>
+    <td>{$row['remarks']} <i class='fa-solid fa-print' style='color: var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='invoices.php?order_ids={$row['id']}'\"></i></td>
 </tr>";
 
 $order_item_query = "
@@ -535,6 +538,7 @@ $order_item_query = "
 $order_item_result = mysqli_query($conn, $order_item_query);
 
 if (mysqli_num_rows($order_item_result) > 0) {
+    $inv_total = 0.00;
     echo "<tr>
                 <td colspan='4'>";
     while ($order_item_row = mysqli_fetch_assoc($order_item_result)) {
@@ -542,10 +546,11 @@ if (mysqli_num_rows($order_item_result) > 0) {
         $quantity = $order_item_row['quantity'];
         $price = $order_item_row['price'];
         $total = $price * $quantity;
+        $inv_total += $total;
 
         echo "<strong>{$item_name}</strong>  {$quantity} × " . number_format($price, 2) . " = " . number_format($total, 2). "<br>";
     }
-                echo "</td>
+                echo "<br> Total: " . number_format($inv_total, 2) . "</td>
               </tr>";
 }
 
@@ -559,7 +564,9 @@ if (mysqli_num_rows($order_item_result) > 0) {
             </div>
         </div>
 
-
+        <div style="text-align: center; margin-top: 10px;">
+<button onclick="window.location.href='invoices.php?order_ids=<?php echo rtrim($ids, ','); ?>'" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem; margin-top: 10px;"><i class="fa-solid fa-file-pdf"></i> Generate Report for Listed Orders</button>
+                    </div>
                             
 
 
