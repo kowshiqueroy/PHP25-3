@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $status = $_POST['status'];
         $price = $_POST['price'];
         $company_id = $_SESSION['company_id'];
-        $check_query = "SELECT id FROM items WHERE item_name='$item_name'";
+        $check_query = "SELECT id FROM items WHERE item_name='$item_name' AND company_id='$company_id'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
             echo "<script>alert('item name already exists'); window.location.href='items.php';</script>";
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $price = $_POST['price'];
         $status = $_POST['status'];
 
-        $check_query = "SELECT id FROM items WHERE item_name='$item_name' AND id != '$item_id'";
+        $check_query = "SELECT id FROM items WHERE item_name='$item_name' AND id != '$item_id' AND company_id='{$_SESSION['company_id']}'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
             echo "<script>alert('item name already exists'); window.location.href='items.php';</script>";

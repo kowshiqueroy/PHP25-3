@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $user_id = $_SESSION['user_id'];
         $status = $_POST['status'];
         $company_id = $_SESSION['company_id'];
-        $check_query = "SELECT id FROM shops WHERE shop_name='$shop_name'";
+        $check_query = "SELECT id FROM shops WHERE shop_name='$shop_name' AND company_id='$company_id'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
             echo "<script>alert('Shop name already exists'); window.location.href='shops.php';</script>";
@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $shop_name = $_POST['shop_name'];
         $status = $_POST['status'];
 
-        $check_query = "SELECT id FROM shops WHERE shop_name='$shop_name' AND id != '$shop_id'";
+        $check_query = "SELECT id FROM shops WHERE shop_name='$shop_name' AND id != '$shop_id' AND company_id='{$_SESSION['company_id']}'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
             echo "<script>alert('Shop name already exists'); window.location.href='shops.php';</script>";

@@ -269,7 +269,7 @@ if (isset($_GET['error'])) {
         <div class="brand-header">
             <i class="fa-solid fa-building logo-icon"></i>
             <div class="brand-name"><?php echo APP_NAME; ?> <span style="color:var(--primary)">App</span></div>
-            <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">Enterprice Information System</div>
+            <div style="font-size: 0.9rem; color: #666; margin-top: 5px;">Enterprise Information System</div>
         </div>
 
         <?php if(!empty($error_msg)): ?>

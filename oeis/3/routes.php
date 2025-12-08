@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $route_name = $_POST['route_name'];
         $status = $_POST['status'];
         $company_id = $_SESSION['company_id'];
-        $check_query = "SELECT id FROM routes WHERE route_name='$route_name'";
+        $check_query = "SELECT id FROM routes WHERE route_name='$route_name' AND company_id='$company_id'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
             echo "<script>alert('Route name already exists'); window.location.href='routes.php';</script>";
@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $route_name = $_POST['route_name'];
         $status = $_POST['status'];
 
-        $check_query = "SELECT id FROM routes WHERE route_name='$route_name' AND id != '$route_id'";
+        $check_query = "SELECT id FROM routes WHERE route_name='$route_name' AND id != '$route_id' AND company_id='{$_SESSION['company_id']}'";
         $check_result = mysqli_query($conn, $check_query);
         if (mysqli_num_rows($check_result) > 0) {
             echo "<script>alert('Route name already exists'); window.location.href='routes.php';</script>";

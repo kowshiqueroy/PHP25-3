@@ -12,21 +12,16 @@ if(isset($_SESSION['role']) && ($_SESSION['role'] != 3 && $_SESSION['role'] != 1
 // --- MENU DATA ---
 $menuItems = [
     ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
-     ['icon' => 'fa-clipboard', 'label' => 'Orders', 'link' => 'orders.php'],
-     //truck
-     ['icon' => 'fa-truck', 'label' => 'Serial', 'link' => 'serials.php'],
-     ['icon' => 'fa-money-bill', 'label' => 'Cash', 'link' => 'cash.php'],
+    ['icon' => 'fa-clipboard', 'label' => 'Orders', 'link' => 'orders.php'],
+    ['icon' => 'fa-truck', 'label' => 'Serial', 'link' => 'serials.php'],
+    ['icon' => 'fa-store', 'label' => 'Shops', 'link' => 'shops.php'],
+    ['icon' => 'fa-money-bill', 'label' => 'Cash', 'link' => 'cash.php'],
     ['icon' => 'fa-map', 'label' => 'Routes', 'link' => 'routes.php'],
-      ['icon' => 'fa-store', 'label' => 'Shops', 'link' => 'shops.php'],
     ['icon' => 'fa-box', 'label' => 'Items', 'link' => 'items.php'],
-      ['icon' => 'fa-question', 'label' => 'Survey', 'link' => '#'],
-  //damage
+    ['icon' => 'fa-question', 'label' => 'Survey', 'link' => '#'],
     ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
     ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
-   //gift
     ['icon' => 'fa-gift', 'label' => 'Brand Gift Promos', 'link' => '#'],
-   
-
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '..\logout.php'],
 ];
 ?>
@@ -35,7 +30,7 @@ $menuItems = [
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title><?=APP_NAME; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">

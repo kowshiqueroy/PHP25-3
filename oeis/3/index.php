@@ -4,10 +4,141 @@ include 'header.php';
 
 <div class="container">
 
-    <div class="text-center" style="text-align: center; margin: 30px 0;">
-        <h2 style="font-weight: 300; font-size: 2rem;">Welcome Back</h2>
-        <p style="color: #666;">Manage your company with modern, vibrant interface.</p>
+   
+
+  
+
+  <style>
+   
+
+    .targets-and-achievements {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 30px;
+      flex-wrap: wrap;
+      margin: 0 auto;
+      max-width: 900px;
+    }
+
+    .targets-and-achievements > div {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      padding: 20px 25px;
+      flex: 1;
+      min-width: 280px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .targets-and-achievements > div:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    }
+
+    .targets-and-achievements > div > p {
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: #444;
+      margin-bottom: 15px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 8px;
+    }
+
+    .targets-and-achievements > div > ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .targets-and-achievements > div > ul > li {
+      margin-bottom: 12px;
+      color: #555;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .targets-and-achievements > div > ul > li::before {
+      content: "✔";
+      position: absolute;
+      left: 0;
+      color: #4CAF50;
+      font-size: 0.9rem;
+    }
+  </style>
+
+   <div class="text-center" style="text-align: center; margin: 30px 0;">
+        <h2 style="font-weight: 300; font-size: 2rem;">🎯 Targets & Achievements</h2>
+       
     </div>
+
+  <!-- <h2 class="section-title"></h2> -->
+  <div class="targets-and-achievements">
+    <div>
+      <p>Demo Target List</p>
+      <ul>
+        <li>Increase sales by 15% in the next quarter</li>
+        <li>Reduce costs by 10% in the next quarter</li>
+        <li>Increase customer satisfaction by 20% in the next quarter</li>
+         <li>Reduce costs by 10% in the next quarter</li>
+        <li>Increase customer satisfaction by 20% in the next quarter</li>
+      </ul>
+      <div style="margin-top:20px; text-align:center;">
+        <button class="btn btn-primary" onclick="">See All</button>
+      </div>
+    </div>
+    <div>
+      <p>Demo Achievement List</p>
+      <ul>
+        <li>Increase sales by 10% in the next quarter</li>
+        <li>Reduce costs by 5% in the next quarter</li>
+        <li>Increase customer satisfaction by 15% in the next quarter</li>
+         <li>Reduce costs by 10% in the next quarter</li>
+        <li>Increase customer satisfaction by 20% in the next quarter</li>
+      </ul>
+      <div style="margin-top:20px; text-align:center;">
+        <button class="btn btn-primary" onclick="">See All</button>
+      </div>
+    </div>
+  </div>
+
+   <div class="text-center" style="text-align: center; margin: 30px 0;">
+        <h2 style="font-weight: 300; font-size: 2rem;"> 🎁 Gifts & Promotions</h2>
+       
+    </div>
+
+  <!-- <h2 class="section-title"></h2> -->
+  <div class="targets-and-achievements">
+    <div>
+      <p>Demo Gift List</p>
+      <ul>
+        <li>Increase sales by 15% in the next quarter</li>
+        <li>Reduce costs by 10% in the next quarter</li>
+        <li>Increase customer satisfaction by 20% in the next quarter</li>
+         <li>Reduce costs by 10% in the next quarter</li>
+        <li>Increase customer satisfaction by 20% in the next quarter</li>
+      </ul>
+      <div style="margin-top:20px; text-align:center;">
+        <button class="btn btn-primary" onclick="">See All</button>
+      </div>
+    </div>
+    <div>
+      <p>Demo Promotion List</p>
+      <ul>
+        <li>Increase sales by 10% in the next quarter</li>
+        <li>Reduce costs by 5% in the next quarter</li>
+        <li>Increase customer satisfaction by 15% in the next quarter</li>
+         <li>Reduce costs by 10% in the next quarter</li>
+        <li>Increase customer satisfaction by 20% in the next quarter</li>
+      </ul>
+      <div style="margin-top:20px; text-align:center;">
+        <button class="btn btn-primary" onclick="">See All</button>
+      </div>
+    </div>
+  </div>
+
 
 
     <div class="box" style="display:flex; justify-content:center; align-items:center; margin:30px auto; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border-radius: 12px; padding: 20px; background-color: #fff;">
