@@ -322,7 +322,7 @@ if (isset($_GET['error'])) {
                 <strong><?= DEVELOPER_NAME; ?></strong>
             </div>
             <div class="dev-tag">V <?= VERSION_NAME; ?></div><br>
-             <div onClick="window.location.href='offline.php'" class="dev-tag-offline">Offline Order</div>
+             <!-- <div onClick="window.location.href='offline.php'" class="dev-tag-offline">Offline Order</div> -->
         </div>
     </div>
 
