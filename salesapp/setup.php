@@ -19,7 +19,7 @@ if ($res) {
     if ($row && isset($row['count']) && $row['count'] == 0) {
         $default_user = 'admin';
         $default_pass = password_hash('admin123', PASSWORD_DEFAULT);
-        echo "Inserting default admin user...\n";
+        echo "Inserting default admin user.../n";
         echo $default_pass . "\n";
         $role = 1; // Admin role
         $stmt = $conn->prepare("INSERT INTO user (username, password, role) VALUES (?, ?, ?)");
@@ -30,7 +30,7 @@ if ($res) {
         }
 
         echo "Default admin user inserted successfully.\n";
-        echo "Inserting default user with role 0...\n";
+        echo "Inserting default user with role 0.../n";
         $default_user = 'user';
         $default_pass = password_hash('user123', PASSWORD_DEFAULT);
         $role = 0; // User role

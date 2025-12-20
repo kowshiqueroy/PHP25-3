@@ -1,17 +1,33 @@
 <?php
 /* DB Config */
 define('DB_HOST', 'localhost');
-define('DB_NAME', 'oeis');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+if ($_SERVER['SERVER_NAME'] != "localhost" && strpos($_SERVER['SERVER_NAME'], "free.app") === false)
+{
+    define('DB_NAME', 'u312077073_app');
+    define('DB_USER', 'u312077073_app');
+    define('DB_PASS', 'KR5877kush');
+}
+else
+{
+    define('DB_NAME', 'oeis');
+    define('DB_USER', 'root');
+    define('DB_PASS', '');
+}
 define('DB_CHARSET', 'utf8mb4');
 /* App Info */
 define('APP_NAME', 'Ovijat EIS');
 define('DEVELOPER_NAME', 'Kowshique Roy');
 define('VERSION_NAME', '2.3.1');
-$dev_mode = 1; // 1 = ON, 0 = OFF
-if ($dev_mode) {
-echo '
+session_start();
+date_default_timezone_set('Asia/Dhaka');
+
+$live_td = strtotime('2025-12-20 15:00:00');
+if ($live_td > time())
+    
+    
+    
+    {
+    echo '
 <style>
 body {
     margin: 0;
@@ -87,19 +103,8 @@ echo '<div class="msg-box">
         <span class="rocket">🚀</span> Working on Server Side <br>  Under Development Mode<br><br>
         <small>App: ' . APP_NAME . ' | Developer: ' . DEVELOPER_NAME . ' | Version: ' . VERSION_NAME . '<br>Please Wait for a while</small>
       
-        <small id="countdown"></small>
-        <script>
-            var countDownDate = new Date("December 20, 2025 17:00:00").getTime();
-            var x = setInterval(function() {
-                var now = new Date().getTime();
-                var distance = countDownDate - now;
-                var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                document.getElementById("countdown").innerHTML ="Live: " + days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-            }, 1000);
-        </script>
+        <small id="countdown">'. date("F j, Y, g:i a", $live_td).'</small>
+       
       </div>';
 
 exit;
@@ -115,11 +120,6 @@ if ($conn->connect_error) {
           </div>';
     exit;
 }
-
-
-
-session_start();
-date_default_timezone_set('Asia/Dhaka');
 
 
 ?>

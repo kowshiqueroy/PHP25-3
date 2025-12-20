@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <option value="">Select Role</option>
                             <option value="0" <?php if (isset($user_data) && $user_data['role'] == 0) echo 'selected'; ?>>Admin</option>
                             <option value="1" <?php if (isset($user_data) && $user_data['role'] == 1) echo 'selected'; ?>>Manager</option>
-                            <option value="2" <?php if (isset($user_data) && $user_data['role'] == 2) echo 'selected'; ?>>Viewer</option>
+                            <option value="9" <?php if (isset($user_data) && $user_data['role'] == 9) echo 'selected'; ?>>Viewer</option>
                             <option value="3" <?php if (isset($user_data) && $user_data['role'] == 3) echo 'selected'; ?>>SR</option>
                             <option value="4" <?php if (isset($user_data) && $user_data['role'] == 4) echo 'selected'; ?>>Store</option>
                         

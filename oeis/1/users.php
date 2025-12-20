@@ -3,19 +3,7 @@ include 'header.php';
 ?>
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['add_company'])) {
-        $name = $_POST['name'];
-        $address = $_POST['address'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $website = $_POST['website'];
-        $logo = $_POST['logo'];
 
-        $query = "INSERT INTO companies (name, address, phone, email, website, logo) VALUES ('$name', '$address', '$phone', '$email', '$website', '$logo')";
-        mysqli_query($conn, $query);    
-        header("Location: users.php");
-        exit();
-    }
 
     if (isset($_POST['add_user'])) {
         $username = $_POST['username'];
@@ -61,20 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: users.php");
         exit();
     }
-    if (isset($_POST['update_company'])) {
-        $company_id = $_GET['company_edit_id'];
-        $name = $_POST['name'];
-        $address = $_POST['address'];
-        $phone = $_POST['phone'];
-        $email = $_POST['email'];
-        $website = $_POST['website'];
-        $logo = $_POST['logo'];
 
-        $query = "UPDATE companies SET name='$name', address='$address', phone='$phone', email='$email', website='$website', logo='$logo' WHERE id='$company_id'";
-        mysqli_query($conn, $query);
-        header("Location: users.php");
-        exit();
-    }
 }
 ?>
     <div class="print-header">
@@ -92,90 +67,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         
         
-        <div class="glass-panel form-section">
-            <span class="section-title">New Company Add</span>
-
-            
-
-
-            <form method="POST">
-                <?php
-                if (isset($_GET['company_edit_id'])) {
-                    $company_edit_id = $_GET['company_edit_id'];
-                    $query = "SELECT * FROM companies WHERE id='$company_edit_id'";
-                    $result = mysqli_query($conn, $query);
-                    if (mysqli_num_rows($result) > 0) {
-                        $company_data = mysqli_fetch_assoc($result);
-                    }
-                }
-                ?>
-                <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
-                  
-                    <div><label>Name</label><input type="text" placeholder="Company Name" name="name" value="<?php echo htmlspecialchars(isset($company_data['name']) ? $company_data['name'] : ''); ?>" required></div>
-                    <div><label>Address</label><input type="text" placeholder="Address" name="address" value="<?php echo htmlspecialchars(isset($company_data['address']) ? $company_data['address'] : ''); ?>" ></div>
-                    <div><label>Phone</label><input type="text" placeholder="Phone Number" name="phone" value="<?php echo htmlspecialchars(isset($company_data['phone']) ? $company_data['phone'] : ''); ?>"></div>
-                    <div><label>Email</label><input type="email" placeholder="Email Address" name="email" value="<?php echo htmlspecialchars(isset($company_data['email']) ? $company_data['email'] : ''); ?>"></div> 
-                    <div><label>Website</label><input type="text" placeholder="Company Website" name="website" value="<?php echo htmlspecialchars(isset($company_data['website']) ? $company_data['website'] : ''); ?>"></div>
-                    <div><label>Logo</label><input type="text" placeholder="Logo URL" name="logo" value="<?php echo htmlspecialchars(isset($company_data['logo']) ? $company_data['logo'] : ''); ?>"></div>
-                </div>
-                
-                <div class="form-actions">
-                    <?php
-                    if (isset($company_edit_id)) {
-                        echo '<button type="submit" name="update_company" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update Company</button>';
-                    } else {
-                        echo '<button type="submit" name="add_company" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add Company</button>';
-                    }
-                    ?>
-                </div>
-                 
-            </form>
-
-
-        </div>
-
+        
         
 
-        <div class="glass-panel printable">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span class="section-title" style="margin:0;">All Company</span>
-                <button onclick="window.print()" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.8rem;"><i class="fa-solid fa-print"></i></button>
-            </div>
-            
-            <div class="table-responsive">
-                <table class="table-simple">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Address</th>
-                            <th>Phone</th>
-                            <th>Email</th>
-                            <th>Website</th>
-                            <th>Logo</th>
-                            <th style="text-align: right;">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $query = "SELECT * FROM companies";
-                        $result = mysqli_query($conn, $query);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr><td>" . $row['id'] . "</td><td>" . $row['name'] . "</td><td>" . $row['address'] . "</td><td>" . $row['phone'] .
-                                 "</td><td>" . $row['email'] . "</td><td>" . $row['website'] . "</td><td><img src='" . $row['logo'] .
-                                  "' width='50' height='50'></td> <td style='text-align: right;'>
-                                 <i class='fa-solid fa-pen' style='color:var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='users.php?company_edit_id=" . $row['id'] . "'\"><i></i>
-                               
-                            </td></tr>";
-                            }
-                        }
-                        ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+       
 
 
         
@@ -197,19 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="desktop-span-2">
                       <div>
                         <label>Company</label>
-                        <select name="company_id" id="company_id" required>
-                            <option value="">Select Company</option>
-                            <?php
-                            $query = "SELECT id, name FROM companies";
-                            $result = mysqli_query($conn, $query);
-
-                            if (mysqli_num_rows($result) > 0) {
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo "<option value='" . $row['id'] . "'" . (isset($user_data) && $user_data['company_id'] == $row['id'] ? 'selected' : '') . ">" . $row['name'] . "</option>";
-                                }
-                            }
-                            ?>
-                        </select>
+                        <input type="text" readonly placeholder="Company ID" name="company_id" value="<?php echo htmlspecialchars(isset($user_data['company_id']) ? $user_data['company_id'] : $_SESSION['company_id']); ?>" required>
                     </div>
                 </div>
                 <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
@@ -220,9 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <label>Role</label>
                         <select name="role" required>
                             <option value="">Select Role</option>
-                            <option value="0" <?php if (isset($user_data) && $user_data['role'] == 0) echo 'selected'; ?>>Admin</option>
+                            <option value="0" disabled <?php if (isset($user_data) && $user_data['role'] == 0) echo 'selected'; ?>>Admin</option>
                             <option value="1" <?php if (isset($user_data) && $user_data['role'] == 1) echo 'selected'; ?>>Manager</option>
-                            <option value="2" <?php if (isset($user_data) && $user_data['role'] == 2) echo 'selected'; ?>>Viewer</option>
+                            <option value="9" <?php if (isset($user_data) && $user_data['role'] == 9) echo 'selected'; ?>>Viewer</option>
                             <option value="3" <?php if (isset($user_data) && $user_data['role'] == 3) echo 'selected'; ?>>SR</option>
                             <option value="4" <?php if (isset($user_data) && $user_data['role'] == 4) echo 'selected'; ?>>Store</option>
                         
@@ -279,13 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </thead>
                     <tbody>
                         <?php
-                        $query = "SELECT * FROM users";
+                        $query = "SELECT * FROM users WHERE role != 0 AND company_id='{$_SESSION['company_id']}' ORDER BY id DESC";
                         $result = mysqli_query($conn, $query);
 
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 echo "<tr><td>" . $row['id'] . "</td><td>" . $row['username'] . "</td><td>" . $row['company_id'] . "</td><td>" . $row['role'] .
-                                 "</td><td>" . $row['status'] . "</td><td>" . $row['created_at'] . "</td> <td  style='text-align: right;'>
+                                 "</td><td>" . $row['status'] . " LL: ". $row['last_login'] . "</td><td>" . $row['created_at'] . "</td> <td  style='text-align: right;'>
                                 <i class='fa-solid fa-pen' style='color:var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='users.php?user_edit_id=" . $row['id'] . "'\"><i></i>
                                 </td></tr>";
                             }

@@ -1,5 +1,5 @@
 <?php
-include '..\config.php';
+include '../config.php';
 
 if (isset($_GET['route_id'])) {
     $route_id = $_GET['route_id'];

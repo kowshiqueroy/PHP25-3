@@ -5,7 +5,7 @@
 require_once 'config/config.php';
 
 echo "<pre>";
-echo "Attempting to set up the database...\n";
+echo "Attempting to set up the database.../n";
 
 try {
     // Connect to MySQL server without specifying a database

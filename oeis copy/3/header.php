@@ -1,7 +1,7 @@
 <?php
-require_once '..\config.php';
+require_once '../config.php';
 if(!isset($_SESSION['user_id'])) {
-    header("Location: ..\index.php");
+    header("Location: ../index.php");
     exit;
 }
 if(isset($_SESSION['role']) && $_SESSION['role'] != 3) {
@@ -28,7 +28,7 @@ $menuItems = [
     //branding
     ['icon' => 'fa-palette', 'label' => 'Branding', 'link' => '#'],
 
-    ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '..\logout.php'],
+    ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '../logout.php'],
 ];
 ?>
 
@@ -40,7 +40,7 @@ $menuItems = [
     <title><?=APP_NAME; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="..\style.css">
+    <link rel="stylesheet" href="../style.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

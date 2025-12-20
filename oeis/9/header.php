@@ -4,7 +4,7 @@ if(!isset($_SESSION['user_id'])) {
     header("Location: ../index.php");
     exit;
 }
-if(isset($_SESSION['role']) && ($_SESSION['role'] != 3)) {
+if(isset($_SESSION['role']) && $_SESSION['role'] != 9) {
     header("Location: ".$_SESSION['role']);
     exit;
  
@@ -12,16 +12,9 @@ if(isset($_SESSION['role']) && ($_SESSION['role'] != 3)) {
 // --- MENU DATA ---
 $menuItems = [
     ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
-    ['icon' => 'fa-clipboard', 'label' => 'Orders', 'link' => 'orders.php'],
-    ['icon' => 'fa-truck', 'label' => 'Serial', 'link' => 'serials.php'],
-    ['icon' => 'fa-store', 'label' => 'Shops', 'link' => 'shops.php'],
-    ['icon' => 'fa-money-bill', 'label' => 'Cash', 'link' => 'cash.php'],
-    ['icon' => 'fa-map', 'label' => 'Routes', 'link' => 'routes.php'],
-    ['icon' => 'fa-box', 'label' => 'Items', 'link' => 'items.php'],
-    ['icon' => 'fa-question', 'label' => 'Survey', 'link' => '#'],
-    ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
-    ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
-    ['icon' => 'fa-gift', 'label' => 'Brand Gift Promos', 'link' => '#'],
+    ['icon' => 'fa-location-dot', 'label' => 'locations', 'link' => 'locations.php'],
+    ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => 'reports.php'],
+     ['icon' => 'fa-store', 'label' => 'Shops', 'link' => 'shops.php'],
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '../logout.php'],
 ];
 ?>
@@ -30,7 +23,7 @@ $menuItems = [
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?=APP_NAME; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -38,14 +31,17 @@ $menuItems = [
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    
+    
 </head>
 <body>
- <div class="loading-logo">
+
+    <div class="loading-logo">
         <img src="https://www.ovijatfood.com/images/logo.png" alt="Loading Logo">
     </div>
     
     <style>
-            .loading-logo {
+          .loading-logo {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -70,7 +66,7 @@ $menuItems = [
         }
     </style>
 
-     <script>
+    <script>
         var showTime = 500;
         var startTime = new Date().getTime();
         $(window).on('load', function() {
@@ -86,6 +82,7 @@ $menuItems = [
             }
         });
     </script>
+
     <header>
         <div class="app-name"><i class="fa-solid fa-building" style="color:var(--warning)"></i> <?php echo APP_NAME; ?> <span style="color:var(--primary)"> App</span></div>
         <div class="user-info">

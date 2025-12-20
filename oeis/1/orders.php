@@ -379,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               $company_id = $_SESSION['company_id'];
 
                         if (!isset($_GET['search_id']) && !isset($_GET['search_route_id']) && !isset($_GET['search_shop_id']) && !isset($_GET['search_status']) && !isset($_GET['date_from']) && !isset($_GET['date_to'])) {
-                        $query = "SELECT * FROM orders WHERE company_id='$company_id' AND created_by='{$_SESSION['user_id']}'  ORDER BY id DESC LIMIT 5";
+                        $query = "SELECT * FROM orders WHERE company_id='$company_id'  ORDER BY id DESC LIMIT 5";
                         if (isset($_GET['show_all']) && $_GET['show_all'] == 1) {
                             $query = "SELECT * FROM orders WHERE company_id='$company_id'  ORDER BY id DESC";
                         }
@@ -388,7 +388,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     } else {
 
 
-                       $query = "SELECT * FROM orders WHERE company_id='$company_id' AND created_by='{$_SESSION['user_id']}'  ";
+                       $query = "SELECT * FROM orders WHERE company_id='$company_id'  ";
                         if (isset($_GET['search_id']) && $_GET['search_id'] !== '') {
                             $search_id = $_GET['search_id'];
                             $query .= " AND id='$search_id'";
@@ -530,7 +530,7 @@ if (isset($row['order_status']) && !is_null($row['order_status']) && $row['order
             ? "<span class='badge bg-green'>Approved</span>" 
             : "<span class='badge bg-red'>Pending</span>") . 
     "</td>
-    <td>{$row['remarks']} {$row['created_by']} <i class='fa-solid fa-print' style='color: var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='invoices.php?order_ids={$row['id']}'\"></i></td>
+    <td>{$row['remarks']}   <i class='fa-solid fa-print' style='color: var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='invoices.php?order_ids={$row['id']}'\"></i></td>
 </tr>";
 
 $order_item_query = "
@@ -554,7 +554,7 @@ if (mysqli_num_rows($order_item_result) > 0) {
 
         echo "<strong>{$item_name}</strong>  {$quantity} × " . number_format($price, 2) . " = " . number_format($total, 2). "<br>";
     }
-                echo "<br> Total: " . number_format($inv_total, 2) . "</td>
+                echo "<br> Total: <strong>" . number_format($inv_total, 2) . "</strong>/=  by [user:{$row['created_by']}]</td>
               </tr>";
 }
 
