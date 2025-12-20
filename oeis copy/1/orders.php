@@ -2,92 +2,93 @@
 include 'header.php';
 ?>
 <?php
-// if cash_approve_id is set, update the status to "approved"
-if (isset($_GET['cash_approve_id']) && !empty($_GET['cash_approve_id']) && is_numeric($_GET['cash_approve_id']) && $_GET['cash_approve_id'] > 0) {
-    //if user is not admin, redirect to $_SESSION['role'] == 1
-    if ($_SESSION['role'] != 1) {
-        echo "<script>alert('You are not authorized to Update.'); window.location.href='cash.php';</script>";
-        exit();
-    }
-    $cash_approve_id = $_GET['cash_approve_id'];
-    $update_query = "UPDATE cash_collections SET status='1', approved_at=NOW(),approved_by='" . $_SESSION['user_id'] . "' WHERE id='$cash_approve_id'";
-    mysqli_query($conn, $update_query);
-
-    //update the shop balance
-    $select_query = "SELECT * FROM cash_collections WHERE id='$cash_approve_id'";
-    $result = mysqli_query($conn, $select_query);
-    $row = mysqli_fetch_assoc($result);
-    $shop_id = $row['shop_id'];
-    $amount = $row['amount'];
-    $update_query = "UPDATE shops SET balance=balance+$amount WHERE id='$shop_id'";
-    mysqli_query($conn, $update_query);
-    header("Location: cash.php");
-    exit();
-}
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
    
 
-    if (isset($_POST['add_cash'])) {
+    if (isset($_POST['add_order'])) {
         $shop_id = $_POST['shop_id'];
         $route_id = $_POST['route_id'];
-        $amount = $_POST['amount'];
+        $order_date = $_POST['order_date'];
+        $delivery_date = $_POST['delivery_date'];
+        $order_status = $_POST['order_status'];
         $user_id = $_SESSION['user_id'];
         $status = $_POST['status'];
         $company_id = $_SESSION['company_id'];
         $remarks = $_POST['remarks'];
+        $latitude = $_POST['latitude'];
+        $longitude = $_POST['longitude'];
        
 
-        $query = "INSERT INTO cash_collections (shop_id, route_id, amount, collected_by, collection_date, status, company_id, remarks) 
-        VALUES ('$shop_id', '$route_id', '$amount', '$user_id', NOW(), '$status', '$company_id', '$remarks')";
-        mysqli_query($conn, $query);
-
-    
-
-
-        header("Location: cash.php");
+        $query = "INSERT INTO orders (shop_id, route_id, order_date, delivery_date, order_status, created_by, created_at, status, company_id, remarks, latitude, longitude) 
+        VALUES ('$shop_id', '$route_id', '$order_date', '$delivery_date', '$order_status', '$user_id', NOW(), '$status', '$company_id', '$remarks', '$latitude', '$longitude')";
+        if (mysqli_query($conn, $query) === TRUE) {
+             //get the id
+        $order_id = $conn->insert_id;
+        header("Location: order_item.php?order_id=$order_id");
         exit();
+            exit();
+        } else {
+            echo "<script>alert('An error occurred. Please try again.'); window.location.href='orders.php';</script>";
+            exit();
+        }
+
+        // $update_balance_query = "UPDATE shops SET balance = balance + $amount WHERE id = $shop_id";
+        // mysqli_query($conn, $update_balance_query);
+
+      
     }
-    if (isset($_POST['update_cash'])) {
-        $cash_id = $_GET['cash_edit_id'];
-        $amount = $_POST['amount'];
+    if (isset($_POST['update_order'])) {
+        $order_id = $_GET['order_edit_id'];
+        $order_date = $_POST['order_date'];
+        $delivery_date = $_POST['delivery_date'];
+        $order_status = $_POST['order_status'];
         $shop_id = $_POST['shop_id'];
         $route_id = $_POST['route_id'];
         $status = $_POST['status'];
 
         //check if approved
-        $approval_check_query = "SELECT approved_at FROM cash_collections WHERE id = '$cash_id'";
+        $approval_check_query = "SELECT order_status FROM orders WHERE id = '$order_id'";
         $approval_check_result = mysqli_query($conn, $approval_check_query);
         $approval_check_row = mysqli_fetch_assoc($approval_check_result);
-        $approved_at = $approval_check_row['approved_at'];
-        if ($approved_at != null) {
-            echo "<script>alert('This cash collection has already been approved.'); window.location.href='cash.php';</script>";
+        $order_status = $approval_check_row['order_status'];
+        if ($order_status == 1) {
+            echo "<script>alert('This order  has already been approved.'); window.location.href='orders.php';</script>";
             exit();
         }
 
+        // $previous_amount_query = "SELECT amount FROM orders WHERE id = '$order_id'";
+        // $previous_amount_result = mysqli_query($conn, $previous_amount_query);
+        // $previous_amount_row = mysqli_fetch_assoc($previous_amount_result);
+        // $previous_amount = $previous_amount_row['amount'];
 
-        $update_fields = " shop_id='$shop_id', route_id='$route_id', amount='$amount', status='$status'";
-        $query = "UPDATE cash_collections SET $update_fields WHERE id='$cash_id'";
+        // $update_balance_query = "UPDATE shops SET balance = balance - '$previous_amount' + '$amount' WHERE id = $shop_id";
+        // mysqli_query($conn, $update_balance_query);
+
+        $update_fields = " shop_id='$shop_id', route_id='$route_id', order_date='$order_date', delivery_date='$delivery_date', order_status='$order_status', status='$status'";
+        $query = "UPDATE orders SET $update_fields WHERE id='$order_id'";
         mysqli_query($conn, $query);
 
-        header("Location: cash.php");
+        header("Location: orders.php");
         exit();
     }
     
 }
       
-
+ 
 ?>
     <div class="print-header">
            <h1><?php echo APP_NAME; ?> Report</h1>
-        <p>Generated by: <?php echo $_SESSION['user_id'] . "@".$_SESSION['username']. " | Company: " . $_SESSION['company_id']; ?> | Date: <?php echo date("Y-m-d"); ?></p>
+        <p>Generated by: <?php echo $_SESSION['user_id'] . "@".$_SESSION['username']. " | C: " .
+         $_SESSION['company_id']." ";?>| Date: <?php echo date("Y-m-d"); ?></p>
 
     </div>
+
 
     <div class="container">
 
         <div class="text-center" style="text-align: center; margin: 30px 0;">
-            <h2 style="font-weight: 300; font-size: 2rem;">Cash Collection List</h2>
-            <p style="color: #666;">Create and manage cash collection.</p>
+            <h2 style="font-weight: 300; font-size: 2rem;">Order  List</h2>
+            <p style="color: #666;">Create and manage order.</p>
         </div>
 
         
@@ -98,16 +99,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
 
         <div class="glass-panel form-section">
-            <span class="section-title">New Cash Collection Add</span>
+            <span class="section-title">New Order  Add</span>
             <form method="POST">
 
 
-                <?php if (isset($_GET['cash_edit_id'])) {
-                    $cash_edit_id = $_GET['cash_edit_id'];
-                    $query = "SELECT * FROM cash_collections WHERE id='$cash_edit_id'";
+                <?php if (isset($_GET['order_edit_id'])) {
+                    $order_edit_id = $_GET['order_edit_id'];
+                    $query = "SELECT * FROM orders WHERE id='$order_edit_id'";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
-                        $cash_data = mysqli_fetch_assoc($result);
+                        $order_data = mysqli_fetch_assoc($result);
                     }
                 }
                 ?>
@@ -122,7 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $result = mysqli_query($conn, $query);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    $selected = (isset($cash_data['route_id']) && $cash_data['route_id'] == $row['id']) ? 'selected' : '';
+                                    $selected = (isset($order_data['route_id']) && $order_data['route_id'] == $row['id']) ? 'selected' : '';
                                     echo "<option value='" . $row['id'] . "' $selected>" . $row['route_name'] . "</option>";
                                 }
                             }
@@ -147,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $result = mysqli_query($conn, $query);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
-                                    $selected = (isset($cash_data['shop_id']) && $cash_data['shop_id'] == $row['id']) ? 'selected' : '';
+                                    $selected = (isset($order_data['shop_id']) && $order_data['shop_id'] == $row['id']) ? 'selected' : '';
                                     echo '<option value="' . $row['id'] . '" ' . $selected . '>' . $row['shop_name'] . '</option>';
                                 }
                             }
@@ -198,11 +199,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     
                    <div class="grid-layout desktop-4" style="grid-template-columns: 1fr 1fr;">
                   
-                    <div><label>Amount</label>
-                    <input type="number" step="0.01" placeholder="Amount" name="amount" value="<?php echo htmlspecialchars(isset($cash_data['amount']) ? $cash_data['amount'] : ''); ?>" required>
-
-                    
+                    <div>
+                    <label>Order Date</label>
+                    <input type="date" class="form-control" id="order_date" name="order_date" value="<?php echo htmlspecialchars(isset($order_data['order_date']) ? $order_data['order_date'] : date('Y-m-d')); ?>" required>
                     </div>
+                    <div>
+                    <label>Delivery Date</label>
+                    <input type="date" class="form-control" id="delivery_date" name="delivery_date" value="<?php echo htmlspecialchars(isset($order_data['delivery_date']) ? $order_data['delivery_date'] : date('Y-m-d', strtotime('+1 days'))); ?>" required>
+                    </div>
+                    
+                    <div><label>Order Status</label>
+                    <select name="order_status">
+                        <option value="0" <?php echo isset($shop_data['status']) && $shop_data['status'] == 0 ? 'selected' : ''; ?>>Draft</option>
+                        <option value="1" <?php echo isset($shop_data['status']) && $shop_data['status'] == 1 ? 'selected' : ''; ?>>Confirmed</option>
+
+                    </select>
+                </div>
                     <div><label>Status</label>
                     <select name="status">
                         <option value="1" <?php echo isset($shop_data['status']) && $shop_data['status'] == 1 ? 'selected' : ''; ?>>Active</option>
@@ -216,8 +228,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   <div class="col-1">
                         <label>Remarks</label>
                         
-                        <input type="text" placeholder="Remarks" name="remarks" value="<?php echo htmlspecialchars(isset($cash_data['remarks']) ? $cash_data['remarks'] : ''); ?>">
+                        <input type="text" placeholder="Remarks" name="remarks" value="<?php echo htmlspecialchars(isset($order_data['remarks']) ? $order_data['remarks'] : ''); ?>">
                     </div>
+
+                    <input type="hidden" id="latitude" name="latitude" >
+                    <input type="hidden" id="longitude" name="longitude" >
+                    <script>
+                        function getLocation() {
+                            if (navigator.geolocation) {
+                                navigator.geolocation.getCurrentPosition(function(position) {
+                                function showError(error) {
+                                    alert('Error getting location: ' + error.message);
+                                }
+                                    document.getElementById("latitude").value = position.coords.latitude;
+                                    document.getElementById("longitude").value = position.coords.longitude;
+                                });
+                            }
+                        }
+                        getLocation();
+                    </script>
                 
 
 
@@ -226,10 +255,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 
                 <div class="form-actions">
-                    <?php if (isset($cash_edit_id)) {
-                        echo '<button type="submit" name="update_cash" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update Cash</button>';
+                    <?php if (isset($order_edit_id)) {
+                        echo '<button type="submit" name="update_order" class="btn btn-yellow"><i class="fa-solid fa-edit"></i> Update order</button>';
                     } else {
-                        echo '<button type="submit" name="add_cash" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add Cash</button>';
+                        echo '<button type="submit" name="add_order" class="btn btn-yellow"><i class="fa-solid fa-plus"></i> Add order</button>';
                     }
 
                     ?>
@@ -246,12 +275,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <form method="GET">
 
 
-                <?php if (isset($_GET['cash_edit_id'])) {
-                    $cash_edit_id = $_GET['cash_edit_id'];
-                    $query = "SELECT * FROM cash_collections WHERE id='$cash_edit_id'";
+                <?php if (isset($_GET['order_edit_id'])) {
+                    $order_edit_id = $_GET['order_edit_id'];
+                    $query = "SELECT * FROM orders WHERE id='$order_edit_id'";
                     $result = mysqli_query($conn, $query);
                     if (mysqli_num_rows($result) > 0) {
-                        $cash_data = mysqli_fetch_assoc($result);
+                        $order_data = mysqli_fetch_assoc($result);
                     }
                 }
                 ?>
@@ -273,7 +302,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <select name="search_route_id" >
                             <option value="">All Route</option>
                             <?php
-                            $query = "SELECT id, route_name FROM routes";
+                            $query = "SELECT id, route_name FROM routes WHERE status = 1 ORDER BY id DESC";
                             $result = mysqli_query($conn, $query);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -291,7 +320,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <select name="search_shop_id" >
                             <option value="">All Shop</option>
                             <?php
-                            $query = "SELECT id, shop_name FROM shops ORDER BY id DESC";
+                            $query = "SELECT id, shop_name FROM shops WHERE status = 1 ORDER BY id DESC";
                             $result = mysqli_query($conn, $query);
                             if (mysqli_num_rows($result) > 0) {
                                 while ($row = mysqli_fetch_assoc($result)) {
@@ -310,8 +339,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <div><label>Status</label>
                     <select name="search_status">
+                         <option value="">All</option>
                         <option value="1" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 1 ? 'selected' : ''; ?>>Active</option>
                         <option value="0" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 0 ? 'selected' : ''; ?>>Inactive</option>
+                        <option value="3" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 3 ? 'selected' : ''; ?>>Draft</option>
+                        <option value="4" <?php echo isset($_GET['search_status']) && $_GET['search_status'] == 4 ? 'selected' : ''; ?>>Confirmed</option>
+
                     </select>
                 </div>
                     </div>
@@ -320,7 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 
                 
                 <div class="form-actions">
-                   <button type="submit" name="search_cash" class="btn btn-green"><i class="fa-solid fa-search"></i> Search</button>
+                   <button type="submit" name="search_order" class="btn btn-green"><i class="fa-solid fa-search"></i> Search</button>
                 </div>
                  
              
@@ -330,9 +363,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
 
         <div class="glass-panel printable">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
-                <span class="section-title" style="margin:0;">All Cash Collection</span>
-                   <button onclick="window.location.href='cash.php?show_all=1'" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem;">Show All</button>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 15px; m">
+                <span class="section-title" style="margin:0;">All Order </span>
+                   <button onclick="window.location.href='orders.php?show_all=1'" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem;">Show All</button>
                    <button onclick="window.print()" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem;"><i class="fa-solid fa-file-pdf"></i> / <i class="fa-solid fa-print"></i></button>
      
             </div>
@@ -344,14 +377,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php
             $search_text='';
               $company_id = $_SESSION['company_id'];
-                        $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' AND collected_by='{$_SESSION['user_id']}' ORDER BY id DESC LIMIT 5";
+
+                        if (!isset($_GET['search_id']) && !isset($_GET['search_route_id']) && !isset($_GET['search_shop_id']) && !isset($_GET['search_status']) && !isset($_GET['date_from']) && !isset($_GET['date_to'])) {
+                        $query = "SELECT * FROM orders WHERE company_id='$company_id'  ORDER BY id DESC LIMIT 5";
                         if (isset($_GET['show_all']) && $_GET['show_all'] == 1) {
-                            $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' AND collected_by='{$_SESSION['user_id']}' ORDER BY id DESC";
+                            $query = "SELECT * FROM orders WHERE company_id='$company_id'  ORDER BY id DESC";
                         }
                         $result = mysqli_query($conn, $query);
                         
+                    } else {
 
-                       $query = "SELECT * FROM cash_collections WHERE company_id='$company_id' AND collected_by='{$_SESSION['user_id']}' ";
+
+                       $query = "SELECT * FROM orders WHERE company_id='$company_id'  ";
                         if (isset($_GET['search_id']) && $_GET['search_id'] !== '') {
                             $search_id = $_GET['search_id'];
                             $query .= " AND id='$search_id'";
@@ -386,14 +423,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (isset($_GET['search_status']) && $_GET['search_status'] !== '') {
                             $search_status = $_GET['search_status'];
-                            $query .= " AND status='$search_status'";
+                            if ($search_status == 3) {
+                                $query .= " AND order_status='0'";
+                            } else if ($search_status == 4) {
+                                $query .= " AND order_status='1'";
+                            } else {
+                                $query .= " AND status='$search_status'";
+                            }
                             $search_text .= " Status: $search_status";
                         }
                          if (isset($_GET['date_from']) && $_GET['date_from'] !== '' && isset($_GET['date_to']) && $_GET['date_to'] !== '') {
                             $date_from = $_GET['date_from'] . ' 00:00:00';
                             $date_to = $_GET['date_to']. ' 23:59:59';
-                            $query .= " AND collection_date BETWEEN '$date_from' AND '$date_to'";
-                            $search_text .= "Date Range: $date_from to $date_to";
+                            $query .= " AND order_date BETWEEN '$date_from' AND '$date_to'";
+                            $search_text .= " Date Range: $date_from to $date_to";
                         }
                     }
                         $query .= "  ORDER BY id DESC";
@@ -401,7 +444,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         if ($search_text != '') {
                             echo "<p class='badge bg-green' style='text-align: center; margin-bottom: 10px;' >Search Results for <b>$search_text</b></p>";
                         }
-
+                    }
 
             ?>
                 <table class="table-simple">
@@ -410,10 +453,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <th>ID</th>
                             <th>Route Name</th>
                             <th>Shop Name</th>
-                            <th>Amount</th>
+                            <th>Dates</th>
+                         
                            
-                            <th>Collection Date</th>
-                            <th>Status</th>
+                            <th class="print-hide">Status</th>
                            
                       
                             
@@ -424,6 +467,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </thead>
                     <tbody>
                         <?php
+
+                        $ids='';
                       
 
                         
@@ -431,6 +476,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
+                                $ids .= $row['id'] . ",";
                                 $route_name_query = "SELECT route_name FROM routes WHERE id='{$row['route_id']}'";
                                 $route_name_result = mysqli_query($conn, $route_name_query);
                                 $route_name = mysqli_fetch_assoc($route_name_result)['route_name'];
@@ -443,49 +489,77 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                               echo "
 <tr>
-    <td>{$row['id']}</td>
+    <td >{$row['id']}
+    <i class='fa-solid fa-box' 
+           style='color: green; margin-right: 10px; cursor: pointer;' 
+           onclick=\"window.location.href='order_item.php?order_id={$row['id']}'\">
+        </i>
+    
+    </td>
    
     <td>{$route_name}</td>
      <td>{$shop_name}</td>
     
-    <td>{$row['amount']}</td>
+    <td>{$row['order_date']} {$row['delivery_date']}</td>
 
-    <td>{$row['collection_date']}</td>
+
   
-    <td>" . 
+    <td class='print-hide' style='text-align: center;'>" . 
         ($row['status'] 
             ? "<span class='badge bg-green'>Active</span>" 
-            : "<span class='badge bg-red'>Inactive</span>") . 
+            : "<span class='badge bg-red'>Inactive</span>") . " <br>".
+        ($row['order_status'] 
+            ? "<span class='badge bg-green'>Confirmed</span>" 
+            : "<span class='badge bg-yellow'>Draft</span>") . " ".
+
     "</td>
-    <td style='text-align: right;' class='print-hide'>";
-if (isset($row['approved_at']) && !is_null($row['approved_at'])) {
-            echo "<i class='fa-solid fa-user' style='color: green; cursor: not-allowed;' title='Approved records cannot be edited.'></i>".$row['approved_by'];
+    <td style='text-align: right;' class='print-hide' >";
+if (isset($row['order_status']) && !is_null($row['order_status']) && $row['order_status'] == 1 ) {
+            echo "<i class='fa-solid fa-user' style='color: green; cursor: not-allowed;' title='Confirmed records cannot be edited.'></i>";
         } else {
     echo "
         <i class='fa-solid fa-pen' 
            style='color: var(--warning); margin-right: 10px; cursor: pointer;' 
-           onclick=\"window.location.href='cash.php?shop_name={$shop_name}& shop_id={$row['shop_id']}&cash_edit_id={$row['id']}'\">
+           onclick=\"window.location.href='orders.php?shop_name={$shop_name}& shop_id={$row['shop_id']}&order_edit_id={$row['id']}'\">
         </i>";}
 
         echo"
     </td>
-    <td style='text-align: center;'>" . 
+    <td >" . 
         (isset($row['approved_at']) && !is_null($row['approved_at'])
             ? "<span class='badge bg-green'>Approved</span>" 
-            : "<span class='badge bg-red'>Pending</span>");
-
-            if (!isset($row['approved_at']) || is_null($row['approved_at'])) {
-                echo " <i class='fa-solid fa-check-circle' 
-                style='color: green; margin-left: 10px; cursor: pointer;' 
-                onclick=\"if(confirm('Are you sure you want to approve this cash collection?')) { window.location.href='cash.php?cash_approve_id={$row['id']}'; }\" 
-                title='Approve Cash Collection'>
-             </i>";
-            }
-
-            echo
+            : "<span class='badge bg-red'>Pending</span>") . 
     "</td>
-    <td>{$row['remarks']}</td>
+    <td>{$row['remarks']}   <i class='fa-solid fa-print' style='color: var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='invoices.php?order_ids={$row['id']}'\"></i></td>
 </tr>";
+
+$order_item_query = "
+    SELECT oi.quantity, oi.price, i.item_name
+    FROM order_items oi
+    JOIN items i ON oi.item_id = i.id
+    WHERE oi.order_id = '{$row['id']}'
+";
+$order_item_result = mysqli_query($conn, $order_item_query);
+
+if (mysqli_num_rows($order_item_result) > 0) {
+    $inv_total = 0.00;
+    echo "<tr>
+                <td colspan='4'>";
+    while ($order_item_row = mysqli_fetch_assoc($order_item_result)) {
+        $item_name = $order_item_row['item_name'];
+        $quantity = $order_item_row['quantity'];
+        $price = $order_item_row['price'];
+        $total = $price * $quantity;
+        $inv_total += $total;
+
+        echo "<strong>{$item_name}</strong>  {$quantity} × " . number_format($price, 2) . " = " . number_format($total, 2). "<br>";
+    }
+                echo "<br> Total: <strong>" . number_format($inv_total, 2) . "</strong>/=  by [user:{$row['created_by']}]</td>
+              </tr>";
+}
+
+
+
                             }
                         }
                         ?>
@@ -494,7 +568,9 @@ if (isset($row['approved_at']) && !is_null($row['approved_at'])) {
             </div>
         </div>
 
-
+        <div style="text-align: center; margin-top: 10px;">
+<button onclick="window.location.href='invoices.php?order_ids=<?php echo rtrim($ids, ','); ?>'" class="btn btn-dark" style="padding: 5px 15px; font-size: 0.7rem; margin-top: 10px;"><i class="fa-solid fa-file-pdf"></i> Generate Report for Listed Orders</button>
+                    </div>
                             
 
 

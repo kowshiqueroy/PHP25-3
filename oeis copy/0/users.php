@@ -198,9 +198,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                       <div>
                         <label>Company</label>
                         <select name="company_id" id="company_id" required>
-                            <option value="">Select Company</option>
+                           
                             <?php
-                            $query = "SELECT id, name FROM companies";
+                            $query = "SELECT id, name FROM companies ORDER BY id DESC";
                             $result = mysqli_query($conn, $query);
 
                             if (mysqli_num_rows($result) > 0) {
@@ -222,7 +222,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <option value="">Select Role</option>
                             <option value="0" <?php if (isset($user_data) && $user_data['role'] == 0) echo 'selected'; ?>>Admin</option>
                             <option value="1" <?php if (isset($user_data) && $user_data['role'] == 1) echo 'selected'; ?>>Manager</option>
-                            <option value="2" <?php if (isset($user_data) && $user_data['role'] == 2) echo 'selected'; ?>>Viewer</option>
+                            <option value="9" <?php if (isset($user_data) && $user_data['role'] == 9) echo 'selected'; ?>>Viewer</option>
                             <option value="3" <?php if (isset($user_data) && $user_data['role'] == 3) echo 'selected'; ?>>SR</option>
                             <option value="4" <?php if (isset($user_data) && $user_data['role'] == 4) echo 'selected'; ?>>Store</option>
                         
@@ -273,6 +273,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <th>Role</th>
                             <th>Status</th>
                             <th>Created At</th>
+                            <th>Last Login</th>
                       
                             <th style="text-align: right;">Actions</th>
                         </tr>
@@ -284,8 +285,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
-                                echo "<tr><td>" . $row['id'] . "</td><td>" . $row['username'] . "</td><td>" . $row['company_id'] . "</td><td>" . $row['role'] .
-                                 "</td><td>" . $row['status'] . "</td><td>" . $row['created_at'] . "</td> <td  style='text-align: right;'>
+
+                                //get company name
+                                $company_query = "SELECT name FROM companies WHERE id='" . $row['company_id'] . "'";
+                                $company_result = mysqli_query($conn, $company_query);
+                                $company_row = mysqli_fetch_assoc($company_result);
+                                $company_name = $company_row['name'];
+                                echo "<tr><td>" . $row['id'] . "</td><td>" . $row['username'] . "</td><td>" . $company_name . "</td><td>" . $row['role'] .
+                                 "</td><td>" . $row['status'] . "</td><td>" . $row['created_at'] . "</td><td>" . $row['last_login'] . "</td> <td  style='text-align: right;'>
                                 <i class='fa-solid fa-pen' style='color:var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='users.php?user_edit_id=" . $row['id'] . "'\"><i></i>
                                 </td></tr>";
                             }

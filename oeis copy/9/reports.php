@@ -11,17 +11,9 @@ include 'header.php';
     <div class="container">
 
         <div class="text-center" style="text-align: center; margin: 30px 0;">
-            <h2 style="font-weight: 300; font-size: 2rem;">Welcome Back</h2>
-            <p style="color: #666;">Manage your data with our modern, vibrant interface.</p>
+            <h2 style="font-weight: 300; font-size: 2rem;">Welcome Back Viewer</h2>
+            <p style="color: #666;">View your Company data.</p>
         </div>
-
-        
-
-        
-
-        
-
-        
 
          <div class="glass-panel printable">
             <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
@@ -40,15 +32,12 @@ include 'header.php';
                             <th>Status</th>
                             <th>Created At</th>
                             <th>Last Login</th>
-                      
-                        
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         $query = "SELECT * FROM users ORDER BY last_login DESC";
                         $result = mysqli_query($conn, $query);
-
                         if (mysqli_num_rows($result) > 0) {
                             while ($row = mysqli_fetch_assoc($result)) {
 
@@ -66,11 +55,7 @@ include 'header.php';
                 </table>
             </div>
         </div>
-
     </div>
-
-   
-
 <?php
 include 'footer.php';
 ?>

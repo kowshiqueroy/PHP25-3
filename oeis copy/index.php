@@ -23,6 +23,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->close();
                 return;
             }
+            $last_login = date('Y-m-d H:i:s');
+           // echo "<script>alert('Login successful!');</script>";
+            $stmt = $conn->prepare("UPDATE users SET last_login = ? WHERE id = ?");
+            $stmt->bind_param("si", $last_login, $row['id']);
+            $stmt->execute();
+            $stmt->close();
            $status = $row['status'];
            $company_id = $row['company_id'];
            $role = $row['role'];
@@ -54,7 +60,7 @@ if (isset($_GET['error'])) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Login <?=APP_NAME; ?></title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -255,6 +261,16 @@ if (isset($_GET['error'])) {
             font-size: 0.65rem;
             letter-spacing: 1px;
         }
+        .dev-tag-offline {
+            display: inline-block;
+            margin-top: 5px;
+            background: red;
+            color: #fff;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -305,7 +321,8 @@ if (isset($_GET['error'])) {
                 Designed & Developed by<br>
                 <strong><?= DEVELOPER_NAME; ?></strong>
             </div>
-            <div class="dev-tag">V <?= VERSION_NAME; ?></div>
+            <div class="dev-tag">V <?= VERSION_NAME; ?></div><br>
+             <!-- <div onClick="window.location.href='offline.php'" class="dev-tag-offline">Offline Order</div> -->
         </div>
     </div>
 
@@ -322,6 +339,8 @@ if (isset($_GET['error'])) {
             this.classList.toggle('fa-eye-slash');
             this.classList.toggle('fa-eye');
         });
+     
     </script>
+    
 </body>
 </html>

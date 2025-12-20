@@ -13,11 +13,8 @@ if(isset($_SESSION['role']) && $_SESSION['role'] != 0) {
 $menuItems = [
     ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
     ['icon' => 'fa-users', 'label' => 'Users', 'link' => 'users.php'],
-    ['icon' => 'fa-clipboard-list', 'label' => 'Logs', 'link' => '#'],
-    ['icon' => 'fa-box-open', 'label' => 'Stock', 'link' => '#'],
-    ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
-    ['icon' => 'fa-gear', 'label' => 'Config', 'link' => '#'],
-    ['icon' => 'fa-bell', 'label' => 'Notify', 'link' => '#'],
+       ['icon' => 'fa-gear', 'label' => 'DB Manage', 'link' => 'dbmanage.php'],
+   
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '../logout.php'],
 ];
 ?>
@@ -38,7 +35,52 @@ $menuItems = [
     
 </head>
 <body>
+<div class="loading-logo">
+        <img src="https://www.ovijatfood.com/images/logo.png" alt="Loading Logo">
+    </div>
+    
+    <style>
+       .loading-logo {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            z-index: 99999999;
+            opacity: 0.5;
+        }
+        .loading-logo img {
+            width: 300px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 
+   <script>
+        var showTime = 500;
+        var startTime = new Date().getTime();
+        $(window).on('load', function() {
+            var endTime = new Date().getTime();
+            var timeElapsed = endTime - startTime;
+            if(timeElapsed < showTime) {
+                var timeLeft = showTime - timeElapsed;
+                setTimeout(function() {
+                    $(".loading-logo").fadeOut(200);
+                }, timeLeft);
+            } else {
+                $(".loading-logo").fadeOut(200);
+            }
+        });
+    </script>
     <header>
         <div class="app-name"><i class="fa-solid fa-building" style="color:var(--warning)"></i> <?php echo APP_NAME; ?> <span style="color:var(--primary)"> App</span></div>
         <div class="user-info">

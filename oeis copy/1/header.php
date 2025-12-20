@@ -4,7 +4,7 @@ if(!isset($_SESSION['user_id'])) {
     header("Location: ../index.php");
     exit;
 }
-if(isset($_SESSION['role']) && ($_SESSION['role'] != 3)) {
+if(isset($_SESSION['role']) && ($_SESSION['role'] != 3 && $_SESSION['role'] != 1)) {
     header("Location: ".$_SESSION['role']);
     exit;
  
@@ -22,6 +22,7 @@ $menuItems = [
     ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
     ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
     ['icon' => 'fa-gift', 'label' => 'Brand Gift Promos', 'link' => '#'],
+    ['icon' => 'fa-users', 'label' => 'Users', 'link' => 'users.php'],
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '../logout.php'],
 ];
 ?>
@@ -45,7 +46,7 @@ $menuItems = [
     </div>
     
     <style>
-            .loading-logo {
+       .loading-logo {
             display: flex;
             justify-content: center;
             align-items: center;
@@ -70,7 +71,7 @@ $menuItems = [
         }
     </style>
 
-     <script>
+   <script>
         var showTime = 500;
         var startTime = new Date().getTime();
         $(window).on('load', function() {

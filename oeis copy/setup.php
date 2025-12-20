@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS users (
     company_id INT(11) UNSIGNED,
     status TINYINT(1) NOT NULL DEFAULT 1,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_login TIMESTAMP NULL,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
@@ -74,9 +75,7 @@ CREATE TABLE IF NOT EXISTS orders (
     id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     route_id INT(11) UNSIGNED NOT NULL,
     shop_id INT(11) UNSIGNED NOT NULL,
-    user_id INT(11) UNSIGNED NOT NULL,
-    total DECIMAL(15,2) DEFAULT 0,
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    order_date DATE NOT NULL,
     delivery_date DATE NOT NULL,
     order_status TINYINT(1) DEFAULT 0,
     latitude DECIMAL(10,8),
@@ -92,7 +91,6 @@ CREATE TABLE IF NOT EXISTS orders (
     status TINYINT(1) DEFAULT 1,
     FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
     FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
@@ -105,13 +103,9 @@ CREATE TABLE IF NOT EXISTS order_items (
     item_id INT(11) UNSIGNED NOT NULL,
     quantity INT(11) NOT NULL,
     price DECIMAL(15,2) NOT NULL,
-    total DECIMAL(15,2) NOT NULL,
-    company_id INT(11) UNSIGNED NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TINYINT(1) DEFAULT 1,
     FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
 
@@ -166,6 +160,24 @@ CREATE TABLE IF NOT EXISTS market_surveys (
     status TINYINT(1) DEFAULT 1,
     FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
     FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
+    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+");
+
+//serials TABLE
+$conn->query("
+CREATE TABLE IF NOT EXISTS serials (
+    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    serial_name VARCHAR(255) NOT NULL,
+    order_ids VARCHAR(255) NOT NULL,
+    user_id INT(11) UNSIGNED NOT NULL,
+    company_id INT(11) UNSIGNED NOT NULL,
+    status TINYINT(1) DEFAULT 1,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_by INT(11) UNSIGNED,
+    printed_at TIMESTAMP NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
