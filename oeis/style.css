@@ -217,7 +217,7 @@
         @media print {
             body { background: white; padding: 0; }
             header, .nav-footer, .form-section, .btn, .popup-menu, .text-center { display: none !important; }
-            .container { max-width: 100%; width: 100%; padding: 0; }
+            .container { max-width: 100%; width: 100%; padding: 0; margin: auto; }
             
             /* Only show elements with class 'printable' */
             .glass-panel { 

@@ -151,8 +151,8 @@ function getAddressFromLatLng($lat, $lng) {
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>lat</th>
-                        <th>long</th>
+                        <th style='display: none'>lat</th>
+                        <th style='display: none'>long</th>
                         <th>User</th>
                         <th>Order</th>
                         <th>Location</th>
@@ -241,8 +241,8 @@ function getAddressFromLatLng($lat, $lng) {
 
                             echo "<tr>
                                     <td>" . $row['id'] ."<br>" . $user_name . " @ " . $row['created_at'].  "</td>
-                                    <td>" . $row ['latitude'] .  "</td>
-                                    <td>" . $row['longitude'] . "</td>
+                                    <td style='display: none'>" . $row ['latitude'] .  "</td>
+                                    <td style='display: none'>" . $row['longitude'] . "</td>
                                     <td>Order #" . $row['id'] . " - " . $company_name  . " [" . ($row['order_status'] ? "Confirmed" : "Pending") . "]<br>" . $route_name . " - " . $shop_name . "</td>
                                     <td>" . $items_text . "<br>" . $order_items_info . "</td>
                                     <td> <span id='address_" . $row['id'] . "'></span>
@@ -296,13 +296,15 @@ function getLocation(lat, lng, orderId) {
             </table>
         </div>
     </div>
-</div>
+
 
 <!-- Leaflet CSS -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<div class="glass-panel printable">
 <div style="text-align:center; margin:20px;">
   <button id="showMapBtn" style="padding:10px 20px; font-size:16px; cursor:pointer;">
     Show Map
@@ -312,8 +314,8 @@ function getLocation(lat, lng, orderId) {
   Order Tracking Map (Bangladesh)
 </div>
 
-<div id="map" style="height:600px; width:100%; margin-bottom:20px; display:none"></div>
-
+<div id="map" style="height:900px; width:100%; margin-bottom:20px; display:none"></div>
+</div>
 <script>
 document.getElementById("showMapBtn").addEventListener("click", () => {
     document.getElementById("map").style.display = "block";
@@ -401,7 +403,7 @@ function showMap() {
 </script>
 
 
-
+</div>
 
 <?php
 include 'footer.php';
