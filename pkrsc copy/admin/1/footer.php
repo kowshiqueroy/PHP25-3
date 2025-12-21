@@ -1,10 +1,12 @@
 
   <nav>
     <button onClick="window.location.href = 'index.php'">🏠</button>
-    <button onClick="window.location.href = 'index.php'">🛒</button>
-    <button onClick="window.location.href = 'index.php'">💰</button>
-    <button id="settingsBtn" ontouchstart="">⚙️</button>
-  </nav>
+    <button onClick="window.location.href = 'students.php'">👥</button>
+    <button onClick="window.location.href = 'print.php'">📑</button>
+    <button onClick="window.location.href = 'logout.php'">🔒</button>
+  
+
+ 
 
   <div class="dropdown" id="settingsDropdown">
     <button onClick="window.location.href = 'profile.php'">👨🏻‍💼Profile</button>
@@ -12,10 +14,10 @@
     <button onClick="window.location.href = 'items.php'">📦Items</button>
     <button onClick="window.location.href = 'stocks.php'">📈Stocks</button>
     <button onClick="window.location.href = 'balances.php'">💰Balances</button>
-    <button onClick="window.location.href = 'logout.php'">🔒Logout</button>
+  
     
   </div>
-
+</nav>
 <script>
   const settingsBtn = document.getElementById('settingsBtn');
   const dropdown = document.getElementById('settingsDropdown');

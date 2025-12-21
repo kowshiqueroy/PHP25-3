@@ -1,0 +1,120 @@
+/* admin/css/admin-style.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+    --sidebar-bg: #1e293b;   /* Dark Slate */
+    --sidebar-text: #cbd5e1;
+    --primary: #006a4e;      /* BD Green */
+    --accent: #3b82f6;       /* Blue */
+    --bg-light: #f1f5f9;
+    --white: #ffffff;
+    --sidebar-width: 260px;
+    --header-height: 60px;
+    --radius: 8px;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Roboto', sans-serif; background: var(--bg-light); display: flex; height: 100vh; overflow: hidden; }
+
+/* --- Sidebar --- */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100%;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+}
+.brand { padding: 20px; font-size: 1.2rem; font-weight: bold; color: white; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 10px; }
+.nav-links { list-style: none; padding: 0; margin: 20px 0; flex: 1; overflow-y: auto; }
+.nav-links a {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 25px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    transition: 0.2s;
+    font-size: 0.95rem;
+    border-left: 3px solid transparent;
+}
+.nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.05); color: white; border-left-color: var(--primary); }
+.nav-links i { width: 20px; text-align: center; }
+
+/* --- Main Content --- */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    transition: 0.3s;
+}
+
+/* --- Top Header --- */
+.top-header {
+    height: var(--header-height);
+    background: var(--white);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.toggle-btn { font-size: 1.2rem; cursor: pointer; color: #333; }
+.user-info { display: flex; align-items: center; gap: 10px; font-size: 0.9rem; font-weight: 500; }
+.avatar { width: 35px; height: 35px; background: var(--primary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+
+/* --- Page Content --- */
+.page-wrapper {
+    padding: 25px;
+    overflow-y: auto;
+    height: calc(100vh - var(--header-height));
+}
+
+/* --- Common Components --- */
+.card { background: white; border-radius: var(--radius); padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); margin-bottom: 20px; }
+.btn { padding: 8px 16px; border-radius: 4px; border: none; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: inline-block; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-danger { background: #ef4444; color: white; }
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #f8fafc; font-weight: 600; color: #475569; }
+
+/* --- Mobile Responsive --- */
+@media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.active { transform: translateX(0); }
+    .main-content { margin-left: 0; }
+    
+    /* Overlay when sidebar is open */
+    .overlay {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0,0,0,0.5); z-index: 900; display: none;
+    }
+    .overlay.active { display: block; }
+}
+
+/* Ensure main content doesn't get wider than the screen */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width)); /* Vital for preventing overflow */
+    overflow-x: hidden; /* Stops horizontal scroll on the body */
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        width: 100%; /* Full width on mobile */
+    }
+}
+
+.container form {
+    background: var(--white);
+    padding: 20px;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}

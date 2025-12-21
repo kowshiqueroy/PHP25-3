@@ -51,4 +51,5 @@ $conn->query("CREATE TABLE IF NOT EXISTS student (
     address VARCHAR(255) NOT NULL,
     photo VARCHAR(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
 ?>

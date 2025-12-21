@@ -700,7 +700,7 @@
 
     <nav class="main-nav">
         <div class="container">
-            <a href="#" class="logo">
+            <a href="index.php" class="logo">
                 <img src="logo.png" alt="লোগো">
                 <div class="logo-text">
                     <h1>পারভেজ খান রেসিডেন্সিয়াল স্কুল এন্ড কলেজ</h1>

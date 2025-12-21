@@ -1,12 +1,19 @@
 
   <nav>
     <button onClick="window.location.href = 'index.php'">🏠</button>
-    <button onClick="window.location.href = 'students.php'">👥</button>
-    <button onClick="window.location.href = 'print.php'">📑</button>
-    <button onClick="window.location.href = 'logout.php'">🔒</button>
+      <button onClick="window.location.href = 'logout.php'">🔒Logout</button>
+  
   </nav>
 
- 
+  <div class="dropdown" id="settingsDropdown">
+    <button onClick="window.location.href = 'profile.php'">👨🏻‍💼Profile</button>
+    <button onClick="window.location.href = 'shops.php'">🏪Shops</button>
+    <button onClick="window.location.href = 'items.php'">📦Items</button>
+    <button onClick="window.location.href = 'stocks.php'">📈Stocks</button>
+    <button onClick="window.location.href = 'balances.php'">💰Balances</button>
+  
+    
+  </div>
 
 <script>
   const settingsBtn = document.getElementById('settingsBtn');

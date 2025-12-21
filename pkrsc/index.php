@@ -1,118 +1,71 @@
-   <?php
-require_once 'header.php';
-?>
-    <main>
+<?php require 'includes/header.php'; ?>
 
-        <section id="hero">
-            <div class="hero-content">
-                <h2>শিক্ষাই জাতির মেরুদণ্ড</h2>
-                <p>একটি আদর্শ ও মানসম্মত শিক্ষা প্রতিষ্ঠান</p>
-                <a href="#admission" class="btn">ভর্তি তথ্য</a>
-            </div>
-        </section>
+<section class="hero">
+    <div class="container">
+        <h1 style="font-size: 2.5rem; margin-bottom: 10px;">স্বাগতম আমাদের শিক্ষা পরিবারে</h1>
+        <p style="font-size: 1.2rem; margin-bottom: 20px;">আমরা আধুনিক ও নৈতিক শিক্ষার সমন্বয়ে আগামীর নেতৃত্ব গড়ে তুলি</p>
+        <a href="admission.php" class="btn" style="background: var(--accent); color: #333; font-weight: bold;">
+            <i class="fas fa-user-plus"></i> এখনই ভর্তি হোন
+        </a>
+    </div>
+</section>
 
-        <section id="introduction" class="container">
-            <h2 class="section-title">আমাদের সম্পর্কে</h2>
+<div class="container">
+    <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+        
+        <div class="main-content">
             <div class="card">
-                <p>পারভেজ খান রেসিডেন্সিয়াল স্কুল এন্ড কলেজ, ২০১৮ সালে প্রতিষ্ঠিত, নীলফামারীর হাড়োয়া, দেবীর ডাঙ্গা এলাকায় অবস্থিত একটি স্বনামধন্য শিক্ষা প্রতিষ্ঠান। আমরা শিক্ষার্থীদের মেধা ও মননের বিকাশে অঙ্গীকারবদ্ধ। আধুনিক শিক্ষা উপকরণ, অভিজ্ঞ শিক্ষক মণ্ডলী এবং একটি শিক্ষাবান্ধব পরিবেশ নিশ্চিত করার মাধ্যমে আমরা প্রতিটি শিক্ষার্থীকে ভবিষ্যতের জন্য যোগ্য নাগরিক হিসেবে গড়ে তুলতে সচেষ্ট। আমাদের লক্ষ্য শুধু একাডেমিক সাফল্যই নয়, বরং মানবিক মূল্যবোধ সম্পন্ন মানুষ তৈরি করা।</p>
-            </div>
-        </section>
-
-        <section id="messages" class="container">
-            <div class="grid-2">
-                <div class="card message-card">
-                    <img src="p.jpg" alt="প্রতিষ্ঠাতা">
-                    <h4>মোঃ পারভেজ খান</h4>
-                    <p class="title">প্রতিষ্ঠাতা সভাপতি ও অধ্যক্ষ</p>
-                    <p>"শিক্ষার আলো প্রতিটি ঘরে পৌঁছে দেওয়াই আমাদের মূল লক্ষ্য। আমরা এমন একটি প্রজন্ম তৈরি করতে চাই যারা দেশ ও দশের কল্যাণে নিবেদিত প্রাণ হবে।"</p>
-                </div>
-                <div class="card message-card">
-                    <img src="p.png" alt="অধ্যক্ষ">
-                    <h4>-</h4>
-                    <p class="title">উপাধ্যক্ষ</p>
-                    <p>"শৃঙ্খলা, অধ্যবসায় এবং সৃজনশীলতাই সাফল্যের চাবিকাঠি। আমরা আমাদের শিক্ষার্থীদের এই মন্ত্রেই দীক্ষিত করি এবং তাদের সুপ্ত প্রতিভার বিকাশ ঘটাই।"</p>
+                <div style="display: flex; gap: 20px; align-items: center; flex-wrap: wrap; justify-content: center;">
+                    <div style="background: #ddd; width: 150px; height: 180px; flex-shrink: 0; border-radius: 4px;">
+                        </div>
+                    <div>
+                        <h2 style="color: var(--primary); text-align: center;">অধ্যক্ষের বাণী</h2>
+                        <p style="text-align: center;">আমরা আধুনিক ও নৈতিক শিক্ষার সমন্বয়ে আগামীর নেতৃত্ব গড়ে তুলি</p>
+                        <p style="color: var(--primary); font-weight: bold;  text-align: center;">নাম</p>
+                    </div>
                 </div>
             </div>
-        </section>
 
-        <section id="awards" class="container">
-            <div class="grid-2">
-                <div class="card award-card">
-                    <h3 class="section-title" style="font-size: 1.8rem; margin-bottom: 20px;">মাস সেরা শিক্ষক</h3>
-                    <img src="p.png" alt="মাস সেরা শিক্ষক">
-                    <h4>-</h4>
-                    <p>-</p>
-                    <p class="achievement">"শিক্ষার্থীদের মধ্যে গণিতের প্রতি ভালোবাসা তৈরি এবং উদ্ভাবনী পাঠদানের জন্য তিনি প্রশংসিত।"</p>
-                </div>
-                <div class="card award-card">
-                    <h3 class="section-title" style="font-size: 1.8rem; margin-bottom: 20px;">মাস সেরা শিক্ষার্থী</h3>
-                    <img src="p.png" alt="মাস সেরা শিক্ষার্থী">
-                    <h4>-</h4>
-                    <p>-</p>
-                    <p class="achievement">"শ্রেণীকক্ষে সর্বোচ্চ উপস্থিতি, দুর্দান্ত ফলাফল এবং সহ-শিক্ষা কার্যক্রমে অংশগ্রহণের জন্য নির্বাচিত।"</p>
+            <div class="card">
+                <h2 style="border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 15px;">আমাদের বৈশিষ্ট্যসমূহ</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> মাল্টিমিডিয়া ক্লাসরুম</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> আধুনিক কম্পিউটার ল্যাব</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> সিসি ক্যামেরা দ্বারা নিয়ন্ত্রিত</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> অভিজ্ঞ শিক্ষকমণ্ডলী</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> বিস্তৃত পাঠ্যক্রম</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> নিরাপদ পরিবেশ</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> বিভিন্ন ক্লাব</div>
+                    <div><i class="fas fa-check-circle" style="color: green;"></i> ইংরেজি চর্চা</div>
                 </div>
             </div>
-        </section>
+        </div>
 
-        
-
-        
-
-        <section id="anthem">
-            <div class="container">
-                <h2 class="section-title">জাতীয় সংগীত</h2>
-                <blockquote>
-                    আমার সোনার বাংলা, আমি তোমায় ভালোবাসি।<br>
-                    চিরদিন তোমার আকাশ, তোমার বাতাস, আমার প্রাণে বাজায় বাঁশি...
-                </blockquote>
-                <audio controls>
-                    <source src="demo_anthem.mp3" type="audio/mpeg">
-                    আপনার ব্রাউজার অডিও সাপোর্ট করে না।
-                </audio>
+        <aside>
+            <div class="card">
+                <h3 style="background: var(--secondary); color: white; padding: 10px; border-radius: 4px; text-align: center; margin-top: -35px; margin-bottom: 20px;">
+                    <i class="fas fa-bell"></i> নোটিশ বোর্ড
+                </h3>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                        <small style="color: #888;">১২ ডিসেম্বর ২০২৫</small><br>
+                        <a href="#" style="text-decoration: none; color: #333; font-weight: 600;">বার্ষিক পরীক্ষার রুটিন প্রকাশ</a>
+                    </li>
+                    <li style="border-bottom: 1px solid #eee; padding: 10px 0;">
+                        <small style="color: #888;">১০ ডিসেম্বর ২০২৫</small><br>
+                        <a href="#" style="text-decoration: none; color: #333; font-weight: 600;">শীতকালীন ছুটির বিজ্ঞপ্তি</a>
+                    </li>
+                </ul>
+                <a href="notice.php" class="btn" style="width: 100%; text-align: center; margin-top: 10px;">সকল নোটিশ</a>
             </div>
-        </section>
-
-        <section id="clubs" class="container">
-            <h2 class="section-title">সহ-শিক্ষা কার্যক্রম (ক্লাব)</h2>
-            <div class="clubs-grid">
-                <div class="club-card">
-                    <i class="fa-solid fa-computer"></i>
-                    <h4>বিজ্ঞান ক্লাব</h4>
-                    <h4>Science Club</h4>
-                    <p>বিজ্ঞান ও কম্পিউটার চর্চা</p>
-                    
-                </div>
-                <div class="club-card">
-                    <i class="fa-solid fa-comments"></i>
-                    <h4>ভাষা ও দক্ষতা ক্লাব</h4>
-                     <h4>Language and Skills Club</h4>
-                    <p>বাংলা, ইংরেজী, বিতর্ক, আবৃত্তি</p>
-                </div>
-                <div class="club-card">
-                    <i class="fa-solid fa-masks-theater"></i>
-                    <h4>সাংস্কৃতিক ক্লাব</h4>
-                    <h4>Cultural Club</h4>
-                    <p>নৃত্য, গান, নাটক, চিত্রাঙ্কন</p>
-                </div>
-                <div class="club-card">
-                    <i class="fa-solid fa-football"></i>
-                    <h4>ক্রীড়া ক্লাব</h4>
-                    <h4>Sports Club</h4>
-                    <p>ফুটবল, ক্রিকেট, ব্যাডমিন্টন</p>
-                </div>
+            
+            <div class="card" style="text-align: center;">
+                <h3>জরুরি হটলাইন</h3>
+                <h1 style="color: var(--secondary);">999</h1>
             </div>
-        </section>
+        </aside>
 
-        
-        
-        
+    </div>
+</div>
 
-        
-
-   
-
-    </main>
-
-   <?php
-require_once 'footer.php';
-?>
+<?php require 'includes/footer.php'; ?>

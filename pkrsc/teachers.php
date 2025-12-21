@@ -1,113 +1,43 @@
-   <?php
-require_once 'header.php';
+<?php 
+require 'includes/header.php'; 
+
+// Fetch Data
+$teachers = $pdo->query("SELECT * FROM teachers ORDER BY sort_order ASC")->fetchAll();
 ?>
-    <main>
 
-       <section id="messages" class="container">
-            <div class="grid-2">
-                <div class="card message-card">
-                    <img src="p.jpg" alt="প্রতিষ্ঠাতা">
-                    <h4>মোঃ পারভেজ খান</h4>
-                    <p class="title">প্রতিষ্ঠাতা সভাপতি ও অধ্যক্ষ</p>
-                    <p>"শিক্ষার আলো প্রতিটি ঘরে পৌঁছে দেওয়াই আমাদের মূল লক্ষ্য। আমরা এমন একটি প্রজন্ম তৈরি করতে চাই যারা দেশ ও দশের কল্যাণে নিবেদিত প্রাণ হবে।"</p>
-                </div>
-                <div class="card message-card">
-                    <img src="p.png" alt="অধ্যক্ষ">
-                    <h4>-</h4>
-                    <p class="title">উপাধ্যক্ষ</p>
-                    <p>"শৃঙ্খলা, অধ্যবসায় এবং সৃজনশীলতাই সাফল্যের চাবিকাঠি। আমরা আমাদের শিক্ষার্থীদের এই মন্ত্রেই দীক্ষিত করি এবং তাদের সুপ্ত প্রতিভার বিকাশ ঘটাই।"</p>
-                </div>
+<div class="container" style="margin-top: 40px; margin-bottom: 50px;">
+    
+    <div style="text-align: center; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: var(--primary); margin-bottom: 10px;">আমাদের সম্মানীত শিক্ষকবৃন্দ</h1>
+        <p style="color: #666;">মানুষ গড়ার কারিগর আমাদের অভিজ্ঞ ও দক্ষ শিক্ষকমণ্ডলী</p>
+        <div style="width: 50px; height: 3px; background: var(--secondary); margin: 15px auto;"></div>
+    </div>
+
+    <div class="teacher-grid">
+        <?php foreach($teachers as $t): ?>
+        <div class="teacher-card">
+            <?php 
+                $imgSrc = "assets/uploads/" . $t['image_path'];
+                if(empty($t['image_path']) || !file_exists($imgSrc)) {
+                    $imgSrc = "https://via.placeholder.com/150?text=No+Image"; 
+                }
+            ?>
+            <img src="<?php echo $imgSrc; ?>" alt="<?php echo htmlspecialchars($t['name']); ?>" class="teacher-img">
+            
+            <div class="teacher-info">
+                <h3><?php echo htmlspecialchars($t['name']); ?></h3>
+                <span><?php echo htmlspecialchars($t['designation']).' - '.htmlspecialchars($t['subject']); ?></span>
+                <?php if($t['education']): ?>
+                    <p><i class="fas fa-book"></i> <?php echo htmlspecialchars($t['education']); ?></p>
+                <?php endif; ?>
+                <?php if($t['phone']): ?>
+                    <a style="color: var(--primary); text-decoration: none;" href="tel:<?php echo $t['phone']; ?>"><i class="fas fa-phone"></i> <?php echo htmlspecialchars($t['phone']); ?></a>
+                <?php endif; ?>
             </div>
-        </section>
+        </div>
+        <?php endforeach; ?>
+    </div>
 
-       <section id="teachers" class="container">
-            <h2 class="section-title">আমাদের অভিজ্ঞ শিক্ষকগণ</h2>
-            <div class="teachers-grid">
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ১">
-                    <h4>মোঃ আব্দুল করিম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (English)</p>
-                    <h6>BA in English, Jahangirnagar University</h6>
+</div>
 
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ২">
-                    <h4>মোসাঃ ফাতেমা বেগম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (ইংরেজি)</p>
-                  <h6>BA in English, BRAC University</h6>
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ৩">
-                    <h4>জনাব মোঃ রবিউল ইসলাম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (গণিত)</p>
-                    <h6>BA in English, Jahangirnagar University</h6>
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ৪">
-                    <h4>আশরাফুল আলম (ডেমো)</h4>
-                    <p>সহকারী শিক্ষক (বিজ্ঞান)</p>
-                    <h6>BA in English, Daffoodil University</h6>
-                </div>  <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ১">
-                    <h4>মোঃ আব্দুল করিম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (বাংলা)</p>
-                    <h6>BA in English, Jahangirnagar University</h6>
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ২">
-                    <h4>মোসাঃ ফাতেমা বেগম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (ইংরেজি)</p>
-                    <h6>BA in English, Dhaka University</h6>
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ৩">
-                    <h4>জনাব মোঃ রবিউল ইসলাম (ডেমো)</h4>
-                    <p>সিনিয়র শিক্ষক (গণিত)</p>
-                    <h6>BA in English, Chitagong University</h6>
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ৪">
-                    <h4>আশরাফুল আলম (ডেমো)</h4>
-                    <p>সহকারী শিক্ষক (বিজ্ঞান)</p>
-                      <h6>BA in English, Jahangirnagar University</h6>
-                </div>
-            </div>
-        </section>
-
-        <section id="teachers" class="container">
-            <h2 class="section-title">আমাদের স্টাফগণ</h2>
-            <div class="teachers-grid">
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ১">
-                    <h4>মোঃ আব্দুল করিম (ডেমো)</h4>
-                    <p>নিরাপত্তা প্রহরী</p>
-                   
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ২">
-                    <h4>মোসাঃ ফাতেমা বেগম (ডেমো)</h4>
-                    <p>পরিচ্ছন্নতা কর্মী</p>
-         
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ৩">
-                    <h4>জনাব মোঃ রবিউল ইসলাম (ডেমো)</h4>
-                    <p>দপ্তরী কাম অফিস সহায়ক</p>
-       
-                </div>
-                <div class="teacher-card">
-                    <img src="p.png" alt="শিক্ষক ৪">
-                    <h4>আশরাফুল আলম (ডেমো)</h4>
-                    <p>বার্তাবাহক</p>
-              
-                </div> 
-            </div>
-        </section>
-
-      
-
-    </main>
-
-   <?php
-require_once 'footer.php';
-?>
+<?php require 'includes/footer.php'; ?>
