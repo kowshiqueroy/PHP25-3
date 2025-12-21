@@ -14,6 +14,7 @@ $menuItems = [
     ['icon' => 'fa-house', 'label' => 'Home', 'link' => 'index.php'],
     ['icon' => 'fa-location-dot', 'label' => 'Track', 'link' => 'track.php'],
     ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => 'reports.php'],
+    ['icon' => 'fa-users', 'label' => 'Users', 'link' => 'users.php'],
      ['icon' => 'fa-store', 'label' => 'Shops', 'link' => 'shops.php'],
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '../logout.php'],
 ];

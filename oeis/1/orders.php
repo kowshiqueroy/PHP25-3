@@ -2,7 +2,20 @@
 include 'header.php';
 ?>
 <?php
+if (isset($_GET['approve_id'])) {
+     
+        $approve_id = $_GET['approve_id'];
+        $approval_query = "UPDATE orders SET order_status='1', approved_at=NOW(), approved_by='{$_SESSION['user_id']}' WHERE id='$approve_id'";
+        if (mysqli_query($conn, $approval_query) === TRUE) {
+            echo "<script>alert('Order approved successfully.'); window.location.href='orders.php';</script>";
+            exit();
+        } else {
+            echo "<script>alert('An error occurred while approving the order. Please try again.'); window.location.href='orders.php';</script>";
+            exit();
+        }
+    }
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    
    
 
     if (isset($_POST['add_order'])) {
@@ -379,9 +392,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               $company_id = $_SESSION['company_id'];
 
                         if (!isset($_GET['search_id']) && !isset($_GET['search_route_id']) && !isset($_GET['search_shop_id']) && !isset($_GET['search_status']) && !isset($_GET['date_from']) && !isset($_GET['date_to'])) {
-                        $query = "SELECT * FROM orders WHERE company_id='$company_id'  ORDER BY id DESC LIMIT 5";
+                        $query = "SELECT * FROM orders WHERE company_id='$company_id' AND (created_by='{$_SESSION['user_id']}' OR (created_by!='{$_SESSION['user_id']}' AND order_status=1)) ORDER BY id DESC LIMIT 5";
                         if (isset($_GET['show_all']) && $_GET['show_all'] == 1) {
-                            $query = "SELECT * FROM orders WHERE company_id='$company_id'  ORDER BY id DESC";
+                            $query = "SELECT * FROM orders WHERE company_id='$company_id' AND (created_by='{$_SESSION['user_id']}' OR (created_by!='{$_SESSION['user_id']}' AND order_status=1)) ORDER BY id DESC";
                         }
                         $result = mysqli_query($conn, $query);
                         
@@ -439,7 +452,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $search_text .= " Date Range: $date_from to $date_to";
                         }
                     }
-                        $query .= "  ORDER BY id DESC";
+                        $query .= " AND (created_by='{$_SESSION['user_id']}' OR (created_by!='{$_SESSION['user_id']}' AND order_status=1))  ORDER BY id DESC";
                         $result = mysqli_query($conn, $query); 
                         if ($search_text != '') {
                             echo "<p class='badge bg-green' style='text-align: center; margin-bottom: 10px;' >Search Results for <b>$search_text</b></p>";
@@ -487,6 +500,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $shop_name = isset($shop_name_result_data['shop_name']) ? $shop_name_result_data['shop_name'] : '';
                                 // $shop_balance = isset($shop_name_result_data['balance']) ? $shop_name_result_data['balance'] : 0;
 
+                                //get username
+                                $created_by_query = "SELECT username FROM users WHERE id='{$row['created_by']}'";
+                                $created_by_result = mysqli_query($conn, $created_by_query);
+                                $created_by = mysqli_fetch_assoc($created_by_result)['username'];
+
                               echo "
 <tr>
     <td >{$row['id']}
@@ -528,7 +546,14 @@ if (isset($row['order_status']) && !is_null($row['order_status']) && $row['order
     <td >" . 
         (isset($row['approved_at']) && !is_null($row['approved_at'])
             ? "<span class='badge bg-green'>Approved</span>" 
-            : "<span class='badge bg-red'>Pending</span>") . 
+            : "<span class='badge bg-red'
+            
+             onclick=\"if(confirm('Are you sure you want to approve this Order?')) { window.location.href='orders.php?approve_id={$row['id']}'; }\" 
+                title='Approve Order'
+            
+            
+            
+            >Pending</span>") . 
     "</td>
     <td>{$row['remarks']}   <i class='fa-solid fa-print' style='color: var(--warning); margin-right: 10px; cursor: pointer;' onclick=\"window.location.href='invoices.php?order_ids={$row['id']}'\"></i></td>
 </tr>";
@@ -554,7 +579,7 @@ if (mysqli_num_rows($order_item_result) > 0) {
 
         echo "<strong>{$item_name}</strong>  {$quantity} × " . number_format($price, 2) . " = " . number_format($total, 2). "<br>";
     }
-                echo "<br> Total: <strong>" . number_format($inv_total, 2) . "</strong>/=  by [user:{$row['created_by']}]</td>
+                echo "<br> Total: <strong>" . number_format($inv_total, 2) . "</strong>/=  by [user:{$row['created_by']} @  $created_by]</td>
               </tr>";
 }
 
