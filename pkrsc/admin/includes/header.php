@@ -1,11 +1,6 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) session_start();
-
-// Security Check: Kick out if not admin
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
-    header("Location: login.php");
-    exit;
-}
+require_once 'auth_check.php';
+require_auth('admin');
 
 // Helper to highlight active menu
 function isActive($page) {

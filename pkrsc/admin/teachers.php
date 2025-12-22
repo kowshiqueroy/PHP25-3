@@ -2,137 +2,160 @@
 require '../config/db.php';
 require 'includes/header.php';
 
-// --- 1. Handle Add Teacher ---
-$msg = "";
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_teacher'])) {
-    $name = $_POST['name'];
-    $desig = $_POST['designation'];
-    $subj = $_POST['subject'];
-    $phone = $_POST['phone'];
-    $order = $_POST['sort_order'];
-    $education = $_POST['education'];
-    $image_path = "default.png"; // Default image if none uploaded
+$action = $_GET['action'] ?? 'list';
+$id = $_GET['id'] ?? 0;
+$error = '';
+$success = '';
 
-    // Image Upload Logic
-    if (!empty($_FILES['photo']['name'])) {
-        $ext = pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION);
-        $new_name = "teacher_" . time() . "." . $ext;
-        move_uploaded_file($_FILES['photo']['tmp_name'], "../assets/uploads/" . $new_name);
-        $image_path = $new_name;
-    }
+// Handle Add/Edit Teacher
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = trim($_POST['name']);
+    $designation = trim($_POST['designation']);
+    $education = trim($_POST['education']);
+    $subject = trim($_POST['subject']);
+    $phone = trim($_POST['phone']);
+    $sort_order = filter_input(INPUT_POST, 'sort_order', FILTER_VALIDATE_INT);
+    $image_path = $_POST['existing_image'] ?? 'default.png';
 
-    $stmt = $pdo->prepare("INSERT INTO teachers (name, designation, education, subject, phone, image_path, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
-    if($stmt->execute([$name, $desig, $education, $subj, $phone, $image_path, $order])) {
-        $msg = "<div class='alert alert-success'>Teacher added successfully!</div>";
+    if (empty($name) || empty($designation)) {
+        $error = 'Name and designation are required.';
+    } else {
+        // Handle image upload
+        if (!empty($_FILES['photo']['name'])) {
+            $target_dir = "../assets/uploads/";
+            $image_name = "teacher_" . time() . "_" . basename($_FILES["photo"]["name"]);
+            $target_file = $target_dir . $image_name;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+            // Check if image file is a actual image or fake image
+            $check = getimagesize($_FILES["photo"]["tmp_name"]);
+            if($check === false) {
+                $error = "File is not an image.";
+            }
+            // Check file size (5MB max)
+            elseif ($_FILES["photo"]["size"] > 5000000) {
+                $error = "Sorry, your file is too large.";
+            }
+            // Allow certain file formats
+            elseif($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" ) {
+                $error = "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+            } else {
+                if (move_uploaded_file($_FILES["photo"]["tmp_name"], $target_file)) {
+                    // Delete old image if it's not the default
+                    if ($action === 'edit' && $image_path !== 'default.png' && file_exists($target_dir . $image_path)) {
+                        unlink($target_dir . $image_path);
+                    }
+                    $image_path = $image_name;
+                } else {
+                    $error = "Sorry, there was an error uploading your file.";
+                }
+            }
+        }
+
+        if (empty($error)) {
+            if ($action === 'add') {
+                $stmt = $pdo->prepare("INSERT INTO teachers (name, designation, education, subject, phone, image_path, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$name, $designation, $education, $subject, $phone, $image_path, $sort_order]);
+                $success = 'Teacher added successfully!';
+            } elseif ($action === 'edit' && $id) {
+                $stmt = $pdo->prepare("UPDATE teachers SET name=?, designation=?, education=?, subject=?, phone=?, image_path=?, sort_order=? WHERE id=?");
+                $stmt->execute([$name, $designation, $education, $subject, $phone, $image_path, $sort_order, $id]);
+                $success = 'Teacher updated successfully!';
+            }
+            // Redirect to prevent form resubmission
+            header("Location: teachers.php");
+            exit();
+        }
     }
 }
 
-// --- 2. Handle Delete ---
-if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
-    // Delete image file first to save space
-    $stmt = $pdo->prepare("SELECT image_path FROM teachers WHERE id=?");
+// Handle Delete Teacher
+if ($action === 'delete' && $id) {
+    // First, get the image path to delete the file
+    $stmt = $pdo->prepare("SELECT image_path FROM teachers WHERE id = ?");
     $stmt->execute([$id]);
-    $img = $stmt->fetchColumn();
-    if($img && $img != 'default.png' && file_exists("../assets/uploads/$img")) {
-        unlink("../assets/uploads/$img");
+    $image_to_delete = $stmt->fetchColumn();
+
+    if ($image_to_delete && $image_to_delete !== 'default.png' && file_exists("../assets/uploads/" . $image_to_delete)) {
+        unlink("../assets/uploads/" . $image_to_delete);
     }
+
+    $stmt = $pdo->prepare("DELETE FROM teachers WHERE id = ?");
+    $stmt->execute([$id]);
     
-    $pdo->prepare("DELETE FROM teachers WHERE id=?")->execute([$id]);
-    echo "<script>window.location.href='teachers.php';</script>";
+    header("Location: teachers.php");
+    exit();
 }
 
-// Fetch Teachers
+// Fetch teacher for editing
+$teacher = null;
+if ($action === 'edit' && $id) {
+    $stmt = $pdo->prepare("SELECT * FROM teachers WHERE id = ?");
+    $stmt->execute([$id]);
+    $teacher = $stmt->fetch();
+}
+
+// Fetch all teachers
 $teachers = $pdo->query("SELECT * FROM teachers ORDER BY sort_order ASC")->fetchAll();
 ?>
 
 <h2 style="margin-bottom: 20px;">Manage Teachers</h2>
 
-<div class="card">
-    <h3>Add New Teacher</h3>
-    <?php echo $msg; ?>
-    <form method="POST" enctype="multipart/form-data">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-            <div>
-                <label class="form-label" style="display:block; margin-bottom:5px; font-weight:500;">Name</label>
-                <input type="text" name="name" class="form-control" required style="width:100%; padding:8px;">
-            </div>
-              <div>
-                <label class="form-label" style="display:block; margin-bottom:5px; font-weight:500;">Education</label>
-                <input type="text" name="education" class="form-control" placeholder="e.g. B.Sc, M.Sc in CSE @ JU" style="width:100%; padding:8px;">
-            </div>
-            <div>
-                <label class="form-label" style="display:block; margin-bottom:5px; font-weight:500;">Designation</label>
-                <select name="designation" class="form-control" required style="width:100%; padding:8px;">
-                   
-              <option value="সহকারী শিক্ষক">সহকারী শিক্ষক</option>
-<option value="শিক্ষানবিশ শিক্ষক">শিক্ষানবিশ শিক্ষক</option>
-<option value="সহকারী প্রশিক্ষক">সহকারী প্রশিক্ষক</option>
-<option value="প্রশিক্ষক">প্রশিক্ষক</option>
-<option value="প্রদর্শক">প্রদর্শক</option>
-<option value="প্রফেসর">প্রফেসর</option>
-<option value="লেকচারার">লেকচারার</option>
-<option value="সহযোগী প্রফেসর">সহযোগী প্রফেসর</option>
-<option value="সহকারী প্রফেসর">সহকারী প্রফেসর</option>
-<option value="প্রফেসর">প্রফেসর</option>
-<option value="শিক্ষক">শিক্ষক</option>
-<option value="প্রধান শিক্ষক">প্রধান শিক্ষক</option>
-<option value="স্টাফ">স্টাফ</option>
-<option value="অধ্যক্ষ">অধ্যক্ষ</option>
-<option value="সহকারী অধ্যক্ষ">সহকারী অধ্যক্ষ</option>
-<option value="অধ্যক্ষ ও সভাপতি">অধ্যক্ষ ও সভাপতি</option>
-<option value="সভাপতি">সভাপতি</option>
-<option value="কমিটি সদস্য">কমিটি সদস্য</option>
-
-
-                </select>
-
-            </div>
-          
-            <div>
-                <label class="form-label" style="display:block; margin-bottom:5px; font-weight:500;">Subject</label>
-                <input type="text" name="subject" class="form-control" placeholder="e.g. Math" style="width:100%; padding:8px;">
-            </div>
-            <div>
-                <label class="form-label" style="display:block; margin-bottom:5px; font-weight:500;">Phone</label>
-                <input type="text" name="phone" class="form-control" style="width:100%; padding:8px;">
-            </div>
-            <div>
-                <label class="form-label" style="display:block; margin-bottom:5px; font-weight:500;">Sort Order</label>
-                <input type="number" name="sort_order" class="form-control" value="10" style="width:100%; padding:8px;">
-            </div>
-            <div>
-                <label class="form-label    " style="display:block; margin-bottom:5px; font-weight:500;">Photo</label>
-                <div style="display: flex; align-items: center;">
-                    <input type="file" name="photo" class="form-control" style="width:100%; padding:8px;" accept="image/*" capture="camera" onclick="openCamera()">
+<?php if ($action === 'add' || $action === 'edit'): ?>
+    <div class="card">
+        <h3><?php echo ucfirst($action); ?> Teacher</h3>
+        <?php if ($error) echo "<div class='alert alert-danger'>$error</div>"; ?>
+        <form method="POST" action="teachers.php?action=<?php echo $action; ?><?php if ($id) echo '&id=' . $id; ?>" enctype="multipart/form-data">
+             <input type="hidden" name="existing_image" value="<?php echo htmlspecialchars($teacher['image_path'] ?? ''); ?>">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <!-- Form fields -->
+                <div>
+                    <label>Name</label>
+                    <input type="text" name="name" class="form-control" value="<?php echo htmlspecialchars($teacher['name'] ?? ''); ?>" required>
                 </div>
-                <script>
-                    function openCamera() {
-                        var input = document.querySelector('input[name="photo"]');
-                        if (input.capture) {
-                            input.setAttribute('capture', 'environment');
-                        } else {
-                            input.setAttribute('capture', 'user');
-                        }
-                    }
-                </script>
+                <div>
+                    <label>Designation</label>
+                    <input type="text" name="designation" class="form-control" value="<?php echo htmlspecialchars($teacher['designation'] ?? ''); ?>" required>
+                </div>
+                <div>
+                    <label>Education</label>
+                    <input type="text" name="education" class="form-control" value="<?php echo htmlspecialchars($teacher['education'] ?? ''); ?>">
+                </div>
+                <div>
+                    <label>Subject</label>
+                    <input type="text" name="subject" class="form-control" value="<?php echo htmlspecialchars($teacher['subject'] ?? ''); ?>">
+                </div>
+                <div>
+                    <label>Phone</label>
+                    <input type="text" name="phone" class="form-control" value="<?php echo htmlspecialchars($teacher['phone'] ?? ''); ?>">
+                </div>
+                <div>
+                    <label>Sort Order</label>
+                    <input type="number" name="sort_order" class="form-control" value="<?php echo htmlspecialchars($teacher['sort_order'] ?? '10'); ?>">
+                </div>
+                <div>
+                    <label>Photo</label>
+                    <input type="file" name="photo" class="form-control">
+                    <?php if ($action === 'edit' && !empty($teacher['image_path'])): ?>
+                        <img src="../assets/uploads/<?php echo htmlspecialchars($teacher['image_path']); ?>" width="100" class="mt-2">
+                    <?php endif; ?>
+                </div>
             </div>
-        </div>
-        <button type="submit" name="add_teacher" class="btn btn-primary" style="margin-top: 15px;">
-            <i class="fas fa-plus-circle"></i> Add Teacher
-        </button>
-    </form>
-</div>
+            <button type="submit" class="btn btn-primary mt-3"><?php echo ucfirst($action); ?> Teacher</button>
+            <a href="teachers.php" class="btn btn-secondary mt-3">Cancel</a>
+        </form>
+    </div>
+<?php endif; ?>
 
 <div class="card">
+    <a href="teachers.php?action=add" class="btn btn-primary mb-3"><i class="fas fa-plus-circle"></i> Add New Teacher</a>
     <div class="table-responsive">
         <table class="custom-table">
             <thead>
                 <tr>
                     <th>Photo</th>
                     <th>Name / Designation</th>
-                    <th>Education</th>
-                    <th>Phone</th>
+                    <th>Contact</th>
                     <th>Order</th>
                     <th>Action</th>
                 </tr>
@@ -140,21 +163,16 @@ $teachers = $pdo->query("SELECT * FROM teachers ORDER BY sort_order ASC")->fetch
             <tbody>
                 <?php foreach($teachers as $t): ?>
                 <tr>
-                    <td>
-                        <img src="../assets/uploads/<?php echo $t['image_path'] ?? 'default.png'; ?>" 
-                             style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid #eee;">
-                    </td>
+                    <td><img src="../assets/uploads/<?php echo htmlspecialchars($t['image_path'] ?? 'default.png'); ?>" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover;"></td>
                     <td>
                         <strong><?php echo htmlspecialchars($t['name']); ?></strong><br>
-                        <small style="color: #666;"><?php echo htmlspecialchars($t['designation']).' - '.htmlspecialchars($t['subject']); ?></small>
+                        <small><?php echo htmlspecialchars($t['designation']); ?></small>
                     </td>
-                    <td><?php echo htmlspecialchars($t['education']); ?></td>
                     <td><?php echo htmlspecialchars($t['phone']); ?></td>
-                    <td><?php echo $t['sort_order']; ?></td>
+                    <td><?php echo htmlspecialchars($t['sort_order']); ?></td>
                     <td>
-                        <a href="?delete=<?php echo $t['id']; ?>" class="btn btn-danger" onclick="return confirm('Delete this teacher?')">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                        <a href="teachers.php?action=edit&id=<?php echo $t['id']; ?>" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                        <a href="teachers.php?action=delete&id=<?php echo $t['id']; ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this teacher?')"><i class="fas fa-trash"></i></a>
                     </td>
                 </tr>
                 <?php endforeach; ?>
