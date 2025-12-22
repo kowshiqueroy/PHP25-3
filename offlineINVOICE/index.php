@@ -10,7 +10,7 @@
       box-sizing: border-box;
     }
     body {
-      margin: 0;
+      margin: 00;
       padding: 20px;
       font-family: 'Inter', sans-serif;
       background: #eef2f5;
