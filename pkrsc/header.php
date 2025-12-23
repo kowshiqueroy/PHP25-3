@@ -114,14 +114,32 @@
         /* --- 2. হেডার এবং নেভিগেশন --- */
 
         @media (max-width: 768px) {
+             .logo-text p {
+            font-size: 0.9rem;
+            margin: 0;
+        }
+              .top-bar .container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
             .top-bar-info {
                 padding: 2px;
-            font-size: 0.8rem;
-            justify-content: center;
-            flex-direction: column;
-            align-items: center;
-            gap: 1px;
+                font-size: 1.2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1px;
             }
+            .top-bar-links {
+                font-size: 1.3rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1px;
+                margin: 2px;
+            }
+
+
         }
         .top-bar {
             background: var(--primary-color);
@@ -172,14 +190,11 @@
         }
 
         .logo-text h1 {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin: 0;
             line-height: 1.2;
         }
-        .logo-text p {
-            font-size: 0.9rem;
-            margin: 0;
-        }
+       
 
         .nav-links {
             list-style: none;
@@ -688,12 +703,11 @@
     <header class="top-bar">
         <div class="container">
             <div class="top-bar-info">
-                <span><i class="fa-solid fa-phone"></i>01724-162121</span>
-                <span><i class="fa-solid fa-envelope"></i>pkrsc.2018@gmail.com</span>
+                <span><i class="fa-solid fa-phone"></i>01724-162121 <i class="fa-solid fa-envelope"></i>pkrsc.2018@gmail.com</span>
             </div>
             <div class="top-bar-links">
                 <span>EMIS: 00704051910</span> | <span>SC: 487425</span>
-                <a href="admin" style="color: #fff; margin-left: 15px;">লগইন</a>
+                <a href="app" style="color: #fff; margin-left: 15px;">লগইন</a>
             </div>
         </div>
     </header>
@@ -716,7 +730,7 @@
                 <li><a href="index.php">প্রচ্ছদ</a></li>
                 <li><a href="admission.php">ভর্তি</a></li>
                 <li><a href="academics.php">একাডেমিক</a></li>
-                <li><a href="result/result.php">ফলাফল</a></li>
+                <li><a href="app/result.php">ফলাফল</a></li>
                 <li><a href="teachers.php">শিক্ষকবৃন্দ</a></li>
                 <li><a href="notice.php">নোটিশ</a></li>
                 <li><a href="club.php">ক্লাব</a></li>

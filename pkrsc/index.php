@@ -22,7 +22,7 @@ require_once 'header.php';
             <div class="grid-2">
                 <div class="card message-card">
                     <img src="p.jpg" alt="প্রতিষ্ঠাতা">
-                    <h4>মোঃ পারভেজ খান</h4>
+                    <h4>মোহাম্মদ পারভেজ খান</h4>
                     <p class="title">প্রতিষ্ঠাতা সভাপতি ও অধ্যক্ষ</p>
                     <p>"শিক্ষার আলো প্রতিটি ঘরে পৌঁছে দেওয়াই আমাদের মূল লক্ষ্য। আমরা এমন একটি প্রজন্ম তৈরি করতে চাই যারা দেশ ও দশের কল্যাণে নিবেদিত প্রাণ হবে।"</p>
                 </div>
@@ -66,7 +66,7 @@ require_once 'header.php';
                     চিরদিন তোমার আকাশ, তোমার বাতাস, আমার প্রাণে বাজায় বাঁশি...
                 </blockquote>
                 <audio controls>
-                    <source src="demo_anthem.mp3" type="audio/mpeg">
+                    <source src="anthem.mp3" type="audio/mpeg">
                     আপনার ব্রাউজার অডিও সাপোর্ট করে না।
                 </audio>
             </div>
