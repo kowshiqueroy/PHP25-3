@@ -512,7 +512,7 @@
 - Butter (বাটার) - মাখন [Noun] I like butter on my bread. [I-আমি like-পছন্দ করি butter-মাখন on-my-আমার bread-রুটিতে] (আমি আমার রুটিতে মাখন পছন্দ করি।)
 - Button (বাটন) - বোতাম [Noun] One of the buttons on my shirt is missing. [One-একটি of-এর the-বোতামগুলোর buttons-বোতাম on-my-আমার shirt-শার্টের is-নেই missing-নেই] (আমার শার্টের একটি বোতাম নেই।)
 - Buy (বাই) - কেনা [Verb] I want to buy a new dress. [I-আমি want-চাই to-কিনতে buy-কিনতে a-একটি new-নতুন dress-পোশাক] (আমি একটি নতুন পোশাক কিনতে চাই।)
-- By (বাই) - দ্বারা [Preposition] The book was written by a famous author. [The-বইটি book-বই was-লেখা হয়েছিল written-লেখা হয়েছিল by-দ্বারা a-একজন famous-বিখ্যাত author-লেখকের] (বইটি একজন বিখ্যাত লেখকের দ্বারা লেখা হয়েছিল।)
+- By (বাই) - দ্বারা [Preposition] The book was CQ by a famous author. [The-বইটি book-বই was-লেখা হয়েছিল CQ-লেখা হয়েছিল by-দ্বারা a-একজন famous-বিখ্যাত author-লেখকের] (বইটি একজন বিখ্যাত লেখকের দ্বারা লেখা হয়েছিল।)
 - Bye (বাই) - বিদায় [Interjection] Bye, see you tomorrow. [Bye-বিদায়, see-দেখা হবে you-তোমার সাথে tomorrow-আগামীকাল] (বিদায়, তোমার সাথে আগামীকাল দেখা হবে।)
 - Cabin (কেবিন) - কেবিন [Noun] We are staying in a cabin in the woods. [We-আমরা are-থাকছি staying-থাকছি in-a-একটি cabin-কেবিনে in-the-বনে woods-বন] (আমরা বনের মধ্যে একটি কেবিনে থাকছি।)
 - Cabinet (ক্যাবিনেট) - মন্ত্রিসভা [Noun] The cabinet will meet tomorrow. [The-মন্ত্রিসভা cabinet-মন্ত্রিসভা will-মিলিত হবে meet-মিলিত হবে tomorrow-আগামীকাল] (মন্ত্রিসভা আগামীকাল মিলিত হবে।)

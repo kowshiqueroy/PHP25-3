@@ -49,6 +49,7 @@ $sql = "CREATE TABLE IF NOT EXISTS subjects (
     subject_name VARCHAR(100) NOT NULL,
     subject_code VARCHAR(20),
     overall_pass_mark DECIMAL(5,2) DEFAULT 0,
+    is_optional TINYINT(1) DEFAULT 0,
     FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
 )";
 $pdo->exec($sql);
@@ -89,6 +90,9 @@ $sql = "CREATE TABLE IF NOT EXISTS marks (
     FOREIGN KEY (component_id) REFERENCES subject_components(id) ON DELETE CASCADE
 )";
 $pdo->exec($sql);
+
+$sql = "ALTER TABLE marks ADD COLUMN is_confirmed TINYINT(1) DEFAULT 0;";
+$pdo->exec($sql);
 echo "Table 'marks' created.<br>";
 
 // --- SEEDING DATA ---
@@ -120,3 +124,4 @@ if ($check == 0) {
 
 echo "<hr><strong>Setup Complete!</strong> Delete this file or rename it before production use.";
 ?>
+

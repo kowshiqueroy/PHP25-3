@@ -2,169 +2,217 @@
 require_once 'db.php';
 if (session_status() === PHP_SESSION_NONE) { session_start(); }
 
-$year = $_GET['year'] ?? date('Y');
+// 1. GET INPUTS
+$year     = $_GET['year'] ?? date('Y');
 $class_id = $_GET['class_id'] ?? null;
-$term = $_GET['term'] ?? 'Final Exam';
+$term     = $_GET['term'] ?? null;
+
+// 2. HELPER FUNCTIONS
+function getGrade($gp) {
+    if ($gp >= 5.00) return 'A+';
+    if ($gp >= 4.00) return 'A';
+    if ($gp >= 3.50) return 'A-';
+    if ($gp >= 3.00) return 'B';
+    if ($gp >= 2.00) return 'C';
+    if ($gp >= 1.00) return 'D';
+    return 'F';
+}
+
+function calculateGP($mark, $max) {
+    if ($max <= 0) return 0.00;
+    $p = ($mark / $max) * 100;
+    if ($p >= 80) return 5.00;
+    if ($p >= 70) return 4.00;
+    if ($p >= 60) return 3.50;
+    if ($p >= 50) return 3.00;
+    if ($p >= 40) return 2.00;
+    if ($p >= 33) return 1.00;
+    return 0.00;
+}
 
 require 'header.php';
-
-// Grading Function
-function getGrade($mark, $max) {
-    if ($max <= 0) return ['LG' => 'N/A', 'GP' => 0];
-    $percent = ($mark / $max) * 100;
-    if ($percent >= 80) return ['LG' => 'A+', 'GP' => 5.0];
-    if ($percent >= 70) return ['LG' => 'A',  'GP' => 4.0];
-    if ($percent >= 60) return ['LG' => 'A-', 'GP' => 3.5];
-    if ($percent >= 50) return ['LG' => 'B',  'GP' => 3.0];
-    if ($percent >= 40) return ['LG' => 'C',  'GP' => 2.0];
-    if ($percent >= 33) return ['LG' => 'D',  'GP' => 1.0];
-    return ['LG' => 'F', 'GP' => 0.0];
-}
 ?>
 
-<div class="no-print mb-4">
-    <h2 class="fw-bold"><i class="fa-solid fa-ranking-star text-warning me-2"></i>Class Tabulation Sheet</h2>
-    
-    <div class="card shadow-sm border-0 bg-light">
+<div class="container-fluid py-3">
+    <div class="card no-print mb-4 shadow-sm border-0 bg-light">
         <div class="card-body">
-            <form method="GET" class="row g-3">
+            <form method="GET" id="filterForm" class="row g-3 align-items-end">
                 <div class="col-md-2">
-                    <label class="small fw-bold">Year</label>
-                    <input type="number" name="year" class="form-control" value="<?= $year ?>">
-                </div>
-                <div class="col-md-3">
-                    <label class="small fw-bold">Class</label>
-                    <select name="class_id" class="form-select" required>
-                        <option value="">-- Select Class --</option>
-                        <?php 
-                        $cls_stmt = $pdo->prepare("SELECT * FROM classes WHERE academic_year = ?");
-                        $cls_stmt->execute([$year]);
-                        foreach($cls_stmt->fetchAll() as $c): ?>
-                            <option value="<?= $c['id'] ?>" <?= $class_id == $c['id'] ? 'selected' : '' ?>><?= $c['class_name'] ?></option>
-                        <?php endforeach; ?>
+                    <label class="small fw-bold">Academic Year</label>
+                    <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <?php
+                        $years = $pdo->query("SELECT DISTINCT academic_year FROM classes ORDER BY academic_year DESC")->fetchAll(PDO::FETCH_COLUMN);
+                        foreach ($years as $y) echo "<option value='$y' ".($year==$y?'selected':'').">$y</option>";
+                        ?>
                     </select>
                 </div>
                 <div class="col-md-3">
-                    <label class="small fw-bold">Term</label>
-                    <input type="text" name="term" class="form-control" value="<?= htmlspecialchars($term) ?>">
+                    <label class="small fw-bold">Select Class</label>
+                    <select name="class_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="">-- Choose Class --</option>
+                        <?php
+                        $classes = $pdo->prepare("SELECT id, class_name FROM classes WHERE academic_year = ?");
+                        $classes->execute([$year]);
+                        while($c = $classes->fetch()) {
+                            echo "<option value='{$c['id']}' ".($class_id==$c['id']?'selected':'').">{$c['class_name']}</option>";
+                        }
+                        ?>
+                    </select>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Generate Result</button>
+                <div class="col-md-3">
+                    <label class="small fw-bold">Exam Term</label>
+                    <select name="term" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="">-- Select Term --</option>
+                        <?php
+                        if ($class_id) {
+                            $terms = $pdo->prepare("SELECT DISTINCT exam_term FROM marks WHERE class_id = ?");
+                            $terms->execute([$class_id]);
+                            while($t = $terms->fetch()) {
+                                echo "<option value='{$t['exam_term']}' ".($term==$t['exam_term']?'selected':'').">{$t['exam_term']}</option>";
+                            }
+                        }
+                        ?>
+                    </select>
                 </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="button" onclick="window.print()" class="btn btn-outline-dark w-100"><i class="fa-solid fa-print"></i> Print</button>
+                <div class="col-md-2">
+                    <button type="button" onclick="window.print()" class="btn btn-dark btn-sm w-100">
+                        <i class="fa fa-print"></i> Print A4
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-</div>
 
-<?php if ($class_id): 
-    // 1. Fetch all subjects and their components for this class
-    $sub_sql = "SELECT s.id as sub_id, s.subject_name, s.overall_pass_mark, 
-                       c.id as comp_id, c.max_marks 
-                FROM subjects s
-                JOIN subject_parts p ON s.id = p.subject_id
-                JOIN subject_components c ON p.id = c.part_id
-                WHERE s.class_id = ? ORDER BY s.id, c.id";
-    $stmt = $pdo->prepare($sub_sql);
-    $stmt->execute([$class_id]);
-    $structure = $stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
+    <?php 
+    if ($class_id && $term): 
+        // 3. DATA FETCHING
+        $cls_stmt = $pdo->prepare("SELECT * FROM classes WHERE id = ?");
+        $cls_stmt->execute([$class_id]);
+        $cls = $cls_stmt->fetch();
 
-    // 2. Fetch class metadata
-    $cls_meta = $pdo->prepare("SELECT * FROM classes WHERE id = ?");
-    $cls_meta->execute([$class_id]);
-    $class = $cls_meta->fetch();
+        $struct_sql = "SELECT s.id as sub_id, s.subject_name, s.is_optional,
+                              c.id as comp_id, c.component_name, c.max_marks
+                       FROM subjects s
+                       JOIN subject_parts p ON s.id = p.subject_id
+                       JOIN subject_components c ON p.id = c.part_id
+                       WHERE s.class_id = ? ORDER BY s.id, p.id, c.id";
+        $st_stmt = $pdo->prepare($struct_sql);
+        $st_stmt->execute([$class_id]);
+        $structure = $st_stmt->fetchAll(PDO::FETCH_GROUP|PDO::FETCH_ASSOC);
 
-    // 3. Fetch all marks for this class/term
-    $m_stmt = $pdo->prepare("SELECT student_roll, component_id, marks_obtained FROM marks WHERE class_id = ? AND exam_term = ?");
-    $m_stmt->execute([$class_id, $term]);
-    $marks_data = [];
-    while($row = $m_stmt->fetch()){
-        $marks_data[$row['student_roll']][$row['component_id']] = $row['marks_obtained'];
-    }
-?>
+        $m_stmt = $pdo->prepare("SELECT student_roll, component_id, marks_obtained FROM marks WHERE class_id = ? AND exam_term = ?");
+        $m_stmt->execute([$class_id, $term]);
+        $marks_data = [];
+        while($r = $m_stmt->fetch()) { $marks_data[$r['student_roll']][$r['component_id']] = $r['marks_obtained']; }
 
-<div class="card shadow-sm border-0">
-    <div class="card-body p-0">
-        <div class="table-responsive">
-            <table class="table table-bordered table-sm text-center mb-0" style="font-size: 0.8rem;">
-                <thead class="table-dark align-middle">
-                    <tr>
-                        <th rowspan="2">Roll</th>
-                        <?php foreach($structure as $sub_id => $comps): ?>
-                            <th colspan="2"><?= $comps[0]['subject_name'] ?></th>
-                        <?php endforeach; ?>
-                        <th rowspan="2">Total Marks</th>
-                        <th rowspan="2">GPA</th>
-                        <th rowspan="2">Result</th>
-                    </tr>
-                    <tr>
-                        <?php foreach($structure as $sub_id => $comps): ?>
-                            <th>Mark</th>
-                            <th>GP</th>
-                        <?php endforeach; ?>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php 
-                    $merit_list = [];
-                    for($r = $class['start_roll']; $r <= $class['end_roll']; $r++): 
-                        $total_marks = 0;
-                        $total_gp = 0;
-                        $is_failed = false;
-                        $subject_count = count($structure);
-                    ?>
-                    <tr>
-                        <td class="fw-bold bg-light"><?= $r ?></td>
-                        <?php foreach($structure as $sub_id => $comps): 
-                            $sub_total = 0;
-                            $sub_max = 0;
-                            foreach($comps as $cp) {
-                                $mark = $marks_data[$r][$cp['comp_id']] ?? 0;
-                                $sub_total += $mark;
-                                $sub_max += $cp['max_marks'];
-                            }
-                            $grade = getGrade($sub_total, $sub_max);
-                            if ($grade['GP'] == 0) $is_failed = true;
-                            
-                            $total_marks += $sub_total;
-                            $total_gp += $grade['GP'];
-                        ?>
-                            <td><?= $sub_total ?></td>
-                            <td class="<?= $grade['GP'] == 0 ? 'text-danger fw-bold' : '' ?>"><?= number_format($grade['GP'], 2) ?></td>
-                        <?php endforeach; ?>
+        // 4. RANKING PRE-CALC
+        $rank_list = [];
+        for ($r = $cls['start_roll']; $r <= $cls['end_roll']; $r++) {
+            $tm=0; $gps=0; $cnt=0; $opt=0; $fail=false;
+            foreach($structure as $sid => $comps) {
+                $sm=0; $smax=0;
+                foreach($comps as $c) { $mv=$marks_data[$r][$c['comp_id']]??0; $sm+=$mv; $smax+=$c['max_marks']; }
+                $gp = calculateGP($sm, $smax);
+                if($gp==0 && !$comps[0]['is_optional']) $fail=true;
+                if($comps[0]['is_optional']) $opt = ($gp > 2) ? ($gp - 2) : 0;
+                else { $gps+=$gp; $cnt++; }
+                $tm+=$sm;
+            }
+            $fgpa = $fail ? 0 : min(5.00, ($gps/max(1,$cnt)) + $opt);
+            $rank_list[] = ['roll'=>$r, 'gpa'=>$fgpa, 'marks'=>$tm];
+        }
+        usort($rank_list, function($a, $b){ return ($b['gpa'] <=> $a['gpa']) ?: ($b['marks'] <=> $a['marks']); });
+        $merit = []; foreach($rank_list as $i => $v) $merit[$v['roll']] = ($v['gpa']>0?($i+1):'-');
+    ?>
 
-                        <?php 
-                        $final_gpa = $is_failed ? 0.00 : ($total_gp / $subject_count);
-                        ?>
-                        <td class="fw-bold"><?= $total_marks ?></td>
-                        <td class="fw-bold <?= $is_failed ? 'text-danger' : 'text-success' ?>"><?= number_format($final_gpa, 2) ?></td>
-                        <td>
-                            <?php if($is_failed): ?>
-                                <span class="badge bg-danger">F</span>
-                            <?php else: ?>
-                                <span class="badge bg-success">P</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <?php endfor; ?>
-                </tbody>
-            </table>
+    <style>
+        .tab-sheet { width: 100%; border-collapse: collapse; font-size: 9px; }
+        .tab-sheet th, .tab-sheet td { border: 1px solid #000; text-align: center; padding: 2px; }
+        .v-text { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; font-size: 8px; padding: 5px 1px; }
+        .bg-sub-total { background-color: #f2f2f2; font-weight: bold; }
+        .bg-opt { background-color: #f0faff; }
+        .fail { color: red; font-weight: bold; }
+        .summary-header { background-color: #000 !important; color: #fff !important; }
+        @media print { 
+            @page { size: A4 landscape; margin: 5mm; } 
+            .no-print { display: none; }
+            .tab-sheet { font-size: 8px; }
+        }
+    </style>
+
+    <div class="printable-area">
+        <div class="text-center mb-3">
+            <h4 class="fw-bold m-0"><?= strtoupper($term) ?> TABULATION SHEET</h4>
+            <p class="m-0"><b>Class:</b> <?= $cls['class_name'] ?> | <b>Session:</b> <?= $year ?></p>
         </div>
+
+        <table class="tab-sheet">
+            <thead>
+                <tr class="bg-dark text-white">
+                    <th rowspan="3">Roll</th>
+                    <?php foreach($structure as $sid => $comps): ?>
+                        <th colspan="<?= count($comps) + 2 ?>" class="<?= $comps[0]['is_optional']?'bg-info':'' ?>">
+                            <?= $comps[0]['subject_name'] ?>
+                        </th>
+                    <?php endforeach; ?>
+                    <th colspan="5" class="summary-header">FINAL SUMMARY</th>
+                </tr>
+                <tr>
+                    <?php foreach($structure as $sid => $comps): 
+                        foreach($comps as $c) echo "<th class='v-text'>{$c['component_name']}</th>";
+                        echo "<th rowspan='2' class='bg-sub-total'>Total</th>";
+                        echo "<th rowspan='2' class='bg-sub-total'>LG</th>";
+                    endforeach; ?>
+                    <th rowspan="2">Grand<br>Marks</th>
+                    <th rowspan="2">GPA<br>(No 4th)</th>
+                    <th rowspan="2">Final<br>GPA</th>
+                    <th rowspan="2">LG</th>
+                    <th rowspan="2">Rank</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php for($r=$cls['start_roll']; $r<=$cls['end_roll']; $r++): 
+                    $gtm=0; $gps=0; $cnt=0; $ob=0; $f=false; ?>
+                <tr>
+                    <td class="fw-bold"><?= $r ?></td>
+                    <?php foreach($structure as $sid => $comps): 
+                        $sm=0; $smax=0; $is_opt=$comps[0]['is_optional'];
+                        foreach($comps as $c) {
+                            $mv=$marks_data[$r][$c['comp_id']]??0;
+                            echo "<td class='".($is_opt?'bg-opt':'')."'>$mv</td>";
+                            $sm+=$mv; $smax+=$c['max_marks'];
+                        }
+                        $sgp = calculateGP($sm, $smax);
+                        $slg = getGrade($sgp);
+                        if($sgp==0 && !$is_opt) $f=true;
+                        if($is_opt) $ob = ($sgp > 2)?($sgp - 2):0;
+                        else { $gps+=$sgp; $cnt++; }
+                        $gtm+=$sm;
+                    ?>
+                        <td class="bg-sub-total <?= ($sgp==0 && !$is_opt)?'fail':'' ?>"><?= $sm ?></td>
+                        <td class="bg-sub-total"><?= $slg ?></td>
+                    <?php endforeach; ?>
+
+                    <?php 
+                        $raw = $gps/max(1,$cnt); 
+                        $fgpa = $f ? 0 : min(5.00, $raw + $ob);
+                    ?>
+                    <td class="fw-bold"><?= $gtm ?></td>
+                    <td><?= number_format($raw, 2) ?></td>
+                    <td class="fw-bold <?= $f?'fail':'' ?>"><?= number_format($fgpa, 2) ?></td>
+                    <td class="fw-bold"><?= getGrade($fgpa) ?></td>
+                    <td class="bg-dark text-white fw-bold"><?= $merit[$r] ?></td>
+                </tr>
+                <?php endfor; ?>
+            </tbody>
+        </table>
     </div>
+
+    <?php else: ?>
+        <div class="alert alert-info text-center mt-5">
+            <i class="fa fa-info-circle"></i> Please select <b>Year</b>, <b>Class</b>, and <b>Exam Term</b> to view results.
+        </div>
+    <?php endif; ?>
 </div>
-
-<style>
-    @media print {
-        .no-print { display: none !important; }
-        .card { border: none !important; box-shadow: none !important; }
-        .table { width: 100% !important; border-collapse: collapse !important; }
-        th, td { border: 1px solid #000 !important; }
-        .table-dark { background-color: #eee !important; color: #000 !important; }
-    }
-</style>
-
-<?php endif; ?>
 
 <?php require 'footer.php'; ?>

@@ -9,8 +9,8 @@ $school_phone = $settings['school_phone'] ?? '';
 $school_email = $settings['school_email'] ?? '';
 $school_logo  = $settings['school_logo'] ?? 'logo.png';
 
-// 2. INPUTS
-$year = $_GET['year'] ?? date('Y');
+// 2. DYNAMIC INPUTS
+$year = $_GET['year'] ?? null;
 $class_id = $_GET['class_id'] ?? null;
 $term = $_GET['term'] ?? null;
 $roll_input = $_GET['roll'] ?? null;
@@ -50,53 +50,26 @@ $base_url = $protocol . $_SERVER['HTTP_HOST'] . explode('?', $_SERVER['REQUEST_U
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body { background: #f0f2f5; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        
-        .no-print-area { max-width: 900px; margin: 20px auto; }
-
-        /* A4 half-page logic */
+        .no-print-area { max-width: 1000px; margin: 20px auto; }
         .card-preview { 
-            background: #fff; 
-            width: 210mm; 
-            height: 148.5mm; 
-            padding: 8mm 10mm; 
-            position: relative; 
-            box-sizing: border-box;
-            margin: 0 auto;
-            border: 1px dashed #ddd; /* Cutting guide */
-            overflow: hidden;
+            background: #fff; width: 210mm; height: 148.5mm; 
+            padding: 8mm 10mm; position: relative; box-sizing: border-box;
+            margin: 0 auto; border: 1px dashed #ddd; overflow: hidden;
         }
-
         @media print {
             body { background: none; margin: 0; padding: 0; }
             .no-print-area { display: none !important; }
             .card-preview { border: none; border-bottom: 1px dashed #ccc; page-break-inside: avoid; }
             .card-preview:nth-child(even) { page-break-after: always; border-bottom: none; }
         }
-
         .school-logo { width: 55px; height: 55px; object-fit: contain; }
         .qr-code { width: 55px; height: 55px; border: 1px solid #eee; padding: 2px; }
-        
         .header-title { font-size: 18px; font-weight: 800; color: #1a202c; margin-bottom: 0; }
-        .header-sub { font-size: 9px; color: #4a5568; margin-bottom: 0; }
-
         .table-transcript { width: 100%; border-collapse: collapse; margin-top: 5px; }
-        .table-transcript th { 
-            background: #2d3748 !important; color: #fff !important; 
-            font-size: 9px; padding: 4px; text-transform: uppercase; border: 1px solid #2d3748;
-        }
-        .table-transcript td { 
-            border: 1px solid #cbd5e0 !important; padding: 2px 5px; font-size: 9px; vertical-align: middle; 
-        }
-
-        /* Fail Row Design */
+        .table-transcript th { background: #2d3748 !important; color: #fff !important; font-size: 9px; padding: 4px; border: 1px solid #2d3748; }
+        .table-transcript td { border: 1px solid #cbd5e0 !important; padding: 2px 5px; font-size: 9px; vertical-align: middle; }
         .row-fail { background-color: #fff5f5 !important; color: #c53030 !important; }
-        .row-fail td { border-color: #feb2b2 !important; }
-        
-        .gpa-summary { 
-            margin-top: 8px; background: #edf2f7; border: 1px solid #cbd5e0; 
-            padding: 5px 0; border-radius: 4px; font-size: 11px;
-        }
-
+        .gpa-summary { margin-top: 8px; background: #edf2f7; border: 1px solid #cbd5e0; padding: 5px 0; font-size: 11px; }
         .signature-row { position: absolute; bottom: 10mm; left: 10mm; right: 10mm; display: flex; justify-content: space-between; }
         .sig-box { width: 140px; text-align: center; border-top: 1px solid #1a202c; padding-top: 3px; font-size: 9px; font-weight: bold; }
     </style>
@@ -104,40 +77,62 @@ $base_url = $protocol . $_SERVER['HTTP_HOST'] . explode('?', $_SERVER['REQUEST_U
 <body>
 
 <div class="no-print-area card p-3 shadow-sm mb-4">
+
+    <div class="text-center">
+        <img src="<?= $school_logo ?>" class="school-logo" style="width: 150px; height: 150px; object-fit: contain;">
+        <h3 class="header-title"><?= $school_name ?></h3>
+        <p class="text-muted"><?= $school_addr . '<br>Phone: ' . $school_phone . '<br>Email: ' . $school_email ?></p>
+    </div>
+
+
     <form method="GET" class="row g-2 align-items-end">
+        <div class="col-md-1">
+            <button type="button" onclick="window.location.href='index.php'" class="btn btn-dark btn-sm w-100 fw-bold">Back</button>
+        </div>
         <div class="col-md-2">
             <label class="small fw-bold">Academic Year</label>
-            <select name="year" class="form-select form-select-sm">
+            <select name="year" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="">-- Year --</option>
                 <?php
                 $years = $pdo->query("SELECT DISTINCT academic_year FROM classes ORDER BY academic_year DESC")->fetchAll(PDO::FETCH_COLUMN);
                 foreach ($years as $y) echo "<option value='$y' ".($year==$y?'selected':'').">$y</option>";
                 ?>
             </select>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
             <label class="small fw-bold">Class</label>
-            <select name="class_id" class="form-select form-select-sm">
-                <?php
-                $classes = $pdo->prepare("SELECT id, class_name FROM classes WHERE academic_year = ?");
-                $classes->execute([$year]);
-                while($c = $classes->fetch()) echo "<option value='{$c['id']}' ".($class_id==$c['id']?'selected':'').">{$c['class_name']}</option>";
-                ?>
+            <select name="class_id" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="">-- Class --</option>
+                <?php if($year):
+                    $classes = $pdo->prepare("SELECT id, class_name FROM classes WHERE academic_year = ?");
+                    $classes->execute([$year]);
+                    while($c = $classes->fetch()) echo "<option value='{$c['id']}' ".($class_id==$c['id']?'selected':'').">{$c['class_name']}</option>";
+                endif; ?>
             </select>
         </div>
         <div class="col-md-2">
             <label class="small fw-bold">Exam Term</label>
-            <input type="text" name="term" class="form-control form-control-sm" value="<?= htmlspecialchars($term) ?>" placeholder="Annual">
+            <select name="term" class="form-select form-select-sm">
+                <option value="">-- Term --</option>
+                <?php if($class_id):
+                    $terms = $pdo->prepare("SELECT DISTINCT exam_term FROM marks WHERE class_id = ?");
+                    $terms->execute([$class_id]);
+                    while($t = $terms->fetch()) echo "<option value='{$t['exam_term']}' ".($term==$t['exam_term']?'selected':'').">{$t['exam_term']}</option>";
+                endif; ?>
+            </select>
         </div>
         <div class="col-md-3">
-            <label class="small fw-bold">Roll Number / Range</label>
-            <input type="text" name="roll" class="form-control form-control-sm" value="<?= htmlspecialchars($roll_input) ?>" placeholder="101-110">
+            <label class="small fw-bold">Roll</label>
+            <input type="text" name="roll" class="form-control form-control-sm" value="<?= htmlspecialchars($roll_input) ?>" placeholder="1-20">
         </div>
-        <div class="col-md-2">
-            <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Generate</button>
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary btn-sm w-100 fw-bold">Load</button>
+        </div>
+        <div class="col-md-1">
+            <button type="button" onclick="window.print()" class="btn btn-dark btn-sm w-100 fw-bold">Print All</button>
         </div>
     </form>
 </div>
-
 <?php 
 if ($class_id && $term && $roll_input):
     $rolls = [];

@@ -85,7 +85,7 @@ $current_session = $settings['current_session'] ?? '----';
 <body>
 
 <div class="d-flex" id="wrapper">
-    <div id="sidebar-wrapper">
+    <div id="sidebar-wrapper" >
         <div class="sidebar-heading text-center fw-bold border-bottom border-secondary">
             <i class="fa-solid fa-graduation-cap me-2"></i> EduResult
         </div>
@@ -95,11 +95,12 @@ $current_session = $settings['current_session'] ?? '----';
             <a href="subjects.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-book me-2"></i> Subjects & Grading</a>
             <a href="marks_entry.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-pen-to-square me-2"></i> Marks Entry</a>
             
-            <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1" style="font-size: 0.75rem;">Reports</div>
+    
             <a href="result_class.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-table me-2"></i> Class Result</a>
-            <a href="result_student.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-id-card me-2"></i> Student Report</a>
+            <a href="result.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-id-card me-2"></i> Student Report</a>
+            <a href="admit_card_generator.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-address-card me-2"></i> Admit Card Generator</a>
             
-            <div class="sidebar-heading text-uppercase fs-6 text-muted mt-3 mb-1" style="font-size: 0.75rem;">System</div>
+        
             <a href="settings.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-gear me-2"></i> Settings</a>
             <a href="logout.php" class="list-group-item list-group-item-action text-danger"><i class="fa-solid fa-power-off me-2"></i> Logout</a>
         </div>

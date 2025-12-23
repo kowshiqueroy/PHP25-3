@@ -167,7 +167,11 @@ require 'header.php';
     <input type="hidden" id="confirm_action" name="confirm_action" value="0">
     <input type="hidden" id="json_input" name="bulk_data_json">
 </form>
-
+<style>
+    .handsontable th { background-color: #f8fafc !important; font-size: 11px !important; border: 1px solid #cbd5e1 !important; }
+    .sub-total-cell { color: #2563eb !important; }
+    <?php if($is_confirmed): ?> #htTable { opacity: 0.7; pointer-events: none; } <?php endif; ?>
+</style>
 <script>
 const compsMeta = <?= json_encode($all_comps) ?>;
 const isConfirmed = <?= $is_confirmed ? 'true' : 'false' ?>;
@@ -180,7 +184,7 @@ const hot = new Handsontable(document.getElementById('htTable'), {
     readOnly: isConfirmed,
     nestedHeaders: [
         ['Roll', <?php foreach($subjects_map as $s) echo "{label: '".addslashes($s['name'])."', colspan: ".(count($s['comps']))."},"; ?>],
-        ['', <?php foreach($all_comps as $c) echo "'".addslashes($c['part_name'])."',"; foreach($subjects_map as $s) echo "'".addslashes($s['name'])." Total',"; ?> 'Grand Total'],
+        ['', <?php foreach($all_comps as $c) echo "'".addslashes($c['part_name'])."',"; foreach($subjects_map as $s) echo "'".addslashes($s['name'])." ',"; ?> 'Grand Total'],
         ['#', <?php foreach($all_comps as $c) echo "'".addslashes($c['component_name'])." (".$c['max_marks'].")',"; foreach($subjects_map as $s) echo "'Sum',"; ?> 'All']
     ],
     columns: [
@@ -239,9 +243,8 @@ function saveData(confirmMode) {
 }
 </script>
 
-<style>
-    .handsontable th { background-color: #f8fafc !important; font-size: 11px !important; border: 1px solid #cbd5e1 !important; }
-    .sub-total-cell { color: #2563eb !important; }
-    <?php if($is_confirmed): ?> #htTable { opacity: 0.7; pointer-events: none; } <?php endif; ?>
-</style>
+
 <?php endif; ?>
+
+
+<?php require 'footer.php'; ?>

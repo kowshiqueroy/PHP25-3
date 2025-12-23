@@ -3,6 +3,10 @@ require 'header.php';
 
 $msg = '';
 
+// 1. ALWAYS FETCH CURRENT SETTINGS FIRST (To populate the form)
+$stmt = $pdo->query("SELECT * FROM settings WHERE id=1");
+$settings = $stmt->fetch(PDO::FETCH_ASSOC);
+
 // Handle Form Submission
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $name = $_POST['school_name'];
@@ -12,8 +16,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $principal = $_POST['principal_name'];
     $session = $_POST['current_session'];
 
-    // Handle File Upload
-    $logoPath = $settings['school_logo'] ?? ''; // Keep old logo by default
+    // 2. LOGIC FOR LOGO: Keep existing one by default
+    $logoPath = $settings['school_logo'] ?? ''; 
+
     if (!empty($_FILES['school_logo']['name'])) {
         $targetDir = "uploads/";
         if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
@@ -25,6 +30,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $allowTypes = array('jpg', 'png', 'jpeg', 'gif');
         if (in_array($fileType, $allowTypes)) {
             if (move_uploaded_file($_FILES['school_logo']['tmp_name'], $targetFilePath)) {
+                // Delete old file if it exists and is a different file
+                if (!empty($settings['school_logo']) && file_exists($settings['school_logo'])) {
+                    @unlink($settings['school_logo']);
+                }
                 $logoPath = $targetFilePath;
             } else {
                 $msg = '<div class="alert alert-danger">Error uploading file.</div>';
@@ -34,17 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 
-    // Update DB
+    // 3. UPDATE DATABASE
     $sql = "UPDATE settings SET 
             school_name=?, school_address=?, school_phone=?, school_email=?, 
             principal_name=?, current_session=?, school_logo=? 
             WHERE id=1";
     $stmt = $pdo->prepare($sql);
+    
     if ($stmt->execute([$name, $address, $phone, $email, $principal, $session, $logoPath])) {
         $msg = '<div class="alert alert-success">Settings updated successfully!</div>';
-        // Refresh settings variable for immediate display
+        
+        // Refresh settings variable so the form shows the NEW data immediately
         $stmt = $pdo->query("SELECT * FROM settings WHERE id=1");
-        $settings = $stmt->fetch();
+        $settings = $stmt->fetch(PDO::FETCH_ASSOC);
     } else {
         $msg = '<div class="alert alert-danger">Database error.</div>';
     }
@@ -109,8 +120,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="card shadow-sm">
                 <div class="card-header bg-white fw-bold">School Logo</div>
                 <div class="card-body text-center">
-                    <?php if (!empty($settings['school_logo'])): ?>
-                        <img src="<?php echo htmlspecialchars($settings['school_logo']); ?>" class="img-fluid mb-3" style="max-height: 150px; border: 1px solid #ddd; padding: 5px;">
+                    <?php 
+                    // Determine image preview path
+                    $logoView = $settings['school_logo'] ?? '';
+                    if (!empty($logoView) && file_exists($logoView)): 
+                    ?>
+                        <img src="<?php echo htmlspecialchars($logoView); ?>?t=<?php echo time(); ?>" class="img-fluid mb-3" style="max-height: 150px; border: 1px solid #ddd; padding: 5px; background: #f9f9f9;">
                     <?php else: ?>
                         <div class="bg-light p-4 mb-3 border text-muted">No Logo Uploaded</div>
                     <?php endif; ?>

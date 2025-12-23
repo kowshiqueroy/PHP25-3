@@ -8,6 +8,11 @@
                 event.preventDefault();
                 document.body.classList.toggle('sb-sidenav-toggled');
             });
+            document.addEventListener('click', event => {
+                if (!event.target.closest('.sb-sidenav') && !event.target.closest('#sidebarToggle')) {
+                    document.body.classList.remove('sb-sidenav-toggled');
+                }
+            });
         }
     });
 </script>

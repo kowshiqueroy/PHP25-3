@@ -33,54 +33,117 @@ $current_session = $settings['current_session'] ?? '----';
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        :root { --sidebar-bg: #1e293b; --content-bg: #f8fafc; }
-        body { background-color: var(--content-bg); min-height: 100vh; overflow-x: hidden; }
+    :root { 
+        --sidebar-bg: #1e293b; 
+        --sidebar-hover: rgba(255, 255, 255, 0.08);
+        --sidebar-active: #3b82f6; /* Modern Blue */
+        --sidebar-text: #94a3b8;
+        --sidebar-text-hover: #f8fafc;
+        --content-bg: #f1f5f9; 
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    body { 
+        background-color: var(--content-bg); 
+        min-height: 100vh; 
+        overflow-x: hidden; 
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Sidebar Styling */
+    #sidebar-wrapper {
+        min-height: 100vh;
+        margin-left: -15rem;
+        transition: var(--transition);
+        background-color: var(--sidebar-bg);
+        color: white;
+        position: fixed;
+        width: 15rem;
+        z-index: 1050;
+        box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    #sidebar-wrapper .sidebar-heading {
+        padding: 1.5rem 1.25rem;
+        font-size: 1.25rem;
+        font-weight: 700;
+        letter-spacing: -0.025em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        color: #fff;
+    }
+
+    #sidebar-wrapper .list-group {
+        padding: 0.75rem 0.5rem;
+    }
+
+    #sidebar-wrapper .list-group-item {
+        background-color: transparent;
+        color: var(--sidebar-text);
+        border: none;
+        padding: 0.8rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 0.2rem;
+        display: flex;
+        align-items: center;
+        transition: var(--transition);
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    #sidebar-wrapper .list-group-item i {
+        width: 1.5rem;
+        margin-right: 0.75rem;
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    #sidebar-wrapper .list-group-item:hover {
+        background-color: var(--sidebar-hover);
+        color: var(--sidebar-text-hover);
+    }
+
+    #sidebar-wrapper .list-group-item.active {
+        background-color: var(--sidebar-active);
+        color: #fff;
+        box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.5);
+    }
+
+    /* Page Content Wrapper */
+    #page-content-wrapper { 
+        width: 100%; 
+        transition: var(--transition); 
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Toggled State for Mobile */
+    body.sb-sidenav-toggled #sidebar-wrapper { margin-left: 0; }
+    
+    /* Desktop State */
+    @media (min-width: 768px) {
+        #sidebar-wrapper { margin-left: 0; }
+        #page-content-wrapper { margin-left: 15rem; width: calc(100% - 15rem); }
         
-        /* Sidebar Styling */
-        #sidebar-wrapper {
-            min-height: 100vh;
-            margin-left: -15rem;
-            transition: margin .25s ease-out;
-            background-color: var(--sidebar-bg);
-            color: white;
-            position: fixed;
-            width: 15rem;
-            z-index: 1000;
-        }
-        #sidebar-wrapper .sidebar-heading { padding: 0.875rem 1.25rem; font-size: 1.2rem; }
-        #sidebar-wrapper .list-group-item {
-            background-color: transparent;
-            color: #cbd5e1;
-            border: none;
-            padding: 12px 20px;
-        }
-        #sidebar-wrapper .list-group-item:hover, #sidebar-wrapper .list-group-item.active {
-            background-color: rgba(255,255,255,0.1);
-            color: #fff;
-        }
-        
-        /* Page Content Wrapper */
-        #page-content-wrapper { width: 100%; transition: margin .25s ease-out; }
-        
-        /* Toggled State for Desktop */
-        body.sb-sidenav-toggled #sidebar-wrapper { margin-left: 0; }
-        body.sb-sidenav-toggled #page-content-wrapper { margin-left: 15rem; }
-        
-        /* Mobile Default: Sidebar Hidden, Toggled shows it */
-        @media (min-width: 768px) {
-            #sidebar-wrapper { margin-left: 0; }
-            #page-content-wrapper { margin-left: 15rem; }
-            body.sb-sidenav-toggled #sidebar-wrapper { margin-left: -15rem; }
-            body.sb-sidenav-toggled #page-content-wrapper { margin-left: 0; }
-        }
-        
-        /* Print Media */
-        @media print {
-            #sidebar-wrapper, .navbar, .no-print { display: none !important; }
-            #page-content-wrapper { margin-left: 0 !important; width: 100% !important; }
-            body { background-color: white; }
-        }
-    </style>
+        body.sb-sidenav-toggled #sidebar-wrapper { margin-left: -15rem; }
+        body.sb-sidenav-toggled #page-content-wrapper { margin-left: 0; width: 100%; }
+    }
+
+    /* Navbar customization to match content */
+    .navbar {
+        background-color: white !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 0.75rem 1.5rem;
+    }
+
+    /* Print Media */
+    @media print {
+        #sidebar-wrapper, .navbar, .no-print, .btn { display: none !important; }
+        #page-content-wrapper { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
+        body { background-color: white; }
+        .card { border: none !important; box-shadow: none !important; }
+    }
+</style>
 </head>
 <body>
 
