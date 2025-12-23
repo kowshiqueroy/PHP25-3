@@ -13,8 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $address = $_POST['school_address'];
     $phone = $_POST['school_phone'];
     $email = $_POST['school_email'];
-    $principal = $_POST['principal_name'];
-    $session = $_POST['current_session'];
+    $principal = $_POST['email'];
+    $session = $_POST['established'];
 
     // 2. LOGIC FOR LOGO: Keep existing one by default
     $logoPath = $settings['school_logo'] ?? ''; 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // 3. UPDATE DATABASE
     $sql = "UPDATE settings SET 
             school_name=?, school_address=?, school_phone=?, school_email=?, 
-            principal_name=?, current_session=?, school_logo=? 
+            email=?, established=?, school_logo=? 
             WHERE id=1";
     $stmt = $pdo->prepare($sql);
     
@@ -104,11 +104,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label class="form-label">Principal's Name</label>
-                            <input type="text" name="principal_name" class="form-control" value="<?php echo htmlspecialchars($settings['principal_name'] ?? ''); ?>">
+                            <input type="text" name="email" class="form-control" value="<?php echo htmlspecialchars($settings['email'] ?? ''); ?>">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Current Session</label>
-                            <input type="text" name="current_session" class="form-control" value="<?php echo htmlspecialchars($settings['current_session'] ?? ''); ?>" placeholder="e.g. 2024-2025">
+                            <label class="form-label">Established</label>
+                            <input type="text" name="established" class="form-control" value="<?php echo htmlspecialchars($settings['established'] ?? ''); ?>" placeholder="e.g. 2024-2025">
                             <small class="text-muted">This appears on all reports.</small>
                         </div>
                     </div>

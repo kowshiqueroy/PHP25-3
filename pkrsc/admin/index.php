@@ -1,54 +1,146 @@
 <?php
-require '../config/db.php';
-require 'includes/header.php'; // Loads CSS, Sidebar, Navbar
+require_once '../config.php';
+$message = '';
+if (isset($_POST['login'])) {
 
-// Dashboard Stats Logic
-$total_students = $pdo->query("SELECT COUNT(*) FROM users WHERE role='student'")->fetchColumn();
-$pending_apps = $pdo->query("SELECT COUNT(*) FROM admission_applications WHERE status='pending'")->fetchColumn();
-$total_notices = $pdo->query("SELECT COUNT(*) FROM notices")->fetchColumn();
+  $username = $_POST['username'];
+  $password = $_POST['password'];
+  // Prepare and execute the query
+  $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?");
+  $stmt->bind_param("s", $username);
+  $stmt->execute();
+  $result = $stmt->get_result();
+  if ($result->num_rows === 1) {
+      $user = $result->fetch_assoc();
+      // Verify password
+      if (password_verify($password, $user['password'])) {
+          // Successful login
+            $message = 'Login successful. Welcome, ' . htmlspecialchars($username) . '!';
+       
+            $_SESSION['username'] = $username;
+            $_SESSION['role'] = $user['role'];
+            header('Location: '.$user['role']);
+            exit();
+      } else {
+          // Invalid password
+          $message = 'Invalid username or password.';
+      }
+  } else {
+      // User not found
+      $message = 'Invalid username or password.';
+  }
+  $stmt->close();
+}
 ?>
 
-<div style="margin-bottom: 20px;">
-    <h2>Dashboard Overview</h2>
-</div>
 
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 30px;">
-    
-    <div class="card" style="border-left: 4px solid var(--primary);">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <p style="color: #64748b; margin: 0;">Total Students</p>
-                <h2 style="margin: 5px 0; font-size: 2rem;"><?php echo $total_students; ?></h2>
-            </div>
-            <i class="fas fa-users" style="font-size: 2.5rem; color: #e2e8f0;"></i>
-        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #3661f1ff, #ACB6E5);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 2rem;
+      width: 90%;
+      max-width: 360px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      color: #fff;
+    }
+
+    .login-container h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .form-group input::placeholder {
+      color: #eee;
+    }
+
+    .login-btn {
+      width: 100%;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.3);
+      color: #fff;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-btn:hover {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .message-box {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 0.9rem;
+      min-height: 1.2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Welcome Back</h2>
+    <form action="" method="post">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter username" />
     </div>
-
-    <div class="card" style="border-left: 4px solid #f59e0b;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <p style="color: #64748b; margin: 0;">Pending Admissions</p>
-                <h2 style="margin: 5px 0; font-size: 2rem;"><?php echo $pending_apps; ?></h2>
-            </div>
-            <i class="fas fa-user-clock" style="font-size: 2.5rem; color: #e2e8f0;"></i>
-        </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" />
     </div>
+    <button class="login-btn" type="submit" name="login">Login</button>
+    </form>
 
-    <div class="card" style="border-left: 4px solid #3b82f6;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-                <p style="color: #64748b; margin: 0;">Published Notices</p>
-                <h2 style="margin: 5px 0; font-size: 2rem;"><?php echo $total_notices; ?></h2>
-            </div>
-            <i class="fas fa-bullhorn" style="font-size: 2.5rem; color: #e2e8f0;"></i>
-        </div>
-    </div>
+    <div class="message-box" id="messageBox"><?php echo isset($message) ? $message : ''; ?></div>
+  </div>
 
-</div>
 
-<div class="card">
-    <h3>Quick Actions</h3>
-    <p>Select a module from the sidebar to start managing the content.</p>
-</div>
-
-<?php require 'includes/footer.php'; ?>
+</body>
+</html>

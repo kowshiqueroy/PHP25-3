@@ -9,10 +9,10 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch School Details
-$stmt = $pdo->query("SELECT school_name, current_session, school_logo FROM settings WHERE id=1");
+$stmt = $pdo->query("SELECT school_name, established, school_logo FROM settings WHERE id=1");
 $settings = $stmt->fetch();
 $school_name = $settings['school_name'] ?? 'EduResult Pro';
-$current_session = $settings['current_session'] ?? date('Y');
+$established = $settings['established'] ?? date('Y');
 $school_logo = $settings['school_logo'] ?? 'logo.png';
 ?>
 <!DOCTYPE html>
@@ -92,7 +92,7 @@ $school_logo = $settings['school_logo'] ?? 'logo.png';
         </div>
         <div>
             <h4 class="mb-0"><i class="fa fa-id-card me-2"></i> Admit Card Studio</h4>
-            <small class="text-white-50"><?= $school_name; ?> • Session <?= $current_session; ?></small>
+            <small class="text-white-50"><?= $school_name; ?> • Session <?= $established; ?></small>
         </div>
         <div>
             <button onclick="generate()" class="btn btn-success px-5 fw-bold"><i class="fa fa-print me-2"></i>GENERATE PRINT</button>
@@ -245,7 +245,7 @@ function generate() {
                     <img src="<?= $school_logo ?>" style="width:70px;height:70px;object-fit:contain" onerror="this.src='https://via.placeholder.com/70?text=LOGO'">
                     <div class="text-center flex-grow-1">
                         <h1 class="school-title"><?= $school_name; ?></h1>
-                        <p class="mb-0 small">Academic Session: <?= $current_session; ?></p>
+                        <p class="mb-0 small">Academic Session: <?= $established; ?></p>
                         <div class="exam-title">${document.getElementById('term').value.toUpperCase() || 'EXAMINATION'}</div>
                     </div>
                     <div class="photo-placeholder">Student<br>PHOTO</div>

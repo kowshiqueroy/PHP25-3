@@ -18,10 +18,10 @@ if (!in_array($current_page, $public_pages)) {
 require_once 'db.php';
 
 // 2. Fetch Global Settings
-$stmt = $pdo->query("SELECT school_name, current_session FROM settings WHERE id=1");
+$stmt = $pdo->query("SELECT school_name, established FROM settings WHERE id=1");
 $settings = $stmt->fetch();
 $school_name = $settings['school_name'] ?? 'EduResult Pro';
-$current_session = $settings['current_session'] ?? '----';
+$established = $settings['established'] ?? '----';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -112,7 +112,7 @@ $current_session = $settings['current_session'] ?? '----';
                 <button class="btn btn-outline-secondary btn-sm" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
                 
                 <div class="ms-auto d-flex align-items-center">
-                    <span class="me-3 text-muted small d-none d-sm-block">Session: <strong><?php echo htmlspecialchars($current_session); ?></strong></span>
+                    <span class="me-3 text-muted small d-none d-sm-block">Session: <strong><?php echo htmlspecialchars($established); ?></strong></span>
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-user-circle fa-lg"></i> Admin

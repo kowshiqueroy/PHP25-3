@@ -1,0 +1,21 @@
+</div> </div> </div> <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    window.addEventListener('DOMContentLoaded', event => {
+        const sidebarToggle = document.body.querySelector('#sidebarToggle');
+        if (sidebarToggle) {
+            sidebarToggle.addEventListener('click', event => {
+                event.preventDefault();
+                document.body.classList.toggle('sb-sidenav-toggled');
+            });
+            document.addEventListener('click', event => {
+                if (!event.target.closest('.sb-sidenav') && !event.target.closest('#sidebarToggle')) {
+                    document.body.classList.remove('sb-sidenav-toggled');
+                }
+            });
+        }
+    });
+</script>
+
+</body>
+</html>

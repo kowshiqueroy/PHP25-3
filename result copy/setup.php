@@ -15,8 +15,8 @@ $sql = "CREATE TABLE IF NOT EXISTS settings (
     school_phone VARCHAR(50),
     school_email VARCHAR(100),
     school_logo VARCHAR(255),
-    principal_name VARCHAR(100),
-    current_session VARCHAR(50)
+    email VARCHAR(100),
+    established VARCHAR(50)
 )";
 $pdo->exec($sql);
 echo "Table 'settings' created.<br>";
@@ -100,7 +100,7 @@ echo "Table 'marks' created.<br>";
 // Seed Settings
 $check = $pdo->query("SELECT count(*) FROM settings")->fetchColumn();
 if ($check == 0) {
-    $sql = "INSERT INTO settings (id, school_name, school_address, current_session, principal_name) 
+    $sql = "INSERT INTO settings (id, school_name, school_address, established, email) 
             VALUES (1, 'Modern High School', '123 Edu Lane, City', '2024-2025', 'Dr. A. Smith')";
     $pdo->exec($sql);
     echo "Default settings inserted.<br>";
