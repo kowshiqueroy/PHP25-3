@@ -33,6 +33,11 @@ function calculateGP($mark, $max) {
 require 'header.php';
 ?>
 
+
+
+
+
+
 <div class="container-fluid py-3">
     <div class="card no-print mb-4 shadow-sm border-0 bg-light">
         <div class="card-body">
@@ -125,7 +130,7 @@ require 'header.php';
         $merit = []; foreach($rank_list as $i => $v) $merit[$v['roll']] = ($v['gpa']>0?($i+1):'-');
     ?>
 
-    <style>
+    <!-- <style>
         .tab-sheet { width: 100%; border-collapse: collapse; font-size: 9px; }
         .tab-sheet th, .tab-sheet td { border: 1px solid #000; text-align: center; padding: 2px; }
         .v-text { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; font-size: 8px; padding: 5px 1px; }
@@ -138,12 +143,77 @@ require 'header.php';
             .no-print { display: none; }
             .tab-sheet { font-size: 8px; }
         }
-    </style>
+    </style> -->
+
+ <style>
+    .tab-sheet { 
+        width: 100%; 
+        border-collapse: collapse; 
+        font-family: 'Arial Narrow', sans-serif;
+        table-layout: fixed; 
+    }
+
+    .tab-sheet th { 
+        border: 1px solid #000; 
+        text-align: center; 
+        padding: 0px 0;
+        font-size: 6px;
+    }
+
+     .tab-sheet td { 
+        border: 1px solid #000; 
+        text-align: center; 
+        padding: 0px 0;
+        font-size: 7.5px;
+    }
+
+    /* Narrow for integer marks (e.g., 75) */
+    .col-mark { 
+        width: 14px; 
+    }
+
+    /* Slightly wider for Grade Letters (e.g., A+) */
+    .col-lg { 
+        width: 16px; 
+        font-weight: bold;
+       
+    }
+
+    /* Wider for GPA/CGPA (e.g., 5.00) */
+    .col-summary { 
+        width: 32px; 
+        font-weight: bold;
+        background-color: #f8f9fa;
+    }
+
+    .v-text { 
+        writing-mode: vertical-rl; 
+        transform: rotate(180deg); 
+        white-space: nowrap; 
+        font-size: 8px; 
+        font-weight: bold;
+        height: 40px;
+    }
+
+    .comp-text {
+        font-size: 6px !important;
+        height: 22px;
+        background-color: #f2f2f2;
+    }
+
+    @media print {
+        @page { size: A4 landscape; margin: 3mm; }
+        .tab-sheet { font-size: 7px; }
+        /* Ensure background colors for GPA columns print */
+        .col-summary { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .no-mg { margin: 0 !important;}
+    }
+</style>
 
     <div class="printable-area">
-        <div class="text-center mb-3">
-            <h4 class="fw-bold m-0"><?= strtoupper($term) ?> TABULATION SHEET</h4>
-            <p class="m-0"><b>Class:</b> <?= $cls['class_name'] ?> | <b>Session:</b> <?= $year ?></p>
+        <div class="text-center mb-3 no-mg">
+          
+            <p class="m-0"><b> <?= strtoupper($term) ?> TABULATION SHEET Class:</b> <?= $cls['class_name'] ?> | <b>Session:</b> <?= $year ?></p>
         </div>
 
         <table class="tab-sheet">
@@ -179,6 +249,7 @@ require 'header.php';
                         $sm=0; $smax=0; $is_opt=$comps[0]['is_optional'];
                         foreach($comps as $c) {
                             $mv=$marks_data[$r][$c['comp_id']]??0;
+                            $mv = (int) $mv;
                             echo "<td class='".($is_opt?'bg-opt':'')."'>$mv</td>";
                             $sm+=$mv; $smax+=$c['max_marks'];
                         }
@@ -197,7 +268,7 @@ require 'header.php';
                         $raw = $gps/max(1,$cnt); 
                         $fgpa = $f ? 0 : min(5.00, $raw + $ob);
                     ?>
-                    <td class="fw-bold"><?= $gtm ?></td>
+                    <td class=""><?= $gtm ?></td>
                     <td><?= number_format($raw, 2) ?></td>
                     <td class="fw-bold <?= $f?'fail':'' ?>"><?= number_format($fgpa, 2) ?></td>
                     <td class="fw-bold"><?= getGrade($fgpa) ?></td>

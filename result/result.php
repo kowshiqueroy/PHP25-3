@@ -184,9 +184,14 @@ if ($class_id && $term && $roll_input):
             <img src="https://api.qrserver.com/v1/create-qr-code/?data=<?= urlencode($qr_url) ?>&size=100x100" class="qr-code">
         </div>
 
-        <div class="row mb-2 gx-0" style="font-size: 11px;">
-            <div class="col-8"><strong>Student:</strong> ___________________________________</div>
-            <div class="col-4 text-end"><strong>Roll:</strong> <?= $roll ?> | <strong>Class:</strong> <?= $cls_name ?></div>
+        <div class="row mb-2 gx-0 d-flex align-items-center" style="font-size: 11px;">
+            <div class="col-6">   <div class="d-flex align-items-center">
+                <div class="col-2 text-left">Name:</div>
+                <div class="col-10 text-left">
+                    <input type="text" class="form-control form-control-sm">
+                </div>
+            </div></div>
+            <div class="col-6 text-end"><strong>Roll:</strong> <?= $roll ?> | <strong>Class:</strong> <?= $cls_name ?></div>
         </div>
 
         <table class="table-transcript text-center">
@@ -204,6 +209,7 @@ if ($class_id && $term && $roll_input):
                     $sm=0; $smx=0; $det=[];
                     foreach($data['components'] as $c) {
                         $v = $marks[$c['comp_id']] ?? 0;
+                        $v= intval($v); 
                         $sm += $v; $smx += $c['max_marks'];
                         $det[] = "{$c['part_name']}({$c['component_name']}):$v";
                     }
@@ -215,7 +221,7 @@ if ($class_id && $term && $roll_input):
                     $total_m += $sm;
                 ?>
                 <tr class="<?= $is_fail ? 'row-fail' : '' ?>">
-                    <td class="text-start fw-bold"><?= $s_name ?></td>
+                    <td class="text-start fw-bold "><?= $s_name ?> <?= $data['is_optional'] ? '[4th]' : '' ?></td>
                     <td class="text-start" style="font-size: 8px; line-height: 1;"><?= implode(', ', $det) ?></td>
                     <td class="fw-bold"><?= $sm ?></td>
                     <td class="fw-bold"><?= getGrade($gp) ?></td>
@@ -225,20 +231,20 @@ if ($class_id && $term && $roll_input):
             </tbody>
         </table>
 
-        <div class="gpa-summary row gx-0 text-center fw-bold">
+        <div class="gpa-summary row gx-0 text-center fw-bold <?= $fail?'bg-danger text-white':'' ?>">
             <?php 
                 $raw_gpa = ($cnt > 0) ? ($gp_sum / $cnt) : 0;
                 $final_gpa = $fail ? 0 : min(5.00, $raw_gpa + $opt_b);
             ?>
             <div class="col-3">Total: <?= $total_m ?></div>
-            <div class="col-3">GPA: <?= number_format($raw_gpa, 2) ?></div>
-            <div class="col-3">Final GPA: <span class="<?= $fail?'text-danger':'' ?>"><?= number_format($final_gpa, 2) ?></span></div>
+            <div class="col-3">Without 4th Subject: <?= number_format($raw_gpa, 2) ?></div>
+            <div class="col-3">Final GPA: <?= number_format($final_gpa, 2) ?></span></div>
             <div class="col-3">Grade: <?= getGrade($final_gpa) ?></div>
         </div>
 
         <div class="signature-row">
             <div class="sig-box">Guardian's Signature</div>
-            <div class="sig-box">Class Teacher</div>
+            <div class="sig-box">Class Teacher's Signature</div>
             <div class="sig-box">Principal's Signature</div>
         </div>
     </div>

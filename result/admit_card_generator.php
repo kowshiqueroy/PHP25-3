@@ -9,11 +9,13 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Fetch School Details
-$stmt = $pdo->query("SELECT school_name, current_session, school_logo FROM settings WHERE id=1");
+$stmt = $pdo->query("SELECT * FROM settings WHERE id=1");
 $settings = $stmt->fetch();
 $school_name = $settings['school_name'] ?? 'EduResult Pro';
-$current_session = $settings['current_session'] ?? date('Y');
+$school_address = $settings['school_address'] ?? 'School Address';
+$school_phone = $settings['school_phone'] ?? 'Phone';
 $school_logo = $settings['school_logo'] ?? 'logo.png';
+$current_session = $settings['current_session'] ?? '----';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,7 +60,7 @@ $school_logo = $settings['school_logo'] ?? 'logo.png';
                 position: relative;
             }
 
-            .school-title { font-size: 22px; font-weight: bold; text-transform: uppercase; margin: 0; color: #000; }
+            .school-title { font-size: 18px; font-weight: bold; text-transform: uppercase; margin: 0; color: #000; }
             .exam-title { 
                 font-size: 14px; border: 2px solid #000; display: inline-block; 
                 padding: 2px 20px; margin-top: 5px; font-weight: bold; background: #eee !important;
@@ -242,10 +244,10 @@ function generate() {
         <div class="admit-wrapper">
             <div class="admit-inner">
                 <div class="d-flex justify-content-between align-items-start">
-                    <img src="<?= $school_logo ?>" style="width:70px;height:70px;object-fit:contain" onerror="this.src='https://via.placeholder.com/70?text=LOGO'">
+                    <img src="<?= $school_logo ?>" style="height:100px;object-fit:contain" ">
                     <div class="text-center flex-grow-1">
                         <h1 class="school-title"><?= $school_name; ?></h1>
-                        <p class="mb-0 small">Academic Session: <?= $current_session; ?></p>
+                        <p class="mb-0 small"><?= $school_address." ".$school_phone." ".date("d.m.Y"  ) ?></p>
                         <div class="exam-title">${document.getElementById('term').value.toUpperCase() || 'EXAMINATION'}</div>
                     </div>
                     <div class="photo-placeholder">Student<br>PHOTO</div>
@@ -277,7 +279,7 @@ function generate() {
 
                 <div class="signature-row d-flex justify-content-between">
                     <div class="sig-box">Class Teacher</div>
-                    <div class="sig-box">Principal / Headmaster</div>
+                    <div class="sig-box">Principal</div>
                 </div>
             </div>
         </div>`;
