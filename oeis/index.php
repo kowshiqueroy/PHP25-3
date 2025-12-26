@@ -1,3 +1,5 @@
+
+
 <?php
 require_once 'config.php';
 // --- PHP LOGIN LOGIC ---
@@ -341,6 +343,156 @@ if (isset($_GET['error'])) {
         });
      
     </script>
+
+
+ 
+
+  <script>
+    // Register service worker for caching
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('SW registered:', reg.scope))
+        .catch(err => console.log('SW registration failed:', err));
+    }
+
+
+    function updateOnlineStatus() {
+      if (!navigator.onLine) {
+       window.location.href = 'offline.php';
     
+      } 
+    }
+
+    // Initial check
+    updateOnlineStatus();
+
+    // Listen for changes
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+
+
+       window.addEventListener("online", () => {
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      if (orders.length > 0) {
+        fetch("sync.php", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orders)
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Synced:", data);
+          localStorage.removeItem("orders");
+          loadOrders();
+        })
+        .catch(err => console.error("Sync failed:", err));
+      }
+    });
+  </script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // --- CONFIGURATION ---
+    const STORAGE_KEY = 'offline_orders_data';
+    const SYNC_ENDPOINT = 'sync.php'; // Ensure this path is correct relative to your pages
+
+    // --- MAIN SYNC FUNCTION ---
+    function checkAndSync() {
+        // 1. Check network status
+        if (!navigator.onLine) return;
+
+        // 2. Check for data
+        const orders = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        
+        if (orders.length > 0) {
+            console.log(`Found ${orders.length} offline orders. Syncing...`);
+            
+            // Show "Syncing..." status
+            showToast("⏳ Syncing offline orders...", "info");
+
+            fetch(SYNC_ENDPOINT, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(orders)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // 3. Clear storage on success
+                    localStorage.removeItem(STORAGE_KEY);
+                    
+                    // 4. Notify User
+                    showToast(`✅ Successfully synced ${data.count} orders!`, "success");
+                    
+                    // Optional: Refresh page if you are on a listing page
+                    // location.reload(); 
+                } else {
+                    console.error("Server refused sync:", data);
+                    showToast("❌ Sync Error: " + data.message, "error");
+                }
+            })
+            .catch(error => {
+                console.error("Network error during sync:", error);
+                // Don't clear storage, retry later
+            });
+        }
+    }
+
+    // --- TRIGGERS ---
+    
+    // 1. Run immediately on page load
+    checkAndSync();
+
+    // 2. Run whenever internet reconnects
+    window.addEventListener('online', checkAndSync);
+
+
+    // --- UI HELPER: TOAST NOTIFICATION ---
+    // Creates a temporary popup at the bottom of the screen
+    function showToast(message, type = "success") {
+        // Remove existing toast if any
+        const existing = document.getElementById('sync-toast');
+        if (existing) existing.remove();
+
+        // Create element
+        const toast = document.createElement('div');
+        toast.id = 'sync-toast';
+        toast.textContent = message;
+        
+        // Styles
+        Object.assign(toast.style, {
+            position: 'fixed',
+            bottom: '20px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: type === 'success' ? '#198754' : (type === 'error' ? '#dc3545' : '#0d6efd'),
+            color: 'white',
+            padding: '12px 24px',
+            borderRadius: '50px',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
+            zIndex: '9999',
+            fontFamily: 'system-ui, sans-serif',
+            fontSize: '14px',
+            fontWeight: '600',
+            opacity: '0',
+            transition: 'opacity 0.3s ease'
+        });
+
+        document.body.appendChild(toast);
+
+        // Fade In
+        requestAnimationFrame(() => { toast.style.opacity = '1'; });
+
+        // Fade Out after 3 seconds
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+});
+</script>
+
 </body>
 </html>

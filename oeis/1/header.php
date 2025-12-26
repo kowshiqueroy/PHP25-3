@@ -18,10 +18,8 @@ $menuItems = [
     ['icon' => 'fa-money-bill', 'label' => 'Cash', 'link' => 'cash.php'],
     ['icon' => 'fa-map', 'label' => 'Routes', 'link' => 'routes.php'],
     ['icon' => 'fa-box', 'label' => 'Items', 'link' => 'items.php'],
-    ['icon' => 'fa-question', 'label' => 'Survey', 'link' => '#'],
-    ['icon' => 'fa-triangle-exclamation', 'label' => 'Damage', 'link' => '#'],
-    ['icon' => 'fa-chart-pie', 'label' => 'Reports', 'link' => '#'],
-    ['icon' => 'fa-gift', 'label' => 'Brand Gift Promos', 'link' => '#'],
+    ['icon' => 'fa-question', 'label' => 'Survey', 'link' => 'survey.php'],
+    ['icon' => 'fa-gift', 'label' => 'Others', 'link' => 'others.php'],
     ['icon' => 'fa-users', 'label' => 'Users', 'link' => 'users.php'],
     ['icon' => 'fa-right-from-bracket', 'label' => 'Logout', 'link' => '../logout.php'],
 ];

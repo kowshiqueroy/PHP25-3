@@ -130,35 +130,21 @@ CREATE TABLE IF NOT EXISTS cash_collections (
 ");
 
 // 9. Damage Reports TABLE
-$conn->query("
-CREATE TABLE IF NOT EXISTS damage_reports (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    item_id INT(11) UNSIGNED NOT NULL,
-    quantity INT(11) NOT NULL,
-    report_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    reported_by INT(11) UNSIGNED NOT NULL,
-    remarks VARCHAR(255),
-    company_id INT(11) UNSIGNED NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status TINYINT(1) DEFAULT 1,
-    FOREIGN KEY (item_id) REFERENCES items(id) ON DELETE CASCADE,
-    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-");
+
 
 // 10. Market Surveys TABLE
 $conn->query("
-CREATE TABLE IF NOT EXISTS market_surveys (
-    id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS surveys (
+  id INT(11) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    survey_name VARCHAR(255) NOT NULL,
+    survey_type VARCHAR(255) NOT NULL,
+     survey_address VARCHAR(255) NOT NULL,
+      survey_phone VARCHAR(255) NOT NULL,
     route_id INT(11) UNSIGNED NOT NULL,
-    shop_id INT(11) UNSIGNED NOT NULL,
-    survey_data TEXT NOT NULL,
-    survey_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    surveyed_by INT(11) UNSIGNED NOT NULL,
     company_id INT(11) UNSIGNED NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_id INT(11) UNSIGNED,
+    balance DECIMAL(15,2) DEFAULT 0,
     status TINYINT(1) DEFAULT 1,
-    FOREIGN KEY (shop_id) REFERENCES shops(id) ON DELETE CASCADE,
     FOREIGN KEY (route_id) REFERENCES routes(id) ON DELETE CASCADE,
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -181,6 +167,25 @@ CREATE TABLE IF NOT EXISTS serials (
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ");
+
+// offline_orders TABLE
+
+ /* items JSON requires MySQL 5.7+ or use TEXT emaple: 
+       [{"name":"i","qty":"10","price":"06","total":"60.00"},{"name":"Ir","qty":"12","price":"05","total":"60.00"}] */
+$conn->query("CREATE TABLE IF NOT EXISTS offline_orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_name VARCHAR(255),
+    route_name VARCHAR(255),
+    shop_details VARCHAR(255),
+    order_date DATE,
+    delivery_date DATE,
+    note TEXT,
+    items JSON,
+    total DECIMAL(10,2),
+    synced TINYINT DEFAULT 0,
+    admin_approval_id INT DEFAULT NULL,
+    admin_approval_timedate DATETIME DEFAULT NULL
+)");
 
 // 11. Gifts TABLE
 
@@ -208,43 +213,47 @@ if ($res && ($row = $res->fetch_assoc()) && $row['count'] == 0) {
 }
 ?>
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['action'])) {
-        if ($_POST['action'] === 'setup') {
-            // Reload the setup script to ensure tables are created
-            header("Location: setup.php");
-            exit;
-        } elseif ($_POST['action'] === 'delete') {
-            // Delete this setup file for security
-            if (unlink(__FILE__)) {
-                echo "<script>alert('setup.php has been deleted for security reasons.'); window.location.href='index.php';</script>";
-                exit;
-            } else {
-                $msg = "❌ Error: Could not delete setup.php. Please delete it manually.";
-            }
-        }
-        elseif ($_POST['action'] === 'reset') {
-            // Reset the setup process by redirecting to setup.php
-            //get and remove all tables in the database automatically, child first
-            $tables = $conn->query("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema = 'oeis' ORDER BY TABLE_NAME");
-            while ($row = $tables->fetch_assoc()) {
-                $stmt = $conn->prepare("SET FOREIGN_KEY_CHECKS = 0;");
-                if ($stmt) {
-                    $stmt->execute();
-                    $conn->query("DROP TABLE IF EXISTS `" . $row['TABLE_NAME'] . "`");
-                    $stmt->close();
+// session_start();
+
+// Define a secure password (hashed)
+$admin_password_hash = password_hash("5877", PASSWORD_DEFAULT);
+
+$msg = "";
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['password']) && !empty($_POST['password'])) {
+        if (password_verify($_POST['password'], $admin_password_hash)) {
+            // ✅ Password correct, allow actions
+            if (isset($_POST['action'])) {
+                if ($_POST['action'] === 'setup') {
+                    header("Location: setup.php");
+                    exit;
+                } elseif ($_POST['action'] === 'delete') {
+                    if (unlink(__FILE__)) {
+                        echo "<script>alert('setup.php has been deleted for security reasons.'); window.location.href='index.php';</script>";
+                        exit;
+                    } else {
+                        $msg = "❌ Error: Could not delete setup.php. Please delete it manually.";
+                    }
+                } elseif ($_POST['action'] === 'reset') {
+                    // Reset DB tables
+                    $tables = $conn->query("SELECT TABLE_NAME FROM information_schema.tables WHERE table_schema = 'oeis' ORDER BY TABLE_NAME");
+                    while ($row = $tables->fetch_assoc()) {
+                        $conn->query("SET FOREIGN_KEY_CHECKS = 0;");
+                        $conn->query("DROP TABLE IF EXISTS `" . $row['TABLE_NAME'] . "`");
+                    }
+                    $conn->query("SET FOREIGN_KEY_CHECKS = 1;");
+                    header("Location: setup.php");
+                    exit;
                 }
             }
-            $stmt = $conn->prepare("SET FOREIGN_KEY_CHECKS = 1;");
-            if ($stmt) {
-                $stmt->execute();
-                $stmt->close();
-            }
-
-            header("Location: setup.php");
-            exit;
+        } else {
+            // ❌ Wrong password
+            $msg = "Error: Incorrect password.";
+        }
+    } else {
+        $msg = "Error: Password is required.";
     }
-}
 }
 ?>
 <!DOCTYPE html>
@@ -266,22 +275,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       border-radius: 15px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
-    .btn-setup {
-      background: #28a745;
-      color: #fff;
-      font-weight: bold;
-    }
-    .btn-delete {
-      background: #dc3545;
-      color: #fff;
-      font-weight: bold;
-    }
-
-    .btn-warning {
-      background: #ffc107;
-      color: #e9edf1ff;
-      font-weight: bold;
-    }
+    .btn-setup { background: #28a745; color: #fff; font-weight: bold; }
+    .btn-delete { background: #dc3545; color: #fff; font-weight: bold; }
+    .btn-warning { background: #ffc107; color: #fff; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -289,17 +285,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="card p-5 text-center">
       <h2 class="mb-4">🚀 Admin Setup</h2>
       <p class="mb-4">Choose an action to initialize or secure your system.</p>
-        <p class="mb-4"><?=htmlspecialchars($msg); ?></p>
+      <p class="mb-4"><?=htmlspecialchars($msg); ?></p>
       <form method="post">
-        <button type="submit" name="action" value="setup" class="btn btn-setup btn-lg me-3">
-          Start Setup
-        </button>
-        <button type="submit" name="action" value="delete" class="btn btn-delete btn-lg">
-          Delete setup.php
-        </button>
-         <button type="submit" name="action" value="reset" class="btn btn-warning btn-lg">
-          Reset setup
-        </button>
+        <input type="password" name="password" placeholder="Enter admin password" required class="form-control mb-3">
+        <button type="submit" name="action" value="setup" class="btn btn-setup btn-lg me-3">Start Setup</button>
+        <button type="submit" name="action" value="delete" class="btn btn-delete btn-lg">Delete setup.php</button>
+        <button type="submit" name="action" value="reset" class="btn btn-warning btn-lg">Reset setup</button>
       </form>
     </div>
   </div>

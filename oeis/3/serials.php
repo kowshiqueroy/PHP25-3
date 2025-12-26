@@ -42,6 +42,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             echo "<script>alert('Serial Order IDs already exists'); window.location.href='serials.php';</script>";
             exit();
         }
+
+        //check any id in serial_order_ids doesnot exists in orders table
+        $order_ids_array = explode(',', $serial_order_ids);
+        foreach ($order_ids_array as $order_id) {
+            $check_query = "SELECT id, created_by FROM orders WHERE id='$order_id' AND company_id='$company_id'";
+            $check_result = mysqli_query($conn, $check_query);
+            if (mysqli_num_rows($check_result) == 0 || $_SESSION['user_id'] != mysqli_fetch_assoc($check_result)['created_by']) {
+                echo "<script>alert('Order ID $order_id does not exist in orders table'); window.location.href='serials.php?serial_order_id=$serial_order_ids';</script>";
+                exit();
+            }
+        }
         //check if any of the order ids in serial_order_ids already exists in serials table
         $order_ids_array = explode(',', $serial_order_ids);
         foreach ($order_ids_array as $order_id) {
@@ -87,6 +98,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $update_fields = "order_ids='$serial_order_ids', status='$status', user_id='$user_id'";
         $query = "UPDATE serials SET $update_fields WHERE id='$serial_id'";
         mysqli_query($conn, $query);
+        //update orders table to set order_status=1 for all order ids in serial_order_ids
+        $order_ids_array = explode(',', $serial_order_ids);
+        foreach ($order_ids_array as $order_id) {
+            $update_query = "UPDATE orders SET order_status=1 WHERE id='$order_id'";
+            mysqli_query($conn, $update_query);
+        }
         header("Location: serials.php");
         exit();
     }
