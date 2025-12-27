@@ -43,10 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sync_confirm'])) {
         }
 
         // C. Update OFFLINE_ORDERS table (Mark as synced)
-        $stmt_update = $conn->prepare("UPDATE offline_orders SET synced=1, admin_approval_timedate=NOW(), admin_approval_id=? WHERE id=?");
+        $stmt_update = $conn->prepare("UPDATE offline_orders SET synced=1, admin_approval_timedate=NOW(), admin_approval_id=?, note=? WHERE id=?");
         // Assuming admin_approval_id is the currently logged in admin. Using $_POST['user_id'] as fallback or 1.
         $admin_id = isset($_SESSION['user_id']) ? $_SESSION['user_id'] : 1; 
-        $stmt_update->bind_param("ii", $admin_id, $offline_id);
+        $stmt_update->bind_param("isi", $admin_id, $new_order_id, $offline_id);
         $stmt_update->execute();
 
         // Commit Transaction
@@ -113,7 +113,9 @@ if (isset($_GET['id'])) {
 
                             <?php
                                 if ($row['admin_approval_id'] != NULL) {
-                                    echo '<span >Added '.$row['admin_approval_timedate']. ' by '.$row['admin_approval_id'].'</span>';
+                                    $search_url = "orders.php?search_id=" . $row['note'];
+                                    echo '<span >Added '.$row['admin_approval_timedate']. ' by '.$row['admin_approval_id'].' OrderID: '.$row['note'].'</span>';
+                                    echo '<span><a href="' . $search_url . '">View Order Details</a></span>';
                                 } else {
                                     ?>
 <a href="offline.php?id=<?= $row['id'] ?>" class="btn btn-primary btn-sm">

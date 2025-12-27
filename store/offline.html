@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline Entry - Inventory</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .offline-header {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            border-bottom: 2px solid #ef4444;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .offline-badge {
+            background: #ef4444;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 5px;
+        }
+        .field-note {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: -5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="offline-header">
+    ⚠️ YOU ARE OFFLINE
+    <div style="font-size: 0.8rem; font-weight: normal; margin-top: 5px;">
+        Data saved here will be stored on your device until you reconnect.
+    </div>
+</div>
+
+<div class="container">
+    <h3>
+        New Offline Entry 
+        <span id="pendingCount" class="offline-badge" style="display:none">0 Pending</span>
+    </h3>
+
+    <datalist id="list_types"></datalist>
+<datalist id="list_names"></datalist>
+<datalist id="list_locations"></datalist>
+<datalist id="list_sections"></datalist>
+<datalist id="list_from_to"></datalist>
+<datalist id="list_handled_by"></datalist>
+
+<form id="offlineForm">
+    <div class="form-grid">
+        <div class="form-group">
+            <label>Txn Type <span style="color:red">*</span></label>
+            <select id="txn_type" class="input-field"><option value="IN">IN</option><option value="OUT">OUT</option></select>
+        </div>
+        <div class="form-group">
+            <label>Date <span style="color:red">*</span></label>
+            <input type="date" id="entry_date">
+        </div>
+
+        <div class="form-group">
+            <label>Product Type <span style="color:red">*</span></label>
+            <input type="text" id="p_type" list="list_types" placeholder="Type or Select..." required>
+        </div>
+        <div class="form-group">
+            <label>Product Name <span style="color:red">*</span></label>
+            <input type="text" id="p_name" list="list_names" placeholder="Type or Select..." required>
+        </div>
+        <div class="form-group">
+            <label>Unit</label>
+            <input type="text" id="p_unit" placeholder="e.g. pcs">
+        </div>
+
+        <div class="form-group"><label>Quantity <span style="color:red">*</span></label><input type="number" id="quantity" oninput="calcTotal()" required></div>
+        <div class="form-group"><label>Unit Value</label><input type="number" id="unit_value" oninput="calcTotal()"></div>
+        <div class="form-group"><label>Total</label><input type="number" id="total_value" readonly style="background:#eee;"></div>
+
+        <div class="form-group"><label>From / To</label><input type="text" id="from_to" list="list_from_to"></div>
+        <div class="form-group"><label>Location</label><input type="text" id="location" list="list_locations"></div>
+        <div class="form-group"><label>Section</label><input type="text" id="section" list="list_sections"></div>
+        <div class="form-group"><label>By</label><input type="text" id="handled_by" list="list_handled_by"></div>
+        
+        <div class="form-group"><label>Slip #</label><input type="text" id="slip_no"></div>
+        <div class="form-group"><label>Reason</label><input type="text" id="reason"></div>
+        <div class="form-group"><label>Remarks</label><input type="text" id="remarks"></div>
+    </div>
+
+    <br>
+    <button type="button" onclick="saveToDevice()" class="btn" style="width:100%">💾 Save to Device</button>
+</form>
+</div>
+
+<script>
+
+    // LOAD DICTIONARY ON STARTUP
+    (function loadOfflineDictionary() {
+        var raw = localStorage.getItem('offline_dictionary');
+        if(!raw) return; // No data cached
+
+        var data = JSON.parse(raw);
+
+        // Helper to fill lists
+        function fillList(id, array) {
+            var list = document.getElementById(id);
+            if(!list || !array) return;
+            var html = '';
+            array.forEach(function(item) {
+                html += '<option value="' + item + '">';
+            });
+            list.innerHTML = html;
+        }
+
+        fillList('list_types', data.types);
+        fillList('list_names', data.names);
+        fillList('list_locations', data.locations);
+        fillList('list_sections', data.sections);
+        fillList('list_from_to', data.from_to);
+        fillList('list_handled_by', data.handled_by);
+        
+        console.log("Offline Dictionary Loaded into inputs");
+    })();
+    // 1. Initialize Date
+    document.getElementById('entry_date').valueAsDate = new Date();
+
+    // 2. Update Pending Count on Load
+    updatePendingBadge();
+
+    // 3. Auto Calculate Total
+    function calcTotal() {
+        let qty = parseFloat(document.getElementById('quantity').value) || 0;
+        let val = parseFloat(document.getElementById('unit_value').value) || 0;
+        document.getElementById('total_value').value = (qty * val).toFixed(2);
+    }
+
+    // 4. Save Function
+    function saveToDevice() {
+        // Validation
+        const required = ['p_type', 'p_name', 'quantity'];
+        for(let id of required) {
+            if(!document.getElementById(id).value) {
+                alert("Please fill all required fields marked with *");
+                return;
+            }
+        }
+
+        // Build Data Object
+        const entry = {
+            txn_type: document.getElementById('txn_type').value,
+            entry_date: document.getElementById('entry_date').value,
+            p_type: document.getElementById('p_type').value,
+            p_name: document.getElementById('p_name').value,
+            p_unit: document.getElementById('p_unit').value,
+            quantity: document.getElementById('quantity').value,
+            unit_value: document.getElementById('unit_value').value || 0,
+            total_value: document.getElementById('total_value').value || 0,
+            reason: document.getElementById('reason').value,
+            from_to: document.getElementById('from_to').value,
+            section: document.getElementById('section').value,
+            slip_no: document.getElementById('slip_no').value,
+            location: document.getElementById('location').value,
+            remarks: document.getElementById('remarks').value,
+            handled_by: document.getElementById('handled_by').value,
+            // Flag to identify source later if needed
+            is_offline_entry: true
+        };
+
+        // Save to LocalStorage
+        let existing = localStorage.getItem('inventory_offline_data');
+        let data = existing ? JSON.parse(existing) : [];
+        
+        data.push(entry);
+        localStorage.setItem('inventory_offline_data', JSON.stringify(data));
+
+        // Feedback
+        alert("Saved successfully! Data is safely stored on this device.");
+        document.getElementById('offlineForm').reset();
+        document.getElementById('entry_date').valueAsDate = new Date(); // Reset date
+        updatePendingBadge();
+    }
+
+    function updatePendingBadge() {
+        let existing = localStorage.getItem('inventory_offline_data');
+        if(existing) {
+            let count = JSON.parse(existing).length;
+            if(count > 0) {
+                let badge = document.getElementById('pendingCount');
+                badge.style.display = 'inline-block';
+                badge.innerText = count + ' Pending Sync';
+            }
+        }
+    }
+
+    // 5. Connection Listener
+    window.addEventListener('online', function() {
+        if(confirm("You are back Online! \nGo to Dashboard to sync your data?")) {
+            window.location.href = "index.php";
+        }
+    });
+</script>
+
+</body>
+</html>
