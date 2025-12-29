@@ -209,7 +209,14 @@ require 'header.php';
         .no-mg { margin: 0 !important;}
     }
 </style>
+<?php 
+//if isset get change the Title of the page
+if (isset($_GET['year']) && isset($_GET['class_id']) && isset($_GET['term'])) {
+    echo "<script>document.title = 'Tabulation Sheet - " . strtoupper($term) . "-" . $cls['class_name'] . "-" . $year . "';</script>";
+}
 
+
+?>
     <div class="printable-area">
         <div class="text-center mb-3 no-mg">
           

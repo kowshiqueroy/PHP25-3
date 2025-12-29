@@ -158,6 +158,7 @@ $established = $settings['established'] ?? '----';
             
     
             <a href="result_class.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-table me-2"></i> Class Result</a>
+             <a href="summary.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-table me-2"></i> Result Summary</a>
             <a href="result.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-id-card me-2"></i> Student Report</a>
             <a href="admit_card_generator.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-address-card me-2"></i> Admit Card Generator</a>
             

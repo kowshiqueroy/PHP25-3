@@ -94,9 +94,19 @@ require 'header.php';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="col-md-4">
-                <label class="small fw-bold">Select Subjects</label>
-                <select name="subject_ids[]" class="form-select form-select-sm" multiple size="1" <?= $is_loaded ? 'disabled' : '' ?>>
+          <div class="col-md-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <label class="small fw-bold">Select Subjects</label>
+                    
+                    <?php if(!$is_loaded): ?>
+                    <div class="form-check m-0">
+                        <input class="form-check-input" type="checkbox" id="chkSelectAll" onchange="toggleSubjects(this)">
+                        <label class="form-check-label small" for="chkSelectAll" style="font-size: 11px; cursor: pointer;">Select All</label>
+                    </div>
+                    <?php endif; ?>
+                </div>
+
+                <select name="subject_ids[]" id="subject_list" class="form-select form-select-sm" multiple size="3" <?= $is_loaded ? 'disabled' : '' ?>>
                     <?php if($class_id): 
                         $sub_stmt = $pdo->prepare("SELECT id, subject_name FROM subjects WHERE class_id = ?");
                         $sub_stmt->execute([$class_id]);
@@ -104,6 +114,15 @@ require 'header.php';
                             <option value="<?= $s['id'] ?>" <?= in_array($s['id'], $selected_subjects) ? 'selected' : '' ?>><?= htmlspecialchars($s['subject_name']) ?></option>
                     <?php endforeach; endif; ?>
                 </select>
+                
+                <script>
+                    function toggleSubjects(source) {
+                        var select = document.getElementById('subject_list');
+                        for (var i = 0; i < select.options.length; i++) {
+                            select.options[i].selected = source.checked;
+                        }
+                    }
+                </script>
             </div>
             <div class="col-md-2">
                 <?php if(!$is_loaded): ?>
