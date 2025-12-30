@@ -6,23 +6,38 @@ $msg = ''; $error = '';
 // 1. Fetch all available sessions for the dropdown
 $sessions = $pdo->query("SELECT DISTINCT academic_year FROM classes ORDER BY academic_year DESC")->fetchAll(PDO::FETCH_COLUMN);
 
-// 2. Handle the Roll Update Logic
-if (isset($_POST['update_rolls'])) {
+// 2. Handle the Update Logic
+if (isset($_POST['update_students'])) {
     $class_id = $_POST['class_id'];
-    $new_rolls = $_POST['rolls']; // Array: [student_id => new_roll_number]
+    $student_data = $_POST['student']; // Array: [student_id => [fields]]
 
     try {
         $pdo->beginTransaction();
 
-        // STEP A: Move students to a temporary "safe" roll range (Roll + 10000)
-        // This prevents "Duplicate entry" errors when swapping e.g., 1 with 2
+        // STEP A: Temporary Roll Shift (to avoid unique constraint violations during swapping)
         $temp_stmt = $pdo->prepare("UPDATE students SET roll_no = roll_no + 10000 WHERE class_id = ?");
         $temp_stmt->execute([$class_id]);
 
-        // STEP B: Apply the actual new roll numbers
-        $update_stmt = $pdo->prepare("UPDATE students SET roll_no = ? WHERE student_id = ?");
-        foreach ($new_rolls as $st_id => $val) {
-            $update_stmt->execute([(int)$val, $st_id]);
+        // STEP B: Apply actual updates for all fields
+        $update_stmt = $pdo->prepare("UPDATE students SET 
+            roll_no = ?, 
+            student_name = ?, 
+            father_name = ?, 
+            phone = ?, 
+            address = ?, 
+            photo_path = ? 
+            WHERE student_id = ?");
+
+        foreach ($student_data as $st_id => $fields) {
+            $update_stmt->execute([
+                (int)$fields['roll_no'],
+                $fields['name'],
+                $fields['father'],
+                $fields['phone'],
+                $fields['address'],
+                $fields['photo'],
+                $st_id
+            ]);
         }
 
         // STEP C: Sync the Class Table roll range
@@ -33,7 +48,7 @@ if (isset($_POST['update_rolls'])) {
         $sync->execute([$class_id, $class_id, $class_id]);
 
         $pdo->commit();
-        $msg = "Roll numbers successfully rearranged!";
+        $msg = "Student records and roll numbers updated successfully!";
     } catch (Exception $e) {
         $pdo->rollBack();
         $error = "Update failed: " . $e->getMessage();
@@ -50,15 +65,15 @@ if ($selected_class) {
 }
 ?>
 
-<div class="container mt-4">
+<div class="container-fluid mt-4 px-4">
     <div class="card shadow-sm border-0">
         <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-            <h5 class="mb-0"><i class="fa-solid fa-arrow-rotate-left me-2"></i>Advanced Roll Switcher</h5>
+            <h5 class="mb-0"><i class="fa-solid fa-users-gear me-2"></i>Bulk Student & Roll Editor</h5>
             <a href="classes_students.php" class="btn btn-sm btn-outline-light">Back to Classes</a>
         </div>
         <div class="card-body bg-light">
             <form method="GET" class="row g-3 mb-4">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="small fw-bold">1. Select Session</label>
                     <select name="session" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Choose Session --</option>
@@ -67,7 +82,7 @@ if ($selected_class) {
                         <?php endforeach; ?>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label class="small fw-bold">2. Select Class</label>
                     <select name="class_id" class="form-select" onchange="this.form.submit()">
                         <option value="">-- Choose Class --</option>
@@ -92,25 +107,48 @@ if ($selected_class) {
             <form method="POST">
                 <input type="hidden" name="class_id" value="<?= $selected_class ?>">
                 <div class="table-responsive shadow-sm rounded">
-                    <table class="table table-white table-hover align-middle mb-0">
+                    <table class="table table-white table-hover align-middle mb-0" style="min-width: 1200px;">
                         <thead class="table-primary">
                             <tr>
-                                <th width="100">Current Roll</th>
+                                <th width="80">Roll</th>
                                 <th>Student Name</th>
                                 <th>Father's Name</th>
-                                <th width="150" class="text-center">New Roll Number</th>
+                                <th>Phone</th>
+                                <th>Address</th>
+                                <th>Photo Path</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach($students as $st): ?>
                             <tr>
-                                <td class="text-center fw-bold text-muted"><?= $st['roll_no'] ?></td>
-                                <td class="fw-bold"><?= htmlspecialchars($st['student_name']) ?></td>
-                                <td class="small"><?= htmlspecialchars($st['father_name']) ?></td>
                                 <td>
-                                    <input type="number" name="rolls[<?= $st['student_id'] ?>]" 
-                                           class="form-control form-control-sm text-center fw-bold border-primary" 
+                                    <input type="number" name="student[<?= $st['student_id'] ?>][roll_no]" 
+                                           class="form-control form-control-sm text-center fw-bold" 
                                            value="<?= $st['roll_no'] ?>" required>
+                                </td>
+                                <td>
+                                    <input type="text" name="student[<?= $st['student_id'] ?>][name]" 
+                                           class="form-control form-control-sm" 
+                                           value="<?= htmlspecialchars($st['student_name']) ?>" required>
+                                </td>
+                                <td>
+                                    <input type="text" name="student[<?= $st['student_id'] ?>][father]" 
+                                           class="form-control form-control-sm" 
+                                           value="<?= htmlspecialchars($st['father_name']) ?>">
+                                </td>
+                                <td>
+                                    <input type="text" name="student[<?= $st['student_id'] ?>][phone]" 
+                                           class="form-control form-control-sm" 
+                                           value="<?= htmlspecialchars($st['phone']) ?>">
+                                </td>
+                                <td>
+                                    <textarea name="student[<?= $st['student_id'] ?>][address]" 
+                                              class="form-control form-control-sm" rows="1"><?= htmlspecialchars($st['address']) ?></textarea>
+                                </td>
+                                <td>
+                                    <input type="text" name="student[<?= $st['student_id'] ?>][photo]" 
+                                           class="form-control form-control-sm" 
+                                           value="<?= htmlspecialchars($st['photo_path']) ?>" placeholder="uploads/photo.jpg">
                                 </td>
                             </tr>
                             <?php endforeach; ?>
@@ -118,10 +156,9 @@ if ($selected_class) {
                     </table>
                 </div>
                 <div class="mt-4 text-center">
-                    <button type="submit" name="update_rolls" class="btn btn-primary btn-lg px-5 shadow">
-                        Update & Switch All Rolls
+                    <button type="submit" name="update_students" class="btn btn-success btn-lg px-5 shadow">
+                        <i class="fa-solid fa-save me-2"></i> Save All Changes
                     </button>
-                    <p class="text-muted small mt-2">Note: You can swap numbers (e.g., change 1 to 5 and 5 to 1) freely.</p>
                 </div>
             </form>
             <?php elseif($selected_class): ?>

@@ -188,7 +188,7 @@ $classes = $classes_query->fetchAll();
                     <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="openAddClassModal()">+ Add New Class</button>
                     <button class="btn btn-outline-info btn-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#bulkAddModal">Bulk Add Students</button>
                     <button class="btn btn-warning btn-sm w-100 mb-2" data-bs-toggle="modal" data-bs-target="#promoteModal">Promote Session</button>
-                    <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="window.location.href='roll.php'">Alter Rolls</button>
+                    <button class="btn btn-outline-primary btn-sm w-100 mb-2" onclick="window.location.href='roll.php'">Alter Details</button>
 
                 </div>
             </div>

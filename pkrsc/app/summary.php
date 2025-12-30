@@ -56,10 +56,15 @@ require 'header.php';
     .fail-text { color: red; font-weight: bold; }
     .bg-gpa { background-color: #f9f9f9 !important; font-weight: bold; }
     .sub-title { font-size: 8.5px; word-wrap: break-word; max-width: 25px; }
+
+    .tab-summary th:first-child { min-width: 120px;  }
+     .tab-summary td:first-child { min-width: 120px; text-align: left; }
+
+    .tab-summary tr:nth-child(2n) { background-color: #e6e9e6ff; }
     
     @media print {
         @page { size: A4 landscape; margin: 10px 10px; }
-            body { background-color: #fff; margin: 5px 5px;}
+            body { background-color: #fff; margin-top: -50px;}
         .no-print { display: none; }
         .class-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     }
@@ -233,7 +238,7 @@ require 'header.php';
                         $stmt = $pdo->prepare("SELECT student_name FROM students WHERE class_id = ? AND roll_no = ?");
                         $stmt->execute([$cid, $r]);
                         $row = $stmt->fetch();
-                        echo $r." ".$row['student_name'];
+                        echo $r." <small class='text-muted' style='font-size: 7px;'>".$row['student_name']."</small>";
                     ?>
                 
                 
