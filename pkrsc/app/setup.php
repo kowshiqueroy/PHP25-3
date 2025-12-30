@@ -47,7 +47,20 @@ $sql = "CREATE TABLE IF NOT EXISTS classes (
 )";
 $pdo->exec($sql);
 echo "Table 'classes' created.<br>";
-
+$sql = "CREATE TABLE IF NOT EXISTS students (
+    student_id INT AUTO_INCREMENT PRIMARY KEY,
+    class_id INT NOT NULL,
+    roll_no INT NOT NULL,
+    student_name VARCHAR(100) NOT NULL,
+    father_name VARCHAR(100),
+    address TEXT,
+    phone VARCHAR(20),
+    photo_path VARCHAR(255) DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (class_id) REFERENCES classes(id) ON DELETE CASCADE
+);";
+$pdo->exec($sql);
+echo "Table 'students' created.<br>";
 // 5. Subjects Table
 $sql = "CREATE TABLE IF NOT EXISTS subjects (
     id INT AUTO_INCREMENT PRIMARY KEY,

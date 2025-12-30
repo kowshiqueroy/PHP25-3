@@ -194,7 +194,13 @@ if ($class_id && $term && $roll_input):
             <div class="col-6">   <div class="d-flex align-items-center">
                 <div class="col-2 text-left">Name:</div>
                 <div class="col-10 text-left">
-                    <input type="text" class="form-control form-control-sm">
+                    <input type="text" class="form-control form-control-sm" value="<?php
+                        //student name
+                        $stmt = $pdo->prepare("SELECT student_name FROM students WHERE class_id = ? AND roll_no = ?");
+                        $stmt->execute([$class_id, $roll]);
+                        $row = $stmt->fetch();
+                        echo htmlspecialchars($row['student_name']);
+                    ?>">
                 </div>
             </div></div>
             <div class="col-6 text-end"><strong>Roll:</strong> <?= $roll ?> | <strong>Class:</strong> <?= $cls_name ?></div>
@@ -245,7 +251,8 @@ if ($class_id && $term && $roll_input):
 
              <?php 
                 $raw_gpa = ($cnt > 0) ? ($gp_sum / $cnt) : 0;
-                $final_gpa = $fail ? 0 : min(5.00, $raw_gpa + $opt_b);
+                $final_gpa = $fail ? 0 : min(5.00, $raw_gpa + $opt_b/$cnt);
+             
             ?>
             <div class="col-4">
         

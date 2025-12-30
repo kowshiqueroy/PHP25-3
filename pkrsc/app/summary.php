@@ -42,7 +42,7 @@ require 'header.php';
         text-align: center; 
         padding: 2px; 
         font-size: 10px; 
-        line-height: 1.2;
+        line-height: 1;
     }
     .tab-summary th { background-color: #f2f2f2 !important; font-weight: bold;  font-size: 8px;  }
     .class-header { 
@@ -114,8 +114,29 @@ require 'header.php';
     </div>
 
     <?php if (!empty($class_ids) && $term): ?>
-        <div class="text-center mb-4">
-            <h3 class="mb-0">ACADEMIC RESULT SUMMARY</h3>
+        <div class="text-center">
+        <?php
+        $stmt = $pdo->prepare("SELECT school_name, school_address, school_phone, school_email, school_logo, established, emis, school_code, website FROM settings LIMIT 1");
+        $stmt->execute();
+        $school = $stmt->fetch(PDO::FETCH_ASSOC);
+
+       
+        $school_logo = $school['school_logo'] ? $school['school_logo'] : 'uploads/logo.png';
+        $school_name = htmlspecialchars($school['school_name']);
+        $school_address = htmlspecialchars($school['school_address']);
+        $school_phone = htmlspecialchars($school['school_phone']);
+        $school_email = htmlspecialchars($school['school_email']);
+        $established = htmlspecialchars($school['established']);
+        $emis = htmlspecialchars($school['emis']);
+        $website = htmlspecialchars($school['website']);
+
+        ?>
+
+            <div>
+                <img src="<?= $school_logo ?>" alt="School Logo" style="max-height: 80px;">
+            </div>
+            <h3 class="mb-0"><?= $school_name ?></h3>
+            <p class="mb-0"><?= $school_address ?> | Phone: <?= $school_phone ?> | Email: <?= $school_email ?> | Website: <?= $website ?></p>
             <p class="mb-0 text-uppercase"><b>Exam:</b> <?= htmlspecialchars($term) ?> | <b>Session:</b> <?= $year ?></p>
         </div>
 
@@ -165,13 +186,13 @@ require 'header.php';
         <table class="tab-summary">
             <thead>
                 <tr>
-                    <th width="35">Roll</th>
+                    <th width="70">Roll</th>
                     <?php foreach($subjects as $s): ?>
                         <th class="sub-title"><?= $s['subject_name'] ?></th>
                     <?php endforeach; ?>
-                    <th width="45">Total</th>
-                    <th width="60">GPA</th>
-                    <th width="40">LG</th>
+                    <th width="55">Total</th>
+                    <th width="40">GPA</th>
+                    <th width="30">LG</th>
                 </tr>
             </thead>
             <tbody>
@@ -203,10 +224,21 @@ require 'header.php';
                     }
 
                     $raw_gpa = $gps / max(1, $cnt);
-                    $final_gpa = $fail ? 0.00 : min(5.00, $raw_gpa + $ob);
+                    $final_gpa = $fail ? 0.00 : min(5.00, $raw_gpa + $ob/$cnt);
                 ?>
                 <tr>
-                    <td class="fw-bold"><?= $r ?></td>
+                    <td class="fw-bold">
+                    <?php
+                        //get the student name
+                        $stmt = $pdo->prepare("SELECT student_name FROM students WHERE class_id = ? AND roll_no = ?");
+                        $stmt->execute([$cid, $r]);
+                        $row = $stmt->fetch();
+                        echo $r." ".$row['student_name'];
+                    ?>
+                
+                
+                
+                </td>
                     <?= $row_cells ?>
                     <td class="fw-bold"><?= $gtm ?></td>
                     <td class="bg-gpa <?= $fail ? 'fail-text' : '' ?>"><?= number_format($final_gpa, 2) ?></td>

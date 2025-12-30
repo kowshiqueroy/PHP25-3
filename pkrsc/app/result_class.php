@@ -251,7 +251,18 @@ if (isset($_GET['year']) && isset($_GET['class_id']) && isset($_GET['term'])) {
                 <?php for($r=$cls['start_roll']; $r<=$cls['end_roll']; $r++): 
                     $gtm=0; $gps=0; $cnt=0; $ob=0; $f=false; ?>
                 <tr>
-                    <td class="fw-bold"><?= $r ?></td>
+                    <td class="fw-bold"><?= $r ?> 
+                        <?php
+                            //get the student name
+                            $stmt = $pdo->prepare("SELECT student_name FROM students WHERE class_id = ? AND roll_no = ?");
+                            $stmt->execute([$class_id, $r]);
+                            $data = $stmt->fetch();
+                            echo $data['student_name'];
+                        ?>
+                        
+                    
+                    
+                    </td>
                     <?php foreach($structure as $sid => $comps): 
                         $sm=0; $smax=0; $is_opt=$comps[0]['is_optional'];
                         foreach($comps as $c) {
@@ -273,7 +284,7 @@ if (isset($_GET['year']) && isset($_GET['class_id']) && isset($_GET['term'])) {
 
                     <?php 
                         $raw = $gps/max(1,$cnt); 
-                        $fgpa = $f ? 0 : min(5.00, $raw + $ob);
+                        $fgpa = $f ? 0 : min(5.00, $raw + ($ob/$cnt));
                     ?>
                     <td class=""><?= $gtm ?></td>
                     <td><?= number_format($raw, 2) ?></td>

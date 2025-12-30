@@ -152,7 +152,7 @@ $established = $settings['established'] ?? '----';
         </div>
         <div class="list-group list-group-flush mt-1 small text-secondary">
             <a href="index.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-gauge me-2"></i> Dashboard</a>
-            <a href="classes.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-chalkboard-user me-2"></i> Classes & Rolls</a>
+            <a href="classes_students.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-chalkboard-user me-2"></i> Classes & Rolls</a>
             <a href="subjects.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-book me-2"></i> Subjects & Grading</a>
             <a href="marks_entry.php" class="list-group-item list-group-item-action"><i class="fa-solid fa-pen-to-square me-2"></i> Marks Entry</a>
             
@@ -175,7 +175,7 @@ $established = $settings['established'] ?? '----';
                 <button class="btn btn-outline-secondary btn-sm" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
                 
                 <div class="ms-auto d-flex align-items-center">
-                    <span class="me-3 text-muted small d-none d-sm-block">Session: <strong><?php echo htmlspecialchars($established); ?></strong></span>
+                    <span class="me-3 text-muted small d-none d-sm-block">EST: <strong><?php echo htmlspecialchars($established); ?></strong></span>
                     <div class="dropdown">
                         <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-user-circle fa-lg"></i> Admin
