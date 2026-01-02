@@ -1,7 +1,7 @@
 <?php
 session_start();
 // config/db.php content inline for simplicity
-$conn = new mysqli("localhost", "root", "", "attendance_pro");
+require_once 'config/db.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">

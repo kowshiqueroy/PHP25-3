@@ -3,9 +3,16 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-$host = 'localhost'; 
-$user = 'root'; 
-$pass = ''; // Adjust as needed
+if ($_SERVER['SERVER_NAME'] != "localhost" && strpos($_SERVER['SERVER_NAME'], "free.app") === false)
+{
+    require_once 'config/db.php';
+}
+else
+{
+    $host = 'localhost';
+    $user = 'root';
+    $pass = ''; // Adjust as needed
+}
 
 $conn = new mysqli($host, $user, $pass);
 if ($conn->connect_error) die("Connection failed: " . $conn->connect_error);
@@ -19,7 +26,11 @@ if (isset($_POST['setup_db'])) {
 }
 
 if (isset($_POST['setup_tables'])) {
-    $conn->select_db("attendance_pro");
+    if (strpos($_SERVER['SERVER_NAME'], 'localhost') === false && strpos($_SERVER['SERVER_NAME'], 'free.app') === false) {
+        $conn->select_db('u312077073_attendance_pro');
+    } else {
+        $conn->select_db('attendance_pro');
+    }
     
     $queries = [
         "CREATE TABLE IF NOT EXISTS admins (
